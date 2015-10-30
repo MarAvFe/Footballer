@@ -7,10 +7,10 @@
     <link href="http://pingendo.github.io/pingendo-bootstrap/themes/default/bootstrap.css" rel="stylesheet" type="text/css">
     <style>
       .container.playersPics .row img{
-        width:200px;
-        height:230px;
-        margin-bottom:20px;
-      }
+                width:200px;
+                height:230px;
+                margin-bottom:20px;
+              }
     </style>
   </head><body>
     <div class="navbar navbar-default navbar-static-top">
@@ -82,6 +82,18 @@
                     </div>
                     <div class="col-sm-8">
                       <input type="text" class="form-control" placeholder="Doe">
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <div class="col-sm-4">
+                      <label class="control-label">Country</label>
+                    </div>
+                    <div class="col-sm-8">
+                      <select>
+                        <option>Mustard</option>
+                        <option>Ketchup</option>
+                        <option>Relish</option>
+                      </select>
                     </div>
                   </div>
                   <div class="form-group">
@@ -226,12 +238,16 @@
     </footer>
     <script>
       $('.popper').popover({
-          placement: 'right',
-          container: 'body',
-          html: true,
-          content: function () {
-              return $(this).next('.popper-content').html();
-          }
+                  placement: 'right',
+                  container: 'body',
+                  html: true,
+                  content: function () {
+                      return $(this).next('.popper-content').html();
+                  }
+              });
+      $('.selectpicker').selectpicker({
+          style: 'btn-info',
+          size: 4
       });
     </script>
   
