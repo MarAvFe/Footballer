@@ -514,9 +514,21 @@ END;
 
 /********************************************/
 
+CREATE DEFINER=`mainSoccer`@`%` TRIGGER `ParameterTableGroup_BINS` BEFORE INSERT ON `ParameterTableGroup` FOR EACH ROW
+BEGIN
+	SET NEW.CreatedOn=curdate();
+	SET NEW.CreatedBy=current_user();
+	SET NEW.UpdatedOn=curdate();
+	SET NEW.UpdatedBy=current_user();
+END;
 
+CREATE DEFINER=`mainSoccer`@`%` TRIGGER `ParameterTableGroup_BUPD` BEFORE UPDATE ON `ParameterTableGroup` FOR EACH ROW
+BEGIN
+	SET NEW.UpdatedOn=curdate();
+	SET NEW.UpdatedBy=current_user();
+END;
 
-
+/********************************************/
 
 
 
