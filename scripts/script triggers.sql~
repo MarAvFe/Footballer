@@ -1,0 +1,100 @@
+/********************************************/
+CREATE DEFINER=`mainSoccer`@`%` TRIGGER `Attempt_BINS` BEFORE INSERT ON `Attempt` FOR EACH ROW
+BEGIN
+	SET NEW.CreatedOn=curdate();
+	SET NEW.CreatedBy=current_user();
+	SET NEW.UpdatedOn=curdate();
+	SET NEW.UpdatedBy=current_user();
+END;
+
+/********************************************/
+
+CREATE DEFINER=`mainSoccer`@`%` TRIGGER `Attempt_BUPD` BEFORE UPDATE ON `Attempt` FOR EACH ROW
+BEGIN
+	SET NEW.UpdatedOn=curdate();
+	SET NEW.UpdatedBy=current_user();
+END;
+
+/********************************************/
+
+CREATE DEFINER=`mainSoccer`@`%` TRIGGER `AttemptType_BINS` BEFORE INSERT ON `AttemptType` FOR EACH ROW
+BEGIN
+	SET NEW.CreatedOn=curdate();
+	SET NEW.CreatedBy=current_user();
+	SET NEW.UpdatedOn=curdate();
+	SET NEW.UpdatedBy=current_user();
+END;
+
+/********************************************/
+
+CREATE DEFINER=`mainSoccer`@`%` TRIGGER `AttemptType_BUPD` BEFORE UPDATE ON `AttemptType` FOR EACH ROW
+BEGIN
+	SET NEW.UpdatedOn=curdate();
+	SET NEW.UpdatedBy=current_user();
+END;
+
+/********************************************/
+
+CREATE DEFINER=`mainSoccer`@`%` TRIGGER `AwardPerson_BINS` BEFORE INSERT ON `AwardPerson` FOR EACH ROW
+BEGIN
+	SET NEW.CreatedOn=curdate();
+	SET NEW.CreatedBy=current_user();
+	SET NEW.UpdatedOn=curdate();
+	SET NEW.UpdatedBy=current_user();
+END;
+
+/********************************************/
+
+CREATE DEFINER=`mainSoccer`@`%` TRIGGER `AwardPerson_BUPD` BEFORE UPDATE ON `AwardPerson` FOR EACH ROW
+BEGIN
+	SET NEW.UpdatedOn=curdate();
+	SET NEW.UpdatedBy=current_user();
+END;
+
+/********************************************/
+
+CREATE DEFINER=`mainSoccer`@`%` TRIGGER `AwardTeam_BINS` BEFORE INSERT ON `AwardTeam` FOR EACH ROW
+BEGIN
+	SET NEW.CreatedOn=curdate();
+	SET NEW.CreatedBy=current_user();
+	SET NEW.UpdatedOn=curdate();
+	SET NEW.UpdatedBy=current_user();
+END;
+
+/********************************************/
+
+CREATE DEFINER=`mainSoccer`@`%` TRIGGER `AwardTeam_BUPD` BEFORE UPDATE ON `AwardTeam` FOR EACH ROW
+BEGIN
+	SET NEW.UpdatedOn=curdate();
+	SET NEW.UpdatedBy=current_user();
+END;
+
+/********************************************/
+
+CREATE DEFINER=`mainSoccer`@`%` TRIGGER `BallPossesion_BINS` BEFORE INSERT ON `BallPossesion` FOR EACH ROW
+BEGIN
+	SET NEW.CreatedOn=curdate();
+	SET NEW.CreatedBy=current_user();
+	SET NEW.UpdatedOn=curdate();
+	SET NEW.UpdatedBy=current_user();
+END;
+
+/********************************************/
+
+CREATE DEFINER=`mainSoccer`@`%` TRIGGER `BallPossesion_BUPD` BEFORE UPDATE ON `BallPossesion` FOR EACH ROW
+BEGIN
+	SET NEW.UpdatedOn=curdate();
+	SET NEW.UpdatedBy=current_user();
+END;
+
+/********************************************/
+
+
+
+
+
+
+
+
+
+

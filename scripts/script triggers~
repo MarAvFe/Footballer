@@ -1,0 +1,42 @@
+-------
+CREATE DEFINER=`mainSoccer`@`%` TRIGGER `Attempt_BINS` BEFORE INSERT ON `Attempt` FOR EACH ROW
+BEGIN
+	SET NEW.CreatedOn=curdate();
+	SET NEW.CreatedBy=current_user();
+	SET NEW.UpdatedOn=curdate();
+	SET NEW.UpdatedBy=current_user();
+END;
+
+------------
+
+CREATE DEFINER=`mainSoccer`@`%` TRIGGER `Attempt_BINS` BEFORE INSERT ON `Attempt` FOR EACH ROW
+BEGIN
+	SET NEW.CreatedOn=curdate();
+	SET NEW.CreatedBy=current_user();
+	SET NEW.UpdatedOn=curdate();
+	SET NEW.UpdatedBy=current_user();
+END;
+
+----------------
+
+CREATE DEFINER=`mainSoccer`@`%` TRIGGER `AttemptType_BINS` BEFORE INSERT ON `AttemptType` FOR EACH ROW
+BEGIN
+	SET NEW.CreatedOn=curdate();
+	SET NEW.CreatedBy=current_user();
+	SET NEW.UpdatedOn=curdate();
+	SET NEW.UpdatedBy=current_user();
+END;
+
+---------------
+
+CREATE DEFINER=`mainSoccer`@`%` TRIGGER `AttemptType_BINS` BEFORE INSERT ON `AttemptType` FOR EACH ROW
+BEGIN
+	SET NEW.CreatedOn=curdate();
+	SET NEW.CreatedBy=current_user();
+	SET NEW.UpdatedOn=curdate();
+	SET NEW.UpdatedBy=current_user();
+END;
+
+---------------
+
+
