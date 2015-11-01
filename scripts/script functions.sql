@@ -89,3 +89,75 @@ BEGIN
 RETURN returnValue;
 
 END;
+
+CREATE DEFINER=`mainSoccer`@`%` FUNCTION `getCoachCountry`(pidCoach int) RETURNS varchar(20) CHARSET utf8
+BEGIN
+	DECLARE returnValue varchar(20);
+	select nameCountry
+	into returnValue
+	from Country
+	where idCountry=(select idCountry from Person where idPerson=(select idPerson from Coach where idCoach = pidCoach));
+	RETURN returnValue;
+END;
+
+CREATE DEFINER=`mainSoccer`@`%` FUNCTION `getCoachAge`(pidCoach int) RETURNS int(11)
+BEGIN
+	DECLARE returnValue int(4);
+	select year(curdate()) - year(birthdate)
+	into returnValue
+	from Person
+	where idPerson=(select idPerson from Coach where idCoach=pidCoach);
+	RETURN returnValue;
+END;
+
+CREATE DEFINER=`mainSoccer`@`%` FUNCTION `getCoachLastName`(pidCoach int) RETURNS varchar(20) CHARSET utf8
+BEGIN
+	DECLARE returnValue varchar(20);
+	select lastName
+	into returnValue
+	from Person
+	where idPerson=(select idPerson from Coach where idCoach = pidCoach);
+	RETURN returnValue;
+END;
+
+CREATE DEFINER=`mainSoccer`@`%` FUNCTION `getCoachSecondName`(pidCoach int) RETURNS varchar(20) CHARSET utf8
+BEGIN
+	DECLARE returnValue varchar(20);
+	select SecondName
+	into returnValue
+	from Person
+	where idPerson=(select idPerson from Coach where idCoach = pidCoach);
+	RETURN returnValue;
+END;
+
+CREATE DEFINER=`mainSoccer`@`%` FUNCTION `getCoachFirstName`(pidCoach int) RETURNS varchar(20) CHARSET utf8
+BEGIN
+	DECLARE returnValue varchar(20);
+	select firstName
+	into returnValue
+	from Person
+	where idPerson=(select idPerson from Coach where idCoach = pidCoach);
+	RETURN returnValue;
+END;
+
+CREATE DEFINER=`mainSoccer`@`%` FUNCTION `getCoachDNI`(pidCoach int) RETURNS int(11)
+BEGIN
+	DECLARE returnValue int;
+	select dni
+	into returnValue
+	from Person
+	where idPerson=(select idPerson from Coach where idCoach = pidCoach);
+	RETURN returnValue;
+END;
+
+
+
+
+
+
+
+
+
+
+
+
