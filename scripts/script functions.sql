@@ -150,6 +150,35 @@ BEGIN
 	RETURN returnValue;
 END;
 
+CREATE DEFINER=`mainSoccer`@`%` FUNCTION `getContinentName`(pidContinent int) RETURNS varchar(20) CHARSET utf8
+BEGIN
+	DECLARE returnValue varchar(20);
+	select nameContinent
+	into returnValue
+	from Continent
+	Where idContinent=pidContinent;
+	return returnValue;
+END;
+
+CREATE DEFINER=`mainSoccer`@`%` FUNCTION `getCountryName`(pidCountry int) RETURNS varchar(20) CHARSET utf8
+BEGIN
+	DECLARE returnValue varchar(20);
+	select nameCountry
+	into returnValue
+	from Country
+	Where idCountry=pidCountry;
+	return returnValue;
+END;
+
+CREATE DEFINER=`mainSoccer`@`%` FUNCTION `getCityName`(pidCity int) RETURNS varchar(20) CHARSET utf8
+BEGIN
+	DECLARE returnValue varchar(20);
+	select nameCity
+	into returnValue
+	from Country
+	Where idCity=pidCity;
+	return returnValue;
+END;
 
 
 
