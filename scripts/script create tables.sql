@@ -770,6 +770,83 @@ CREATE TABLE IF NOT EXISTS `mydb`.`Corner` (
 ENGINE = InnoDB;
 
 
+
+CREATE TABLE IF NOT EXISTS `mydb`.`Award_Player` (
+  `idAward_Player` INT NOT NULL AUTO_INCREMENT,
+  `idAwardPerson` INT NOT NULL,
+  `idPlayer` INT NOT NULL,
+  `idEvent` INT NOT NULL,
+  `createdBy` VARCHAR(45) NULL,
+  `createdOn` DATE NULL,
+  `updatedBy` VARCHAR(45) NULL,
+  `updatedOn` DATE NULL,
+  PRIMARY KEY (`idAward_Player`),
+  UNIQUE INDEX `idPlayer_UNIQUE` (`idPlayer` ASC),
+  UNIQUE INDEX `idAwardPerson_UNIQUE` (`idAwardPerson` ASC),
+  UNIQUE INDEX `idEvent_UNIQUE` (`idEvent` ASC),
+  CONSTRAINT `fk_Award_Player_idPlayer`
+    FOREIGN KEY (`idPlayer`)
+    REFERENCES `mydb`.`Player` (`idPlayer`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT `fk_Award_Player_idAwardPerson`
+    FOREIGN KEY (`idAwardPerson`)
+    REFERENCES `mydb`.`AwardPerson` (`idAwardPerson`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT `fk_Award_Player_idEvent`
+    FOREIGN KEY (`idEvent`)
+    REFERENCES `mydb`.`Event` (`idEvent`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
+ENGINE = InnoDB;
+
+drop table Award_Team;
+CREATE TABLE IF NOT EXISTS `mydb`.`Award_Team` (
+  `idAward_Team` INT NOT NULL AUTO_INCREMENT,
+  `idAwardTeam` INT NOT NULL,
+  `idTeam` INT NOT NULL,
+  `idEvent` INT NOT NULL,
+  `createdBy` VARCHAR(45) NULL,
+  `createdOn` DATE NULL,
+  `updatedBy` VARCHAR(45) NULL,
+  `updatedOn` DATE NULL,
+  PRIMARY KEY (`idAward_Team`),
+  UNIQUE INDEX `idAwardTeam_UNIQUE` (`idAwardTeam` ASC),
+  UNIQUE INDEX `idTeam_UNIQUE` (`idTeam` ASC),
+  UNIQUE INDEX `idEvent_UNIQUE` (`idEvent` ASC),
+  CONSTRAINT `fk_Award_Team_idTeam`
+    FOREIGN KEY (`idTeam`)
+    REFERENCES `mydb`.`Team` (`idTeam`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT `fk_Award_Team_idAwardTeam`
+    FOREIGN KEY (`idAwardTeam`)
+    REFERENCES `mydb`.`AwardTeam` (`idAwardTeam`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT `fk_Award_Team_idEvent`
+    FOREIGN KEY (`idEvent`)
+    REFERENCES `mydb`.`Event` (`idEvent`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
+ENGINE = InnoDB;
+
+drop table ParameterTableGroup;
+CREATE TABLE IF NOT EXISTS `mydb`.`ParameterTableGroup` (
+  `numberTag` INT NOT NULL,
+  `nameGroup` VARCHAR(45) NOT NULL COMMENT 'Campo para los nombres de cada grupo. Se usan cuando se crean nuevos grupos durantes los eventos.',
+  `createdBy` VARCHAR(45) NULL,
+  `createdOn` DATE NULL,
+  `updatedBy` VARCHAR(45) NULL,
+  `updatedOn` DATE NULL,
+  PRIMARY KEY (`numberTag`),
+  UNIQUE INDEX `nameGroup_UNIQUE` (`nameGroup` ASC))
+ENGINE = InnoDB;
+
+
+
+
 SET SQL_MODE=@OLD_SQL_MODE;
 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS;
 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS;
