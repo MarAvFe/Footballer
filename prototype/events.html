@@ -92,6 +92,21 @@
                   </div>
                 </div>
                 <div class="form-group">
+                  <div class="col-sm-offset-3 col-sm-1">
+                    <label class="control-label">Teams</label>
+                  </div>
+                  <div class="col-sm-8">
+                    <select class="selectpicker" data-width="100%" multiple="" data-live-search="true" data-selected-text-format="count" title="Countries" data-max-options="3">
+                      <option>Honduras</option>
+                      <option>Portugal</option>
+                      <option>Spain</option>
+                      <option>Panama</option>
+                      <option>USA</option>
+                      <option>Angola</option>
+                    </select>
+                  </div>
+                </div>
+                <div class="form-group">
                   <div class="col-sm-offset-4 col-sm-8">
                     <button type="submit" class="btn btn-success">Add event</button>
                   </div>
@@ -117,7 +132,9 @@
               </thead>
               <tbody>
                 <tr>
-                  <td><a href="event.html">World cup</a></td>
+                  <td>
+                    <a href="event.html">World cup</a>
+                  </td>
                   <td>Cup</td>
                   <td>13/06/2015</td>
                   <td>13/07/2015</td>
@@ -176,18 +193,18 @@
     </footer>
     <script>
       $('.popper').popover({
-                                placement: 'right',
-                                container: 'body',
-                                html: true,
-                                content: function () {
-                                  return $(this).next('.popper-content').html();
-                                }
-                              });
-                              $('#dateSelector .input-daterange.input-group').datepicker({
-                                format: "dd/mm/yyyy",
-                                autoclose: true,
-                                todayHighlight: true
-                              });
+                                        placement: 'right',
+                                        container: 'body',
+                                        html: true,
+                                        content: function () {
+                                          return $(this).next('.popper-content').html();
+                                        }
+                                      });
+                                      $('#dateSelector .input-daterange.input-group').datepicker({
+                                        format: "dd/mm/yyyy",
+                                        autoclose: true,
+                                        todayHighlight: true
+                                      });
     </script>
   
 
