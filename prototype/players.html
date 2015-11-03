@@ -7,12 +7,14 @@
     <link href="http://pingendo.github.io/pingendo-bootstrap/themes/default/bootstrap.css" rel="stylesheet" type="text/css">
     <link href="css/bootstrap-datepicker.min.css" rel="stylesheet" type="text/css">
     <script type="text/javascript" src="js/bootstrap-datepicker.js"></script>
+    <link href="css/bootstrap-select.min.css" rel="stylesheet" type="text/css">
+    <script type="text/javascript" src="js/bootstrap-select.min.js"></script>
     <style>
       .container.playersPics .row img{
-                width:200px;
-                height:230px;
-                margin-bottom:20px;
-              }
+                        width:200px;
+                        height:230px;
+                        margin-bottom:20px;
+                      }
     </style>
   </head><body>
     <div class="navbar navbar-default navbar-static-top">
@@ -91,7 +93,7 @@
                       <label class="control-label">Country</label>
                     </div>
                     <div class="col-sm-8">
-                      <select>
+                      <select class="selectpicker" data-width="100%" data-live-search="true">
                         <option>Mustard</option>
                         <option>Ketchup</option>
                         <option>Relish</option>
@@ -246,18 +248,18 @@
     </footer>
     <script>
       $('.popper').popover({
-        placement: 'right',
-        container: 'body',
-        html: true,
-        content: function () {
-          return $(this).next('.popper-content').html();
-        }
-      });
-      $('#dateSelector .input-group.date').datepicker({
-        format: "dd/mm/yyyy",
-        autoclose: true,
-        todayHighlight: true
-      });
+                placement: 'right',
+                container: 'body',
+                html: true,
+                content: function () {
+                  return $(this).next('.popper-content').html();
+                }
+              });
+              $('#dateSelector .input-group.date').datepicker({
+                format: "dd/mm/yyyy",
+                autoclose: true,
+                todayHighlight: true
+              });
     </script>
   
 

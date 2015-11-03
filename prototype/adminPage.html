@@ -6,20 +6,24 @@
     <script type="text/javascript" src="js/updateCombos.js"></script>
     <link href="http://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
     <link href="http://pingendo.github.io/pingendo-bootstrap/themes/default/bootstrap.css" rel="stylesheet" type="text/css">
+    <link href="css/bootstrap-datepicker.min.css" rel="stylesheet" type="text/css">
+    <link href="css/bootstrap-select.min.css" rel="stylesheet" type="text/css">
+    <script type="text/javascript" src="js/bootstrap-select.min.js"></script>
+    <script type="text/javascript" src="js/bootstrap-datepicker.js"></script>
     <style>
       .table.statics th+th, 
-                      .table.statics td+td{
-                      	width:50%;
-                      }
-                      .table.statics th, 
-                      .table.statics td,
-                      .table.statics th+th+th, 
-                      .table.statics td+td+td{
-                      	width:25%;
-                      }
-                      .table.statics{
-                      text-align:center;
-                      }
+                                              .table.statics td+td{
+                                              	width:50%;
+                                              }
+                                              .table.statics th, 
+                                              .table.statics td,
+                                              .table.statics th+th+th, 
+                                              .table.statics td+td+td{
+                                              	width:25%;
+                                              }
+                                              .table.statics{
+                                              text-align:center;
+                                              }
     </style>
   </head><body>
     <div class="navbar navbar-default navbar-static-top">
@@ -85,7 +89,7 @@
                 <tr>
                   <td>Positions</td>
                   <td>
-                    <select>
+                    <select class="selectpicker" data-width="100%">
                       <option>Goalkeeper</option>
                       <option>Defense</option>
                       <option>Midfield</option>
@@ -102,35 +106,41 @@
                   </td>
                 </tr>
                 <tr>
+                  <form role="form" class="form-horizontal"></form>
                   <td>Cup structure</td>
-                  <td>
-                    <select>
-                      <option>Goalkeeper</option>
-                      <option>Defense</option>
-                      <option>Midfield</option>
-                    </select>
-                  </td>
-                  <td>
-                    <input type="text" class="form-control" placeholder="Forward">
-                  </td>
-                  <td>
-                    <button type="button" class="btn  btn-info">Add position</button>
-                  </td>
-                  <td>
-                    <button type="button" class="btn  btn-info">Delete position</button>
-                  </td>
-                </tr>
-                <tr>
-                  <td>Positions</td>
-                  <td>
-                    <select>
-                      <option>Goalkeeper</option>
-                      <option>Defense</option>
-                      <option>Midfield</option>
-                    </select>
-                  </td>
-                  <td>
-                    <input type="text" class="form-control" placeholder="Forward">
+                  <td colspan="2">
+                    <div class="form-group">
+                      <div class="col-sm-3">
+                        <select class="selectpicker" data-width="100%">
+                          <option>Cup</option>
+                          <option>Crown</option>
+                          <option>Hexagonal</option>
+                        </select>
+                      </div>
+                      <div class="col-sm-9">
+                        <input type="text" class="form-control" placeholder="Name">
+                      </div>
+                      <div class="col-sm-3">
+                        <input type="text" class="form-control" placeholder="16">
+                      </div>
+                      <div class="col-sm-9">
+                        <select class="selectpicker" data-width="100%">
+                          <option>8</option>
+                          <option>16</option>
+                          <option>32</option>
+                        </select>
+                      </div>
+                      <div class="col-sm-3">
+                        <input type="text" class="form-control" placeholder="4">
+                      </div>
+                      <div class="col-sm-9">
+                        <select class="selectpicker" data-width="100%">
+                          <option>2</option>
+                          <option>4</option>
+                          <option>8</option>
+                        </select>
+                      </div>
+                    </div>
                   </td>
                   <td>
                     <button type="button" class="btn  btn-info">Add position</button>
@@ -227,7 +237,7 @@
             <div id="addAwardForm" class="collapse">
               <div class="row">
                 <div class="col-md-offset-2 col-md-8">
-                  <form role="form" class="form-horizontal" id="dateSelector">
+                  <form role="form" class="form-horizontal">
                     <select>
                       <option>Team</option>
                       <option>Player</option>
@@ -242,7 +252,7 @@
                       <option>Emmy</option>
                       <option>Balon de Oro</option>
                     </select>
-                    <div class="col-sm-8" id="dateSelector">
+                    <div id="dateSelector">
                       <!--<input type="text" class="form-control" placeholder="dd/mm/yyyy" id="datepicker">-->
                       <div class="input-group date">
                         <input type="text" class="form-control" readonly="true">
@@ -296,18 +306,19 @@
     </footer>
     <script>
       $('.popper').popover({
-                placement: 'right',
-                container: 'body',
-                html: true,
-                content: function () {
-                  return $(this).next('.popper-content').html();
-                }
-              });
-              $('#dateSelector .input-group.date').datepicker({
-                format: "dd/mm/yyyy",
-                autoclose: true,
-                todayHighlight: true
-              });
+                                        placement: 'right',
+                                        container: 'body',
+                                        html: true,
+                                        content: function () {
+                                          return $(this).next('.popper-content').html();
+                                        }
+                                      });
+                                      $('#dateSelector .input-group.date').datepicker({
+                                        format: "dd/mm/yyyy",
+                                        autoclose: true,
+                                        todayHighlight: true
+                                      });
+            $('.selectpicker').selectpicker();
     </script>
   
 
