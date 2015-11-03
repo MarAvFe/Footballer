@@ -12,18 +12,18 @@
     <script type="text/javascript" src="js/bootstrap-datepicker.js"></script>
     <style>
       .table.statics th+th, 
-                                              .table.statics td+td{
-                                              	width:50%;
-                                              }
-                                              .table.statics th, 
-                                              .table.statics td,
-                                              .table.statics th+th+th, 
-                                              .table.statics td+td+td{
-                                              	width:25%;
-                                              }
-                                              .table.statics{
-                                              text-align:center;
-                                              }
+                                                      .table.statics td+td{
+                                                      	width:50%;
+                                                      }
+                                                      .table.statics th, 
+                                                      .table.statics td,
+                                                      .table.statics th+th+th, 
+                                                      .table.statics td+td+td{
+                                                      	width:25%;
+                                                      }
+                                                      .table.statics{
+                                                      text-align:center;
+                                                      }
     </style>
   </head><body>
     <div class="navbar navbar-default navbar-static-top">
@@ -159,12 +159,12 @@
               <div class="row">
                 <div class="col-md-offset-2 col-md-8">
                   <form role="form" class="form-horizontal">
-                    <select>
+                    <select class="selectpicker" data-width="auto">
                       <option>World Cup</option>
                       <option>Copa America</option>
                       <option>Euro Cup</option>
                     </select>
-                    <select>
+                    <select class="selectpicker" data-width="auto">
                       <option>Belgium-South Africa</option>
                       <option>France-Honduras</option>
                       <option>Italy-Mexico</option>
@@ -306,19 +306,19 @@
     </footer>
     <script>
       $('.popper').popover({
-                                        placement: 'right',
-                                        container: 'body',
-                                        html: true,
-                                        content: function () {
-                                          return $(this).next('.popper-content').html();
-                                        }
-                                      });
-                                      $('#dateSelector .input-group.date').datepicker({
-                                        format: "dd/mm/yyyy",
-                                        autoclose: true,
-                                        todayHighlight: true
-                                      });
-            $('.selectpicker').selectpicker();
+                                                placement: 'right',
+                                                container: 'body',
+                                                html: true,
+                                                content: function () {
+                                                  return $(this).next('.popper-content').html();
+                                                }
+                                              });
+                                              $('#dateSelector .input-group.date').datepicker({
+                                                format: "dd/mm/yyyy",
+                                                autoclose: true,
+                                                todayHighlight: true
+                                              });
+                    $('.selectpicker').selectpicker();
     </script>
   
 

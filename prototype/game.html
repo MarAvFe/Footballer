@@ -3,14 +3,27 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <script type="text/javascript" src="http://cdnjs.cloudflare.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
     <script type="text/javascript" src="http://netdna.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="js/updateCombos.js"></script>
     <link href="http://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
     <link href="http://pingendo.github.io/pingendo-bootstrap/themes/default/bootstrap.css" rel="stylesheet" type="text/css">
     <link href="css/bootstrap-datepicker.min.css" rel="stylesheet" type="text/css">
-    <script type="text/javascript" src="js/bootstrap-datepicker.js"></script>
     <link href="css/bootstrap-select.min.css" rel="stylesheet" type="text/css">
     <script type="text/javascript" src="js/bootstrap-select.min.js"></script>
+    <script type="text/javascript" src="js/bootstrap-datepicker.js"></script>
     <style>
-      img{margin:0}
+      .table.statics th+th, 
+                                                      .table.statics td+td{
+                                                      	width:50%;
+                                                      }
+                                                      .table.statics th, 
+                                                      .table.statics td,
+                                                      .table.statics th+th+th, 
+                                                      .table.statics td+td+td{
+                                                      	width:25%;
+                                                      }
+                                                      .table.statics{
+                                                      text-align:center;
+                                                      }
     </style>
   </head><body>
     <div class="navbar navbar-default navbar-static-top">
@@ -27,10 +40,10 @@
         </div>
         <div class="collapse navbar-collapse" id="navbar-ex-collapse">
           <ul class="nav navbar-nav navbar-right">
-            <li>
+            <li class="active">
               <a href="home.html">Home</a>
             </li>
-            <li class="active">
+            <li>
               <a href="events.html">Events</a>
             </li>
             <li>
@@ -48,91 +61,95 @@
     </div>
     <div class="section">
       <div class="container">
-        <button type="button" class="btn btn-block btn-info btn-lg" data-target="#addStadiumForm" data-toggle="collapse">Add a new event
-          <i class="fa fa-fw fa-lg fa-plus-circle"></i>
-        </button>
-        <br>
-        <div id="addStadiumForm" class="collapse">
-          <div class="row">
-            <div class="col-md-12">
-              <form class="form-horizontal" role="form">
-                <div class="form-group">
-                  <div class="col-sm-offset-3 col-sm-1">
-                    <label class="control-label">Name</label>
-                  </div>
-                  <div class="col-sm-8">
-                    <input type="text" class="form-control">
-                  </div>
-                </div>
-                <div class="form-group">
-                  <div class="col-sm-offset-3 col-sm-1">
-                    <label class="control-label">Start-End</label>
-                  </div>
-                  <div class="col-sm-8" id="dateSelector">
-                    <div class="input-daterange input-group">
-                      <input type="text" class="input-sm form-control" name="start" readonly="">
-                      <span class="input-group-addon">to</span>
-                      <input type="text" class="input-sm form-control" name="end" readonly="">
-                      <span class="input-group-addon">
-                        <i class="fa fa-fw fa-lg -circle fa-calendar"></i>
-                      </span>
-                    </div>
-                  </div>
-                </div>
-                <div class="form-group">
-                  <div class="col-sm-offset-3 col-sm-1">
-                    <label class="control-label">Structure</label>
-                  </div>
-                  <div class="col-sm-8">
-                    <select class="selectpicker" data-width="100%">
-                      <option>Cup</option>
-                      <option>Crown</option>
-                      <option>Hexagonal</option>
-                    </select>
-                  </div>
-                </div>
-                <div class="form-group">
-                  <div class="col-sm-offset-4 col-sm-8">
-                    <button type="submit" class="btn btn-success">Add event</button>
-                  </div>
-                </div>
-              </form>
+        <div class="row">
+          <div class="col-md-12">
+            <div class="well">
+              <h1 class="text-center">Game</h1>
             </div>
           </div>
         </div>
-      </div>
-    </div>
-    <div class="section">
-      <div class="container">
         <div class="row">
-          <div class="col-md-12">
-            <table class="table">
+          <div class="col-md-offset-3 col-md-6">
+            <table class="table statics">
               <thead>
                 <tr>
-                  <th>Event name</th>
-                  <th>Event structure</th>
-                  <th>Start date</th>
-                  <th>End date</th>
+                  <th>Belgium</th>
+                  <th>Static</th>
+                  <th>South Africa</th>
                 </tr>
               </thead>
               <tbody>
                 <tr>
-                  <td><a href="event.html">World cup</a></td>
-                  <td>Cup</td>
-                  <td>13/06/2015</td>
-                  <td>13/07/2015</td>
+                  <td>
+                    <p class="lead">0</p>
+                  </td>
+                  <td>Ball possesion</td>
+                  <td>
+                    <p class="lead">0</p>
+                  </td>
                 </tr>
                 <tr>
-                  <td>World cup</td>
-                  <td>Cup</td>
-                  <td>13/06/2015</td>
-                  <td>13/07/2015</td>
+                  <td>
+                    <p class="lead">0</p>
+                  </td>
+                  <td>Offsides</td>
+                  <td>
+                    <p class="lead">0</p>
+                  </td>
                 </tr>
                 <tr>
-                  <td>World cup</td>
-                  <td>Cup</td>
-                  <td>13/06/2015</td>
-                  <td>13/07/2015</td>
+                  <td>
+                    <p class="lead">0</p>
+                  </td>
+                  <td>Fouls</td>
+                  <td>
+                    <p class="lead">0</p>
+                  </td>
+                </tr>
+                <tr>
+                  <td>
+                    <p class="lead">0</p>
+                  </td>
+                  <td>Attempts (direct)</td>
+                  <td>
+                    <p class="lead">0</p>
+                  </td>
+                </tr>
+                <tr>
+                  <td>
+                    <p class="lead">0</p>
+                  </td>
+                  <td>Goals</td>
+                  <td>
+                    <p class="lead">0</p>
+                  </td>
+                </tr>
+                <tr>
+                  <td>
+                    <p class="lead">0</p>
+                  </td>
+                  <td>Yellow cards</td>
+                  <td>
+                    <p class="lead">0</p>
+                  </td>
+                </tr>
+                <tr>
+                  <td>
+                    <p class="lead">0</p>
+                  </td>
+                  <td>Red cards</td>
+                  <td>
+                    <p class="lead">0</p>
+                  </td>
+                </tr>
+                <tr>
+                  <td>
+                    <p class="lead">0</p>
+                  </td>
+                  <td>Corners</td>
+                  <td>
+                    <p class="lead">0</p>
+                  </td>
                 </tr>
               </tbody>
             </table>
@@ -176,18 +193,19 @@
     </footer>
     <script>
       $('.popper').popover({
-                                placement: 'right',
-                                container: 'body',
-                                html: true,
-                                content: function () {
-                                  return $(this).next('.popper-content').html();
-                                }
-                              });
-                              $('#dateSelector .input-daterange.input-group').datepicker({
-                                format: "dd/mm/yyyy",
-                                autoclose: true,
-                                todayHighlight: true
-                              });
+                                                placement: 'right',
+                                                container: 'body',
+                                                html: true,
+                                                content: function () {
+                                                  return $(this).next('.popper-content').html();
+                                                }
+                                              });
+                                              $('#dateSelector .input-group.date').datepicker({
+                                                format: "dd/mm/yyyy",
+                                                autoclose: true,
+                                                todayHighlight: true
+                                              });
+                    $('.selectpicker').selectpicker();
     </script>
   
 
