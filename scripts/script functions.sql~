@@ -210,7 +210,26 @@ BEGIN
 	return returnValue;
 END;
 
+CREATE DEFINER=`mainSoccer`@`%` FUNCTION `getTotalAttemptsTeam`(pIdGame int,pIdTeam int) RETURNS int(11)
+BEGIN
+	declare returnValue int(11);
+	select count(1)
+	into returnValue
+	from Attempt go
+	where go.idGame = pIdGame  and idTeam= pIdTeam;
+	return returnValue;
+END;
 
+
+CREATE DEFINER=`mainSoccer`@`%` FUNCTION `getCornersTeam`(pIdGame int, pIdTeam int) RETURNS int(11)
+BEGIN
+	declare returnValue int(11);
+	select count(1)
+	into returnValue
+	from Corner go
+	where go.idGame = pIdGame  and idTeam= pIdTeam;
+	return returnValue;
+END;
 
 
 

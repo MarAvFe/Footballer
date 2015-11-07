@@ -221,6 +221,47 @@ BEGIN
 END;
 
 
+CREATE DEFINER=`mainSoccer`@`%` FUNCTION `getCornersTeam`(pIdGame int, pIdTeam int) RETURNS int(11)
+BEGIN
+	declare returnValue int(11);
+	select count(1)
+	into returnValue
+	from Corner go
+	where go.idGame = pIdGame  and idTeam= pIdTeam;
+	return returnValue;
+END;
+
+CREATE DEFINER=`mainSoccer`@`%` FUNCTION `getSavesTeam`(pIdGame int, pIdTeam int) RETURNS int(11)
+BEGIN
+	declare returnValue int(11);
+	select count(1)
+	into returnValue
+	from Save go
+	where go.idGame =  pIdGame and getIdTeam(idPlayer,pIdGame) = pIdTeam;
+	return returnValue;
+END;
+
+CREATE DEFINER=`mainSoccer`@`%` FUNCTION `getOffsidesTeam`(pIdGame int, pIdTeam int) RETURNS int(11)
+BEGIN
+	declare returnValue int(11);
+	select count(1)
+	into returnValue
+	from Offside go
+	where go.idGame = pIdGame  and idTeam= pIdTeam;
+	return returnValue;
+END;
+
+CREATE DEFINER=`mainSoccer`@`%` FUNCTION `getFoulsTeam`(pIdGame int, pIdTeam int) RETURNS int(11)
+BEGIN
+	declare returnValue int(11);
+	select count(1)
+	into returnValue
+	from Foul go
+	where go.idGame = pIdGame  and idTeam= pIdTeam;
+	return returnValue;
+END
+
+
 
 
 
