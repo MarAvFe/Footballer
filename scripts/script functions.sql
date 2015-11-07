@@ -259,11 +259,27 @@ BEGIN
 	from Foul go
 	where go.idGame = pIdGame  and idTeam= pIdTeam;
 	return returnValue;
-END
+END;
 
+CREATE DEFINER=`mainSoccer`@`%` FUNCTION `getBallPossesionHome`(pIdGame int) RETURNS int(11)
+BEGIN
+	declare returnValue int(11);
+	select homePercentage
+	into returnValue
+	from BallPossesion
+	where idGame = pIdGame;
+	return returnValue;
+END;
 
-
-
+CREATE DEFINER=`mainSoccer`@`%` FUNCTION `getBallPossesionVisit`(pIdGame int) RETURNS int(11)
+BEGIN
+	declare returnValue int(11);
+	select (100 - homePercentage)
+	into returnValue
+	from BallPossesion
+	where idGame = pIdGame;
+	return returnValue;
+END;
 
 
 
