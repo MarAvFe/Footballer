@@ -284,8 +284,30 @@ DELIMITER ;
 
 
 
+DELIMITER //
+CREATE PROCEDURE insertPosition(in pNamePosition varchar(45))
+ BEGIN
+ insert into mydb.Position(namePosition)
+ values (pNamePosition);
+ END //
+DELIMITER ;
+
+DELIMITER //
+CREATE PROCEDURE insertPlayer_Team(in pIdPlayer int, in  pIdTeam int, in pShirtNum int)
+ BEGIN
+ insert into Player_team(idPlayer,idTeam,shirtNum)
+ values (pIdPlayer, pIdTeam, pShirtNum);
+ END //
+DELIMITER ;
 
 
+DELIMITER //
+CREATE PROCEDURE insertPlayer_LineUp(in pIdPlayer int, in  pIdLineUp int,in  pIdPosition int)
+ BEGIN
+ insert into Player_LineUp(idPlayer,idLineUp,idPosition)
+ values (pIdPlayer, pIdLineUp,pIdPosition);
+ END //
+DELIMITER ;
 
 
 
