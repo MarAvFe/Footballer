@@ -309,6 +309,55 @@ CREATE PROCEDURE insertPlayer_LineUp(in pIdPlayer int, in  pIdLineUp int,in  pId
  END //
 DELIMITER ;
 
+DELIMITER //
+CREATE PROCEDURE insertStadium_Game(in pIdStadium int, in pIdGame int)
+ BEGIN
+ insert into Stadium_Game(idStadium,idGame)
+ values (pIdStadium,pIdGame);
+ END //
+DELIMITER ;
+
+DELIMITER //
+CREATE PROCEDURE insertSustitutionLineUp(in pIdPlayer int, in pIdPlayerReplacement int,
+in pMinute int,in pIdLineUp int)
+ BEGIN
+ insert into SustitutionLineUp(idPlayer,idPlayerReplacement,minute,idLineUp)
+ values (pIdPlayer, pIdPlayerReplacement, pMinute, pIdLineUp);
+ END //
+DELIMITER ;
+
+DELIMITER //
+CREATE PROCEDURE insertLineUp(in pIdGame int, in pIdTeam int)
+ BEGIN
+ insert into LineUp(idGame,idTeam)
+ values (pIdGame,pIdTeam);
+ END //
+DELIMITER ;
+
+
+DELIMITER //
+CREATE PROCEDURE insertGame(in pIdHome int,in pIdVisitor int,
+in pMatchJourney int,in pDateTimeGame datetime,in pTotalGameTime int,
+in pIdEvent int)
+ BEGIN
+ insert into Game(idHome,idVisitor,matchJourney,dateTimeGame,totalGameTime,idEvent)
+ values (pIdHome, pIdVisitor, pMatchJourney, pDateTimeGame, pTotalGameTime, pIdEvent);
+ END //
+DELIMITER ;
 
 
 
+DELIMITER //
+CREATE PROCEDURE getContinent()
+ BEGIN
+    select nameContinent , idContinent from Continent;
+ END //
+DELIMITER ;
+
+
+DELIMITER //
+CREATE PROCEDURE getContinent()
+ BEGIN
+    select nameContinent , idContinent from Continent;
+ END //
+DELIMITER ;

@@ -92,7 +92,7 @@ call insertParameterTableGroup(5,'Grupo F');
 call insertParameterTableGroup(6,'Grupo G');
 call insertParameterTableGroup(7,'Grupo H');
 
-
+SoccerUser
 select * from EventStructure;
 select * from mydb.Group;
 select * from mydb.Event;
@@ -101,10 +101,15 @@ call insertEvent('Copa Meh', STR_TO_DATE('01/01/1995','%d/%m/%Y'),
 STR_TO_DATE('05/01/1995','%d/%m/%Y'),5);
 
 
+delete from
+select * from Player_team;
+ALTER TABLE `Player_LineUp` drop column shirtNum;
+ALTER TABLE `Player_team` add column `shirtNum` int NOT NULL;
 
 
-
-
+select getIdTeam(idPlayer,pIdGame)
+select * from Player_team
+select getIdTeam(4,1)
 
 
 
