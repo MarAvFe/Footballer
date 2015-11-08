@@ -281,6 +281,37 @@ BEGIN
 	return returnValue;
 END;
 
+CREATE DEFINER=`mainSoccer`@`%` FUNCTION `getTeamName`(pIdTeam int) RETURNS varchar(20) CHARSET utf8
+BEGIN
+	declare returnValue varchar(20);
+	select nameTeam
+	into returnValue
+	from Team
+	where idTeam=pIdTeam;
+	RETURN returnValue;
+END;
+
+CREATE DEFINER=`mainSoccer`@`%` FUNCTION `getTeamCaptain`(pidTeam int) RETURNS varchar(40) CHARSET utf8
+BEGIN
+	declare returnValue varchar(40);
+	select CONCAT(firstName,' ',secondName,' ',lastName)
+	into returnValue
+	from Person
+	where idPerson= (select idPerson from Player where idPlayer = (select captain from Team where idTeam=pidTeam));
+	RETURN returnValue;
+END;
+
+CREATE DEFINER=`mainSoccer`@`%` FUNCTION `getTeamCoach`(pIdTeam int) RETURNS varchar(40) CHARSET utf8
+BEGIN
+	declare returnValue varchar(40);
+	select CONCAT(firstName,' ',secondName,' ',lastName)
+	into returnValue
+	from Person
+	where idPerson= (select idPerson from Coach where idCoach = (select idCoach from Team where idTeam=pIdTeam));
+	RETURN returnValue;
+END;
+
+
 
 
 
