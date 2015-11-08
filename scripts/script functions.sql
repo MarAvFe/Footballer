@@ -311,7 +311,29 @@ BEGIN
 	RETURN returnValue;
 END;
 
+CREATE DEFINER=`mainSoccer`@`%` PROCEDURE `getAwardsTeam`()
+BEGIN
+	select idAwardTeam,nameAwardTeam,idEventStructure
+	from AwardPerson;
+END;
 
+CREATE DEFINER=`mainSoccer`@`%` PROCEDURE `getAwardsPerson`()
+BEGIN
+	select idAwardPerson,nameAwardPerson,idEventStructure
+	from AwardPerson;
+END;
+
+CREATE DEFINER=`mainSoccer`@`%` PROCEDURE `insertAwardxTeam`(in pIdAwardTeam int, in pIdTeam int, in pIdEvent int)
+BEGIN
+	insert into Award_Team(IdAwardTeam,IdTeam,IdEvent)
+	values (pIdAwardTeam,pIdTeam,pIdEvent);
+END;
+
+CREATE DEFINER=`mainSoccer`@`%` PROCEDURE `insertAwardxPlayer`(in pidAwardPerson int, in pidPlayer int,in pidEvent int)
+BEGIN
+	insert into Award_Player(idAwardPerson,idPlayer,idEvent)
+	values (pidAwardPerson,pidPlayer,pidEvent);
+END;
 
 
 
