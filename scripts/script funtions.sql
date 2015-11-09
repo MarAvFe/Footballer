@@ -329,7 +329,11 @@ BEGIN
 	values (pIdAwardTeam,pIdTeam,pIdEvent);
 END;
 
-
+CREATE PROCEDURE `insertStadium` (in pNameStadium varchar(40), in pCapacity int, in pIdCity int)
+BEGIN
+	insert into Stadium(nameStadium,capacity,idCity) 
+    values (pNameStadium,pCapacity,pIdCity);
+END;
 
 
 
