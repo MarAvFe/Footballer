@@ -59,24 +59,24 @@ function normalize_date($date){
             <span class="icon-bar"></span>
           </button>
           <a class="navbar-brand"><img height="40" alt="Brand" src="img/SoccerStatsImgLogo.png" style="position:relative;bottom:10px;"></a>
-          <a href="home.html"><h4 class="navbar-text">SOCCER STATS</h4></a>
+          <a href="index.php"><h4 class="navbar-text">SOCCER STATS</h4></a>
         </div>
         <div class="collapse navbar-collapse" id="navbar-ex-collapse">
           <ul class="nav navbar-nav navbar-right">
             <li>
-              <a href="home.html">Home</a>
+              <a href="index.php">Home</a>
             </li>
             <li>
               <a href="events.php">Events</a>
             </li>
             <li>
-              <a href="teams.html">Teams</a>
+              <a href="teams.php">Teams</a>
             </li>
             <li>
               <a href="players.php">Players</a>
             </li>
             <li>
-              <a href="stadiums.html">Stadiums</a>
+              <a href="stadiums.php">Stadiums</a>
             </li>
           </ul>
         </div>

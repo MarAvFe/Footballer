@@ -50,7 +50,7 @@ $hasError = $loginFail>0 ? ' has-error' : '';
             <span class="icon-bar"></span>
           </button>
           <a class="navbar-brand"><img height="40" alt="Brand" src="img/SoccerStatsImgLogo.png" style="position:relative;bottom:10px;"></a>
-          <a href="home.html"><h4 class="navbar-text">SOCCER STATS</h4></a>
+          <a href="index.php"><h4 class="navbar-text">SOCCER STATS</h4></a>
         </div>
         <div class="collapse navbar-collapse" id="navbar-ex-collapse">
           <form class="navbar-form navbar-left" role="search" action="index.php" method="post">
@@ -67,16 +67,16 @@ $hasError = $loginFail>0 ? ' has-error' : '';
               <a href="index.php">Home</a>
             </li>
             <li>
-              <a href="events.html">Events</a>
+              <a href="events.php">Events</a>
             </li>
             <li>
-              <a href="teams.html">Teams</a>
+              <a href="teams.php">Teams</a>
             </li>
             <li>
-              <a href="players.html">Players</a>
+              <a href="players.php">Players</a>
             </li>
             <li>
-              <a href="stadiums.html">Stadiums</a>
+              <a href="stadiums.php">Stadiums</a>
             </li>
           </ul>
         </div>

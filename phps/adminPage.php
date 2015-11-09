@@ -6,9 +6,7 @@ if(!isset($_SESSION['loggedUser'])){
     header('Location: '.$newURL);
 }
 
-// Create connection
 $conn = new mysqli($_SESSION['server'], $_SESSION['username'], $_SESSION['password'], $_SESSION['dbname']);
-// Check connection
 if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
 }
@@ -22,19 +20,29 @@ if(isset($_POST['delPosition'])){
     $conn->query($sql);
 }
 
+if(isset($_POST["newStat"])){
+   
+    $capture_field_vals ="";
+    foreach($_POST["newStat"] as $key => $text_field){
+        $capture_field_vals .= $text_field .", ";
+    }
+   
+    echo $capture_field_vals;
+}
 ?>
-<!DOCTYPE html5><html><head>
+<!DOCTYPE html5><html ng-app=""><head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <script type="text/javascript" src="http://cdnjs.cloudflare.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
     <script type="text/javascript" src="http://netdna.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
-    <script type="text/javascript" src="js/updateCombos.js"></script>
+    <script type="text/javascript" src="./js/updateCombos.js"></script>
     <link href="http://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
     <link href="http://pingendo.github.io/pingendo-bootstrap/themes/default/bootstrap.css" rel="stylesheet" type="text/css">
-    <link href="css/bootstrap-datepicker.min.css" rel="stylesheet" type="text/css">
-    <link href="css/bootstrap-select.min.css" rel="stylesheet" type="text/css">
-    <script type="text/javascript" src="js/bootstrap-select.min.js"></script>
-    <script type="text/javascript" src="js/bootstrap-datepicker.js"></script>
+    <link href="./css/bootstrap-datepicker.min.css" rel="stylesheet" type="text/css">
+    <link href="./css/bootstrap-select.min.css" rel="stylesheet" type="text/css">
+    <script type="text/javascript" src="./js/bootstrap-select.min.js"></script>
+    <script type="text/javascript" src="./js/bootstrap-datepicker.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.7/angular.min.js"></script>
     <style>
       .table.statics th+th, 
       .table.statics td+td{
@@ -46,10 +54,25 @@ if(isset($_POST['delPosition'])){
       .table.statics td+td+td{
         width:25%;
       }
-      .table.statics{
+      .table.statics, th{
       text-align:center;
       }
     </style>
+    <script>
+        
+        $(function() {
+            $('.selectpicker.gameselect').on('change', function(){
+                var selected = $(this).find("option:selected").val();
+                var optVals = selected.split("-");
+                document.getElementById("homeId").value = optVals[0];
+                document.getElementById('visitId').value = optVals[1];
+                document.getElementById('homeName').innerHTML = optVals[2];
+                document.getElementById('visitName').innerHTML = optVals[3];
+            });
+
+        });
+    </script>
+
   </head><body>
     <div class="navbar navbar-default navbar-static-top">
       <div class="container">
@@ -61,7 +84,7 @@ if(isset($_POST['delPosition'])){
             <span class="icon-bar"></span>
           </button>
           <a class="navbar-brand"><img height="40" alt="Brand" src="img/SoccerStatsImgLogo.png" style="position:relative;bottom:10px;"></a>
-          <a href="home.html"><h4 class="navbar-text">SOCCER STATS</h4></a>
+          <a href="index.php"><h4 class="navbar-text">SOCCER STATS</h4></a>
         </div>
         <div class="collapse navbar-collapse" id="navbar-ex-collapse">
           <ul class="nav navbar-nav navbar-right">
@@ -69,16 +92,16 @@ if(isset($_POST['delPosition'])){
               <a href="index.php">Home</a>
             </li>
             <li>
-              <a href="events.html">Events</a>
+              <a href="events.php">Events</a>
             </li>
             <li>
-              <a href="teams.html">Teams</a>
+              <a href="teams.php">Teams</a>
             </li>
             <li>
-              <a href="players.html">Players</a>
+              <a href="players.php">Players</a>
             </li>
             <li>
-              <a href="stadiums.html">Stadiums</a>
+              <a href="stadiums.php">Stadiums</a>
             </li>
           </ul>
         </div>
@@ -117,11 +140,10 @@ if(isset($_POST['delPosition'])){
                       <td>
                         <select name="outPosition" class="selectpicker" data-width="100%">
                             <?php 
-                                $sql = "call mydb.getPositions();";
+                                $sql = "Select namePosition from mydb.Position;";
                                 $result = $conn->query($sql);
                                 if (!$result) {
                                     echo 'Could not run query: ' . mysql_error();
-                                    exit;
                                 }
                                 while($row = $result->fetch_row()){
                                     echo "<option>".$row[0]."</option>";
@@ -156,10 +178,10 @@ if(isset($_POST['delPosition'])){
                         <input type="text" class="form-control" placeholder="Name">
                       </div>
                       <div class="col-sm-3">
-                        <input type="text" class="form-control" placeholder="16">
+                        <input type="text" class="form-control">
                       </div>
                       <div class="col-sm-9">
-                        <select class="selectpicker" data-width="100%">
+                        <select class="selectpicker" data-width="100%" title="Number of teams">
                           <option>8</option>
                           <option>16</option>
                           <option>32</option>
@@ -169,7 +191,7 @@ if(isset($_POST['delPosition'])){
                         <input type="text" class="form-control" placeholder="4">
                       </div>
                       <div class="col-sm-9">
-                        <select class="selectpicker" data-width="100%">
+                        <select class="selectpicker" data-width="100%" title="Number of groups">
                           <option>2</option>
                           <option>4</option>
                           <option>8</option>
@@ -178,10 +200,10 @@ if(isset($_POST['delPosition'])){
                     </div>
                   </td>
                   <td>
-                    <button type="button" class="btn  btn-info">Add position</button>
+                    <button type="button" class="btn  btn-info">Add structure</button>
                   </td>
                   <td>
-                    <button type="button" class="btn  btn-info">Delete position</button>
+                    <button type="button" class="btn  btn-info">Delete structure</button>
                   </td>
                 </tr>
               </tbody>
@@ -193,33 +215,46 @@ if(isset($_POST['delPosition'])){
             <div id="addStadiumForm" class="collapse">
               <div class="row">
                 <div class="col-md-offset-2 col-md-8">
-                  <form role="form" class="form-horizontal">
-                    <select class="selectpicker" data-width="auto">
-                      <option>World Cup</option>
-                      <option>Copa America</option>
-                      <option>Euro Cup</option>
-                    </select>
-                    <select class="selectpicker" data-width="auto">
-                      <option>Belgium-South Africa</option>
-                      <option>France-Honduras</option>
-                      <option>Italy-Mexico</option>
-                    </select>
+                  <form role="form" class="form-horizontal" method="post" action="adminPage.php">
+                    <select class="selectpicker gameSelect" ng-model="gameSelect" data-live-search="true" data-width="auto" title="Select a game">
+                        <?php
+                            $sql = "select ev.nameEvent, ev.idEvent , ga.idGame , vis.nameTeam , hom.nameTeam from Team vis, Team hom, mydb.Event ev inner join Game ga on ga.idEvent = ev.idEvent where vis.idTeam = ga.idVisitor  and hom.idTeam = ga.idHome group by idGame , vis.NameTeam , hom.NameTeam;";
+                            
+                            if ($result = $conn->query($sql)) {
+                                $group = '';
+                                $first = 1;
+                                while($row = $result->fetch_row()){
+                                    if($row[0] != $group){
+                                        if($first == 1){
+                                            $first = 0;
+                                        };
+                                        echo '<optgroup label="'.$row[0].'">';
+                                    };
+                                    echo "<option value='".$row[1]."-".$row[2]."-".$row[3]."-".$row[4]."'>".$row[3]." - ".$row[4]."</option>";
+                                }
+                                echo '</optgroup>';
+                            }else{
+                                echo "error";
+                            }
+                            
+                        ?>            
+                      </select>
                     <table class="table statics">
                       <thead>
                         <tr>
-                          <th>Belgium</th>
-                          <th>Static</th>
-                          <th>South Africa</th>
+                          <th id="homeName">Home</th>
+                          <th>Stat</th>
+                          <th id="visitName">Visitor</th>
                         </tr>
                       </thead>
                       <tbody>
                         <tr>
                           <td>
-                            <input type="number" class="form-control" placeholder="0">
+                            <input type="number" class="form-control" placeholder="0" min="0" max="100" step="1" ng-model="otherPossession">
                           </td>
                           <td>Ball possesion</td>
                           <td>
-                            <input type="number" class="form-control" placeholder="0" disabled="">
+                            <input type="number" class="form-control" placeholder="0" ng-model="possession" value="{{100-otherPossession}}" disabled="">
                           </td>
                         </tr>
                         <tr>
@@ -242,6 +277,8 @@ if(isset($_POST['delPosition'])){
                         </tr>
                       </tbody>
                     </table>
+                    <input type="text" hidden="hidden" name="homeId" id="homeId">
+                    <input type="text" hidden="hidden" name="visitId" id="visitId">
                     <button type="button" class="btn  btn-success" onclick="addGoal('moreStats')">Add goal</button>
                     <button type="button" class="btn  btn-success" onclick="addCard('moreStats')">Add card</button>
                     <button type="button" class="btn  btn-success" onclick="addAttempt('moreStats')">Add attempt</button>
