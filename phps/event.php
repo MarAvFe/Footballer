@@ -73,7 +73,7 @@ function normalize_date($date){
               <a href="teams.html">Teams</a>
             </li>
             <li>
-              <a href="players.html">Players</a>
+              <a href="players.php">Players</a>
             </li>
             <li>
               <a href="stadiums.html">Stadiums</a>
