@@ -206,7 +206,7 @@ function normalize_date($date){
               <a href="home.html">Home</a>
             </li>
             <li>
-              <a href="events.html">Events</a>
+              <a href="events.php">Events</a>
             </li>
             <li>
               <a href="teams.html">Teams</a>

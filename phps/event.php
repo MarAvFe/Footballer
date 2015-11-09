@@ -20,9 +20,10 @@ function normalize_date($date){
 		}
 		
 	$idEvent = $_GET['newIdEvent'];
-	echo $idEvent;
 	
-	$sql = "call mydb.getEvent('$idEvent');";
+	$sql = "select e.nameEvent,e.dateStartEvent,e.dateEndEvent, es.nameEventStructure
+	from mydb.Event e, EventStructure es
+    where e.idEvent='$idEvent' and e.idEventStructure=es.idEventStructure;";
     $result = $conn->query($sql);
     if (!$result) {
     echo 'Could not run query: ' . mysql_error();
@@ -66,7 +67,7 @@ function normalize_date($date){
               <a href="home.html">Home</a>
             </li>
             <li>
-              <a href="events.html">Events</a>
+              <a href="events.php">Events</a>
             </li>
             <li>
               <a href="teams.html">Teams</a>
@@ -212,7 +213,7 @@ function normalize_date($date){
                     <tr>
                       <td>1</td>
                       <td>
-                        <a href="game.html">Spain - England</a>
+                        <a href="game.php">Costa Rica - Argentina</a>
                       </td>
                       <td>A</td>
                     </tr>
