@@ -12,6 +12,22 @@ $conn = new mysqli($_SESSION['server'], $_SESSION['username'], $_SESSION['passwo
 if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
 }
+
+if(isset($_POST["addStadium"])){
+	echo "agregar estadio";
+	$nameStadium = $_POST["nameStadium"];
+	$capacity = $_POST["capacity"];
+	$city = 6;
+	echo $nameStadium;
+	echo $capacity;
+	$sql = "call insertStadium('$nameStadium','$capacity','$city')";
+    $result = $conn->query($sql);
+    if (!$result) {
+		echo 'Could not run query: ' . mysql_error();
+		exit;
+    }
+	
+}
 ?>
 <html><head>
     <meta charset="utf-8">
@@ -66,13 +82,13 @@ if ($conn->connect_error) {
         <div id="addStadiumForm" class="collapse">
           <div class="row">
             <div class="col-md-12">
-              <form class="form-horizontal" role="form">
+              <form class="form-horizontal" role="form" action="stadiums.php" method="POST">
                 <div class="form-group">
                   <div class="col-sm-offset-3 col-sm-1">
                     <label class="control-label">Name</label>
                   </div>
                   <div class="col-sm-8">
-                    <input type="text" class="form-control">
+                    <input name="nameStadium" type="text" class="form-control">
                   </div>
                 </div>
                 <div class="form-group">
@@ -88,12 +104,12 @@ if ($conn->connect_error) {
                     <label class="control-label">Capacity</label>
                   </div>
                   <div class="col-sm-8">
-                    <input type="number" class="form-control" placeholder="30000">
+                    <input name="capacity" type="number" class="form-control" placeholder="30000">
                   </div>
                 </div>
                 <div class="form-group">
                   <div class="col-sm-offset-4 col-sm-8">
-                    <button type="submit" class="btn btn-success">Add stadium</button>
+                    <button name="addStadium" type="submit" class="btn btn-success">Add stadium</button>
                   </div>
                 </div>
               </form>
