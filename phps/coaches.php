@@ -12,6 +12,25 @@ $conn = new mysqli($_SESSION['server'], $_SESSION['username'], $_SESSION['passwo
 if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
 }
+
+if(isset($_POST["addCoach"])){
+	$idCountry = $_POST["idCountry"];
+	$birthdate = $_POST["birthdate"];
+	$fname = $_POST["fnameCoach"];
+	$sname = $_POST["snameCoach"];
+	$lname = $_POST["lnameCoach"];
+	$dni = $_POST["dniCoach"];		
+	
+	$sql = "call insertCoach('$dni',STR_TO_DATE('$birthdate','%d/%m/%Y'),'$fname','$sname','$lname','$idCountry')";
+    $result = $conn->query($sql);
+    if (!$result) {
+		echo 'Could not run query: ' . mysql_error();
+		exit;
+    }
+	
+}
+
+
 ?>
 <html><head>
     <meta charset="utf-8">
@@ -42,24 +61,24 @@ if ($conn->connect_error) {
             <span class="icon-bar"></span>
           </button>
           <a class="navbar-brand"><img height="40" alt="Brand" src="img/SoccerStatsImgLogo.png" style="position:relative;bottom:10px;"></a>
-          <a href="index.php"><h4 class="navbar-text">SOCCER STATS</h4></a>
+          <a href="home.html"><h4 class="navbar-text">SOCCER STATS</h4></a>
         </div>
         <div class="collapse navbar-collapse" id="navbar-ex-collapse">
           <ul class="nav navbar-nav navbar-right">
             <li>
-              <a href="index.php">Home</a>
+              <a href="home.html">Home</a>
             </li>
             <li>
               <a href="events.php">Events</a>
             </li>
             <li>
-              <a href="teams.php">Teams</a>
+              <a href="teams.html">Teams</a>
             </li>
             <li>
               <a href="players.php">Players</a>
             </li>
             <li>
-              <a href="stadiums.php">Stadiums</a>
+              <a href="stadiums.html">Stadiums</a>
             </li>
           </ul>
         </div>
@@ -74,7 +93,7 @@ if ($conn->connect_error) {
         <div id="addStadiumForm" class="collapse">
           <div class="row">
             <div class="col-md-12">
-              <form role="form" class="form-horizontal">
+              <form role="form" class="form-horizontal" action="coaches.php" method="POST">
                 <div class="col-md-4">
                   <img src="img/defaultProfile.jpg" class="center-block img-responsive">
                 </div>
@@ -84,7 +103,7 @@ if ($conn->connect_error) {
                       <label class="control-label">Name</label>
                     </div>
                     <div class="col-sm-8">
-                      <input type="text" class="form-control" placeholder="John">
+                      <input name="fnameCoach" type="text" class="form-control" placeholder="John">
                     </div>
                   </div>
                   <div class="form-group">
@@ -92,7 +111,7 @@ if ($conn->connect_error) {
                       <label class="control-label">Second name</label>
                     </div>
                     <div class="col-sm-8">
-                      <input type="text" class="form-control" placeholder="Albert">
+                      <input name="snameCoach" type="text" class="form-control" placeholder="Albert">
                     </div>
                   </div>
                   <div class="form-group">
@@ -100,7 +119,7 @@ if ($conn->connect_error) {
                       <label class="control-label">Last name</label>
                     </div>
                     <div class="col-sm-8">
-                      <input type="text" class="form-control" placeholder="Doe">
+                      <input name="lnameCoach" type="text" class="form-control" placeholder="Doe">
                     </div>
                   </div>
                   <div class="form-group">
@@ -113,7 +132,7 @@ if ($conn->connect_error) {
                   </div>
                   <div class="form-group">
                     <div class="col-sm-4">
-                      <button type="submit" class="btn btn-success">Add player</button>
+                      <button name="addCoach" type="submit" class="btn btn-success">Add Coach</button>
                     </div>
                   </div>
                 </div>
@@ -123,7 +142,7 @@ if ($conn->connect_error) {
                       <label class="control-label">Id number</label>
                     </div>
                     <div class="col-sm-8">
-                      <input type="text" class="form-control" placeholder="1-2345-7890">
+                      <input name="dniCoach" type="text" class="form-control" placeholder="123457890">
                     </div>
                   </div>
                    <div class="form-group">
@@ -131,10 +150,18 @@ if ($conn->connect_error) {
                       <label class="control-label">Country</label>
                     </div>
                     <div class="col-sm-8">
-                      <select class="selectpicker" data-width="100%" data-live-search="true">
-                        <option>Mustard</option>
-                        <option>Ketchup</option>
-                        <option>Relish</option>
+                      <select name="idCountry" class="selectpicker" data-width="100%" data-live-search="true">
+                         <?php 
+                                $sql = "select idCountry,nameCountry from Country;";
+                                $result = $conn->query($sql);
+                                if (!$result) {
+                                    echo 'Could not run query: ' . mysql_error();
+                                    exit;
+                                }
+                                while($row = $result->fetch_row()){
+                                    echo "<option value=\"". $row[0]. "\">". $row[1] . "</option>\n";
+                                }
+                            ?>
                       </select>
                     </div>
                   </div>
@@ -145,7 +172,7 @@ if ($conn->connect_error) {
                     <div class="col-sm-8" id="dateSelector">
                       <!--<input type="text" class="form-control" placeholder="dd/mm/yyyy" id="datepicker">-->
                       <div class="input-group date">
-                        <input type="text" class="form-control" readonly="true">
+                        <input name="birthdate" type="text" class="form-control">
                         <span class="input-group-addon">
                           <i class="fa fa-fw fa-lg -circle fa-calendar"></i>
                         </span>
@@ -172,7 +199,7 @@ if ($conn->connect_error) {
                           <i class="-o fa fa-lg fa-search"></i>
                         </span>
                       </div>
-                      <button type="button" class="btn btn-lg btn-info" onclick="location.href='players.php'">View players</button>
+                      <button type="button" class="btn btn-lg btn-info" onclick="location.href='players.html'">View coaches</button>
                     </form>
                   </div>
                 </div>
