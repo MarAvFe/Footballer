@@ -140,9 +140,141 @@ DELIMITER ;
 
 call getPositions()
 
+#------------------------
+
+select * from Player_team;
+select * from Player;
+select * from Goal;
+
+
+CREATE DEFINER=`mainSoccer`@`%` FUNCTION `getIdTeamWinner`(pIdGame int) RETURNS int(11)
+BEGIN
+
+Declare returnValue int;
+	select te.idTeam
+    into returnValue
+	from Team te,
+    (select count(idGoal) score , ga.idVisitor
+    from Goal go inner join Game ga on go.idGame = ga.idGame and ga.idGame = pIdGame
+    where ga.idVisitor = getIdTeam(go.idPlayer,pIdGame)
+    group by ga.idVisitor) vi,
+    (select count(idGoal) score, ga.idHome
+    from Goal go inner join Game ga on go.idGame = ga.idGame and ga.idGame = pIdGame
+    where ga.idHome = getIdTeam(go.idPlayer,pIdGame)
+    group by ga.idHome) ho 
+    where (vi.score > ho.score and te.idTeam = vi.idVisitor) or 
+    (vi.score < ho.score and te.idTeam = ho.idHome);
+	return returnValue;
+
+RETURN returnValue;
+END
+
+
+CREATE DEFINER=`mainSoccer`@`%` FUNCTION `getIdTeamLoser`(pIdGame int) RETURNS int(11)
+BEGIN
+	declare returnValue int;
+	select te.idTeam
+    into returnValue
+	from Team te,
+    (select count(idGoal) score , ga.idVisitor
+    from Goal go inner join Game ga on go.idGame = ga.idGame and ga.idGame = pIdGame
+    where ga.idVisitor = getIdTeam(go.idPlayer,pIdGame)
+    group by ga.idVisitor) vi,
+    (select count(idGoal) score, ga.idHome
+    from Goal go inner join Game ga on go.idGame = ga.idGame and ga.idGame = pIdGame
+    where ga.idHome = getIdTeam(go.idPlayer,pIdGame)
+    group by ga.idHome) ho 
+    where (vi.score < ho.score and te.idTeam = vi.idVisitor) or 
+    (vi.score > ho.score and te.idTeam = ho.idHome);
+	return returnValue;
+    
+RETURN returnValue;
+END
 
 
 
 
 
+
+CREATE DEFINER=`mainSoccer`@`%` FUNCTION `getWins`(pIdEvent int,  pIdTeam int) RETURNS int(11)
+BEGIN
+	declare returnValue int;
+	select count(ga.idGame)
+	into returnValue
+	from Game ga inner join mydb.Event ev
+	on ga.idEvent = ev.idEvent and ev.idEvent = pIdEvent
+	where getIdWinner(ga.idGame) = pIdTeam;
+	RETURN returnValue;
+END
+
+
+CREATE DEFINER=`mainSoccer`@`%` FUNCTION ``(pIdGame int) RETURNS int(11)
+BEGIN
+	declare returnValue int;
+    
+	select te.idTeam
+	into returnValue
+	from Team te, Game ga,
+    (select idGoal 
+    from Goal go inner join Game ga on go.idGame = ga.idGame and ga.idGame = pIdGame
+    where ga.idVisitor = getIdTeam(go.idPlayer)) vi,
+    (select idGoal 
+    from Goal go inner join Game ga on go.idGame = ga.idGame and ga.idGame = pIdGame
+    where ga.idHome = getIdTeam(go.idPlayer)) ho 
+    where (count(vi.idGoal) > count(ho.idGoal) and te.idTeam = ga.idVisitor and ga.idGame = pIdGame)
+    or (count(vi.idGoal) < count(ho.idGoal) and te.idTeam = ga.idHome and ga.idGame = pIdGame);
+	RETURN returnValue;
+END
+
+#---------------------
+
+
+
+CREATE DEFINER=`mainSoccer`@`%` FUNCTION `getLoses`(pIdEvent int,  pIdTeam int) RETURNS int(11)
+BEGIN
+	declare returnValue int;
+	select count(ga.idGame)
+	into returnValue
+	from Game ga inner join mydb.Event ev
+	on ga.idEvent = ev.idEvent and ev.idEvent = pIdEvent
+	where getIdWinner(ga.idGame) = pIdTeam;
+	RETURN returnValue;
+END
+
+
+CREATE DEFINER=`mainSoccer`@`%` FUNCTION `getIdLoser`(pIdGame int) RETURNS int(11)
+BEGIN
+	declare returnValue int;
+    
+
+    
+	Declare returnValue int;
+	select te.idTeam
+	into returnValue
+	from Team te, Game ga,
+    (select idGoal 
+    from Goal go inner join Game ga on go.idGame = ga.idGame and ga.idGame = pIdGame
+    where ga.idVisitor = getIdTeam(go.idPlayer,pIdGame)) vi,
+    (select idGoal 
+    from Goal go inner join Game ga on go.idGame = ga.idGame and ga.idGame = pIdGame
+    where ga.idHome = getIdTeam(go.idPlayer,pIdGame)) ho 
+    where (te.idTeam = ga.idVisitor or te.idTeam = ga.idVisitor) and ga.idGame = pIdGame
+	HAVING (count(vi.idGoal) > count(ho.idGoal)) or (count(vi.idGoal) < count(ho.idGoal));
+	return returnValue;
+
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
  
