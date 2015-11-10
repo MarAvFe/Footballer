@@ -23,7 +23,7 @@ if(isset($_POST['newTeam'])){
     $teamCoach = $_POST['teamCoach'];
     
     $sql = "call mydb.insertTeam('".$teamName."',".$teamCap.",".$teamCoach.",".$teamCountry.");";
-    echo $sql . "<br>";//$conn->query($sql);
+    $conn->query($sql);
     
 }
 
