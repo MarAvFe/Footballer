@@ -191,80 +191,40 @@ BEGIN
 RETURN returnValue;
 END
 
+select * from mydb.Event;
+select * from Team;
+select getTeamWinsPerEvent(2,4)
 
 
+drop function getTeamWinsPerEvent;
 
-
-
-CREATE DEFINER=`mainSoccer`@`%` FUNCTION `getWins`(pIdEvent int,  pIdTeam int) RETURNS int(11)
+CREATE FUNCTION `getTeamWinsPerEvent` (pIdEvent int, pIdTeam int)
+RETURNS INTEGER
 BEGIN
 	declare returnValue int;
 	select count(ga.idGame)
-	into returnValue
+    into returnValue
 	from Game ga inner join mydb.Event ev
 	on ga.idEvent = ev.idEvent and ev.idEvent = pIdEvent
-	where getIdWinner(ga.idGame) = pIdTeam;
-	RETURN returnValue;
+	where getIdTeamWinner(ga.idGame) = pIdTeam;
+	
+
+RETURN returnValue;
 END
 
+select getTeamLosesPerEvent(2,3)
 
-CREATE DEFINER=`mainSoccer`@`%` FUNCTION ``(pIdGame int) RETURNS int(11)
-BEGIN
-	declare returnValue int;
-    
-	select te.idTeam
-	into returnValue
-	from Team te, Game ga,
-    (select idGoal 
-    from Goal go inner join Game ga on go.idGame = ga.idGame and ga.idGame = pIdGame
-    where ga.idVisitor = getIdTeam(go.idPlayer)) vi,
-    (select idGoal 
-    from Goal go inner join Game ga on go.idGame = ga.idGame and ga.idGame = pIdGame
-    where ga.idHome = getIdTeam(go.idPlayer)) ho 
-    where (count(vi.idGoal) > count(ho.idGoal) and te.idTeam = ga.idVisitor and ga.idGame = pIdGame)
-    or (count(vi.idGoal) < count(ho.idGoal) and te.idTeam = ga.idHome and ga.idGame = pIdGame);
-	RETURN returnValue;
-END
-
-#---------------------
-
-
-
-CREATE DEFINER=`mainSoccer`@`%` FUNCTION `getLoses`(pIdEvent int,  pIdTeam int) RETURNS int(11)
+CREATE FUNCTION `getTeamLosesPerEvent` (pIdEvent int, pIdTeam int)
+RETURNS INTEGER
 BEGIN
 	declare returnValue int;
 	select count(ga.idGame)
-	into returnValue
+    into returnValue
 	from Game ga inner join mydb.Event ev
 	on ga.idEvent = ev.idEvent and ev.idEvent = pIdEvent
-	where getIdWinner(ga.idGame) = pIdTeam;
-	RETURN returnValue;
-END
-
-
-CREATE DEFINER=`mainSoccer`@`%` FUNCTION `getIdLoser`(pIdGame int) RETURNS int(11)
-BEGIN
-	declare returnValue int;
-    
-
-    
-	Declare returnValue int;
-	select te.idTeam
-	into returnValue
-	from Team te, Game ga,
-    (select idGoal 
-    from Goal go inner join Game ga on go.idGame = ga.idGame and ga.idGame = pIdGame
-    where ga.idVisitor = getIdTeam(go.idPlayer,pIdGame)) vi,
-    (select idGoal 
-    from Goal go inner join Game ga on go.idGame = ga.idGame and ga.idGame = pIdGame
-    where ga.idHome = getIdTeam(go.idPlayer,pIdGame)) ho 
-    where (te.idTeam = ga.idVisitor or te.idTeam = ga.idVisitor) and ga.idGame = pIdGame
-	HAVING (count(vi.idGoal) > count(ho.idGoal)) or (count(vi.idGoal) < count(ho.idGoal));
+	where getIdTeamLoser(ga.idGame) = pIdTeam;
 	return returnValue;
-
- 
- 
- 
+END
  
  
  
