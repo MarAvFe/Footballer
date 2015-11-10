@@ -19,6 +19,21 @@ function normalize_date($date){
 			return "$var[2]/$var[1]/$var[0]"; }   
 		} 
 
+	if(isset($_POST["addEvent"])){
+		$nameEvent = $_POST["nameEvent"];
+		$start = $_POST["start"];
+		$end = $_POST["end"];
+		$structure = $_POST["structure"];
+			
+		
+		$sql = "call insertEvent('$nameEvent',STR_TO_DATE('$start','%d/%m/%Y'),STR_TO_DATE('$end','%d/%m/%Y'),'$structure')";
+		$result = $conn->query($sql);
+		if (!$result) {
+			echo 'Could not run query: ' . mysql_error();
+			exit;
+		}
+	}
+		
 ?>
 <!DOCTYPE html5><html><head>
     <meta charset="utf-8">
@@ -77,13 +92,13 @@ function normalize_date($date){
         <div id="addStadiumForm" class="collapse">
           <div class="row">
             <div class="col-md-12">
-              <form class="form-horizontal" role="form">
+              <form class="form-horizontal" role="form" action="events.php" method="POST">
                 <div class="form-group">
                   <div class="col-sm-offset-3 col-sm-1">
                     <label class="control-label">Name</label>
                   </div>
                   <div class="col-sm-8">
-                    <input type="text" class="form-control">
+                    <input name="nameEvent" type="text" class="form-control">
                   </div>
                 </div>
                 <div class="form-group">
@@ -92,9 +107,9 @@ function normalize_date($date){
                   </div>
                   <div class="col-sm-8" id="dateSelector">
                     <div class="input-daterange input-group">
-                      <input type="text" class="input-sm form-control" name="start" readonly="">
+                      <input name="start" type="text" class="input-sm form-control" name="start" readonly="">
                       <span class="input-group-addon">to</span>
-                      <input type="text" class="input-sm form-control" name="end" readonly="">
+                      <input name="end" type="text" class="input-sm form-control" name="end" readonly="">
                       <span class="input-group-addon">
                         <i class="fa fa-fw fa-lg -circle fa-calendar"></i>
                       </span>
@@ -106,10 +121,19 @@ function normalize_date($date){
                     <label class="control-label">Structure</label>
                   </div>
                   <div class="col-sm-8">
-                    <select class="selectpicker" data-width="100%">
-                      <option>Cup</option>
-                      <option>Crown</option>
-                      <option>Hexagonal</option>
+                    <select name="structure" class="selectpicker" data-width="100%">
+                      <?php 
+                                $sql = "select idEventStructure,nameEventStructure from EventStructure;";
+                                $result = $conn->query($sql);
+                                if (!$result) {
+                                    echo 'Could not run query: ' . mysql_error();
+                                    exit;
+                                }
+                                while($row = $result->fetch_row()){
+                                    echo "<option value=\"". $row[0]. "\">". $row[1] . "</option>\n";
+                                }
+							
+                            ?>
                     </select>
                   </div>
                 </div>
@@ -119,18 +143,28 @@ function normalize_date($date){
                   </div>
                   <div class="col-sm-8">
                     <select class="selectpicker" data-width="100%" multiple="" data-live-search="true" data-selected-text-format="count" title="Countries" data-max-options="3">
-                      <option>Honduras</option>
-                      <option>Portugal</option>
-                      <option>Spain</option>
-                      <option>Panama</option>
-                      <option>USA</option>
-                      <option>Angola</option>
+                      <?php 
+                                $sql = "select te.idTeam, te.nameTeam , count(pt.idPlayer) from Country co 
+										inner join Team te on co.idContinent = 8 and co.idCountry = te.idCountry
+										left join Player_team pt on pt.idTeam = te.idTeam
+										where te.idGroup is null
+										group by nameTeam , idTeam;";
+                                $result = $conn->query($sql);
+                                if (!$result) {
+                                    echo 'Could not run query: ' . mysql_error();
+                                    exit;
+                                }
+                                while($row = $result->fetch_row()){
+                                    echo "<option value=\"". $row[0]. "\">". $row[1] . "</option>\n";
+                                }
+							
+                            ?>
                     </select>
                   </div>
                 </div>
                 <div class="form-group">
                   <div class="col-sm-offset-4 col-sm-8">
-                    <button type="submit" class="btn btn-success">Add event</button>
+                    <button name="addEvent" type="submit" class="btn btn-success">Add event</button>
                   </div>
                 </div>
               </form>
