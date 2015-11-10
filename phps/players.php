@@ -40,17 +40,17 @@ function uploadPicture($picture, $idPic, $stadPerCoaFlag){
     if($stadPerCoaFlag == 0){
         $target_dir = "uploads/stadiums/";
     }
-    if($stadPerCoaFlag == 1){
+    else if($stadPerCoaFlag == 1){
         $target_dir = "uploads/people/players/";
     }
-    if($stadPerCoaFlag == 2){
+    else if($stadPerCoaFlag == 2){
         $target_dir = "uploads/people/coaches/";
     }
-    if($stadPerCoaFlag == 3){
+    else if($stadPerCoaFlag == 3){
         $target_dir = "uploads/flags/";
     }
     $target_file = $target_dir . basename($picture['name']);
-    $imageFileType = pathinfo($target_file,PATHINFO_EXTENSION);
+    $imageFileType = pathinfo($target_file,PATHINFO_EXTENSION); // .png .gif .jpg
     $check = getimagesize($picture["tmp_name"]);
     if($check !== false) {
         //echo "File is an image - " . $check["mime"] . ".";
@@ -77,11 +77,10 @@ function uploadPicture($picture, $idPic, $stadPerCoaFlag){
     // if everything is ok, try to upload file
     } else {
         if(!is_dir($target_dir)){
-            $oldmask = umask(0);
             mkdir($target_dir, 0777, true);
-            umask($oldmask);
         }
-        if (move_uploaded_file($picture["tmp_name"], $target_dir."pic".$idPic)) {
+        
+        if (move_uploaded_file($picture["tmp_name"], $target_dir.'pic'.$idPic)) {
         } else {
             echo "Sorry, there was an error uploading your file.";
         }
@@ -123,19 +122,19 @@ function uploadPicture($picture, $idPic, $stadPerCoaFlag){
         <div class="collapse navbar-collapse" id="navbar-ex-collapse">
           <ul class="nav navbar-nav navbar-right">
             <li>
-              <a href="home.html">Home</a>
+              <a href="index.php">Home</a>
             </li>
             <li>
               <a href="events.php">Events</a>
             </li>
             <li>
-              <a href="teams.html">Teams</a>
+              <a href="teams.php">Teams</a>
             </li>
             <li class="active">
               <a href="players.php">Players</a>
             </li>
             <li>
-              <a href="stadiums.html">Stadiums</a>
+              <a href="stadiums.php">Stadiums</a>
             </li>
           </ul>
         </div>
@@ -327,7 +326,7 @@ function uploadPicture($picture, $idPic, $stadPerCoaFlag){
 						
 				
 					echo"<div class=\"col-md-3\">";
-                    echo "<a href=\"#\" data-toggle=\"popover\" data-title=\"$nameplayer\" class=\"popper\"><img src=\"img/totti.jpg\" class=\"center-block img-responsive\"></a>";
+                    echo "<a href=\"#\" data-toggle=\"popover\" data-title=\"$nameplayer\" class=\"popper\"><img src=\"uploads/people/players/pic$dniplayer\" class=\"center-block img-responsive\"></a>";
                     echo '<div class="popper-content hide">';
                     echo '<p>';
                     echo "<strong>DNI:</strong>$dniplayer";
