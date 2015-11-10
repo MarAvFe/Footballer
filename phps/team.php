@@ -13,8 +13,8 @@ if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
 }
 
-//$idTeam = $_GET['newIdTeam'];
-$idTeam = 3;
+$idTeam = $_GET['newIdTeam'];
+
 
 	if (!($resultado = $conn->query("select getTeamName('$idTeam') as res"))) {
 		echo "Falló Select: (" . $conn->errno . ") " . $conn->error;
@@ -41,6 +41,27 @@ $idTeam = 3;
 		$fila = $resultado->fetch_assoc();
 		$nameContinent = $fila['res'];
 	}
+	if (!($resultado = $conn->query("select idCountry as res from Team where idTeam='$idTeam'"))) {
+		echo "Falló Select: (" . $conn->errno . ") " . $conn->error;
+	}else{
+		$fila = $resultado->fetch_assoc();
+		$idCountry = $fila['res'];
+	}
+	
+if(isset($_POST["addPlayer"])){
+	$idPlayer = $_POST["idPlayer"];
+	$shirtNum = $_POST["shirtNum"];
+	$position = $_POST["idPosition"];
+		
+	
+	$sql = "call insertPlayer_Team('$idPlayer','$idTeam','$shirtNum','$position')";
+    $result = $conn->query($sql);
+    if (!$result) {
+		echo 'Could not run query: ' . mysql_error();
+		exit;
+    }
+	
+}
 ?>
 <html><head>
     <meta charset="utf-8">
@@ -141,34 +162,57 @@ $idTeam = 3;
                     </tr>
                   </thead>
                   <tbody>
-					<tr>
-                      <td>1</td>
-                      <td>Mark</td>
-                      <td>Otto</td>
-                      <td>Forward</td>
-                      <td>32</td>
-                    </tr>
-                    <tr>
-                      <td>1</td>
-                      <td>Mark</td>
-                      <td>Otto</td>
-                      <td>Forward</td>
-                      <td>32</td>
-                    </tr>
-                    <tr>
-                      <td>2</td>
-                      <td>Jacob</td>
-                      <td>Thornton</td>
-                      <td>Goalkeeper</td>
-                      <td>27</td>
-                    </tr>
-                    <tr>
-                      <td>3</td>
-                      <td>Larry</td>
-                      <td>the Bird</td>
-                      <td>Defense</td>
-                      <td>30</td>
-                    </tr>
+				  
+				  <?php 
+                                $sql = "select pl.idPlayer,p.firstName,p.lastName from Player_team pt, Person p,  Player pl
+										where (pt.idPlayer=pl.idPlayer and pt.idTeam='$idTeam') and pl.idPerson=p.idPerson;";
+                                $result = $conn->query($sql);
+                                if (!$result) {
+                                    echo 'Could not run query: ' . mysql_error();
+                                    exit;
+                                }
+								$contador=1;
+                                while($row = $result->fetch_row()){
+									$idPlayer = $row[0];
+									$fname=$row[1];
+									$lname=$row[2];
+									
+									if (!($resultado = $conn->query("select getPlayerAge('$idPlayer') as res"))) {
+										echo "Falló CALL: (" . $conn->errno . ") " . $conn->error;
+									}else{
+										$fila = $resultado->fetch_assoc();
+										$age = $fila['res'];
+									}
+									if (!($resultado = $conn->query("select getPlayerPosition('$idPlayer') as res"))) {
+										echo "Falló CALL: (" . $conn->errno . ") " . $conn->error;
+									}else{
+										$fila = $resultado->fetch_assoc();
+										$position = $fila['res'];
+									}
+									if (!($resultado = $conn->query("select getPlayerShirt('$idPlayer') as res"))) {
+										echo "Falló CALL: (" . $conn->errno . ") " . $conn->error;
+									}else{
+										$fila = $resultado->fetch_assoc();
+										$shirt = $fila['res'];
+									}
+								
+                                
+							
+                                   
+									echo'<tr>';
+									  echo"<td>$shirt</td>";
+									  echo"<td>$fname</td>";
+									  echo"<td>$lname</td>";
+									  echo"<td>$position</td>";
+									  echo"<td>$age</td>";
+									echo'</tr>';
+									
+									
+								   
+                                }
+					
+                            ?>
+				  
                   </tbody>
                 </table>
                 <button type="button" class="btn btn-block btn-info btn-lg" data-target="#addStadiumForm" data-toggle="collapse">Add a new player
@@ -178,17 +222,28 @@ $idTeam = 3;
                 <div id="addStadiumForm" class="collapse">
                   <div class="row">
                     <div class="col-md-12">
-                      <form role="form" class="form-horizontal">
+                      <form role="form" class="form-horizontal" action="team.php" method="POST">
                         <div class="col-md-4">
                           <div class="form-group">
                             <div class="col-sm-4">
                               <label class="control-label">Player</label>
                             </div>
                             <div class="col-sm-8">
-                              <select class="selectpicker" data-width="100%" data-live-search="true">
-                                <option>Luis Figo</option>
-                                <option>Raul Gonzáles</option>
-                                <option>Alessandro Del Piero</option>
+                              <select name="idPlayer" class="selectpicker" data-width="100%" data-live-search="true">
+                                <?php 
+                                $sql = "select pl.idPlayer,CONCAT(p.firstName,' ',p.lastName) from Person p inner join
+										Player pl on p.idPerson = pl.idPerson and p.idCountry = '$idCountry' 
+										where pl.idPlayer not in (select idPlayer from Player_team where idTeam = $idTeam);";
+                                $result = $conn->query($sql);
+                                if (!$result) {
+                                    echo 'Could not run query: ' . mysql_error();
+                                    exit;
+                                }
+                                while($row = $result->fetch_row()){
+                                    echo "<option value=\"". $row[0]. "\">". $row[1] . "</option>\n";
+                                }
+							
+                            ?>
                               </select>
                             </div>
                           </div>
@@ -199,16 +254,24 @@ $idTeam = 3;
                               <label class="control-label">Position</label>
                             </div>
                             <div class="col-sm-8">
-                              <select class="selectpicker" data-width="100%">
-                                <option>Forward</option>
-                                <option>Midkeeper</option>
-                                <option>Defense</option>
+                              <select name="idPosition" class="selectpicker" data-width="100%">
+                                 <?php 
+                                $sql = "select idPosition,namePosition from Position;";
+                                $result = $conn->query($sql);
+                                if (!$result) {
+                                    echo 'Could not run query: ' . mysql_error();
+                                    exit;
+                                }
+                                while($row = $result->fetch_row()){
+                                    echo "<option value=\"". $row[0]. "\">". $row[1] . "</option>\n";
+                                }
+                            ?>
                               </select>
                             </div>
                           </div>
                           <div class="form-group">
                             <div class="col-sm-12">
-                              <button type="submit" class="btn btn-block btn-success">Add player</button>
+                              <button name="addPlayer" type="submit" class="btn btn-block btn-success">Add player</button>
                             </div>
                           </div>
                         </div>
@@ -218,7 +281,7 @@ $idTeam = 3;
                               <label class="control-label">Shirt #</label>
                             </div>
                             <div class="col-sm-8">
-                              <input type="number" class="form-control" min="0" step="1" placeholder="00">
+                              <input name="shirtNum" type="number" class="form-control" min="0" step="1" placeholder="00">
                             </div>
                           </div>
                         </div>
