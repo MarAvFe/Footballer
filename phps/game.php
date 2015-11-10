@@ -19,8 +19,9 @@ function normalize_date($date){
 			return "$var[2]/$var[1]/$var[0]"; }   
 		}
 		
-	//$idGame = $_GET['newIdGame'];
-	$idGame = 1;
+	$idGame = $_GET['newIdGame'];
+	
+	
 	
 	if (!($resultado = $conn->query("select idHome,idVisitor from Game where idGame ='$idGame';"))) {
     echo "Falló CALL: (" . $conn->errno . ") " . $conn->error;

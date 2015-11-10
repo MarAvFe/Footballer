@@ -123,14 +123,14 @@ function normalize_date($date){
         </div>
         <div class="row">
           <div class="col-md-12">
-            <div class="panel panel-warning">
+		  <div class="panel panel-warning">
               <div class="panel-heading">
                 <h3 class="panel-title lead">Teams</h3>
               </div>
               <div class="panel-body">
                 <table class="table">
                   <thead>
-                    <tr>
+				  <tr>
                       <th>Team</th>
                       <th>Group</th>
                       <th>Matches played</th>
@@ -143,55 +143,75 @@ function normalize_date($date){
                       <th>Points</th>
                     </tr>
                   </thead>
-                  <tbody>
-                    <tr>
-                      <td>Spain</td>
-                      <td>A</td>
-                      <td>3</td>
-                      <td>2</td>
-                      <td>0</td>
-                      <td>1</td>
-                      <td>8</td>
-                      <td>3</td>
-                      <td>5</td>
-                      <td>6</td>
-                    </tr>
-                    <tr>
-                      <td>England</td>
-                      <td>A</td>
-                      <td>2</td>
-                      <td>1</td>
-                      <td>0</td>
-                      <td>1</td>
-                      <td>5</td>
-                      <td>2</td>
-                      <td>3</td>
-                      <td>4</td>
-                    </tr>
-                    <tr>
-                      <td>Germany</td>
-                      <td>A</td>
-                      <td>3</td>
-                      <td>2</td>
-                      <td>0</td>
-                      <td>1</td>
-                      <td>8</td>
-                      <td>3</td>
-                      <td>5</td>
-                      <td>6</td>
-                    </tr>
-                    <tr>
-                      <td>Sweden</td>
-                      <td>A</td>
-                      <td>3</td>
-                      <td>0</td>
-                      <td>2</td>
-                      <td>1</td>
-                      <td>1</td>
-                      <td>3</td>
-                      <td>-2</td>
-                      <td>2</td>
-                    </tr>
+				  <tbody>
+			<?php
+			
+				$sql = "select gr.idGroup , gr.nameGroup, te.idTeam, te.nameTeam
+						from mydb.Group gr inner join Team te on gr.idEvent = '$idEvent' and te.idGroup = gr.idGroup;";
+                        $result = $conn->query($sql);
+                        if (!$result) {
+                        echo 'Could not run query: ' . mysql_error();
+                        exit;
+                        }
+						$contador=1;
+                        while($row = $result->fetch_row()){
+							$idGroup = $row[0];
+							$nameGroup = $row[1];
+							$idTeam = $row[2];
+							$nameTeam = $row[3];
+							
+						if (!($resultado = $conn->query("select getTeamWinsPerEvent('$idEvent','$idTeam') as res"))) {
+							echo "Falló CALL: (" . $conn->errno . ") " . $conn->error;
+						}else{
+							$fila = $resultado->fetch_assoc();
+							$wins = $fila['res'];
+						}
+						if (!($resultado = $conn->query("select getTeamLosesPerEvent('$idEvent','$idTeam') as res"))) {
+							echo "Falló CALL: (" . $conn->errno . ") " . $conn->error;
+						}else{
+							$fila = $resultado->fetch_assoc();
+							$loses = $fila['res'];
+						}
+						if (!($resultado = $conn->query("select getTeamTiesPerEvent('$idEvent','$idTeam') as res"))) {
+							echo "Falló CALL: (" . $conn->errno . ") " . $conn->error;
+						}else{
+							$fila = $resultado->fetch_assoc();
+							$ties = $fila['res'];
+						}
+						if (!($resultado = $conn->query("select getTeamPoints('$idEvent','$idTeam') as res"))) {
+							echo "Falló CALL: (" . $conn->errno . ") " . $conn->error;
+						}else{
+							$fila = $resultado->fetch_assoc();
+							$points = $fila['res'];
+						}
+						if (!($resultado = $conn->query("select getMatchesPlayed('$idEvent','$idTeam') as res"))) {
+							echo "Falló CALL: (" . $conn->errno . ") " . $conn->error;
+						}else{
+							$fila = $resultado->fetch_assoc();
+							$matches = $fila['res'];
+						}
+						
+						 echo'<tr>';
+						 echo"<td>$nameTeam</td>";
+						 echo "<td>$nameGroup</td>";
+						 echo"<td>$matches</td>";
+						 echo"<td>$wins</td>";
+						 echo"<td>$ties</td>";
+						 echo"<td>$loses</td>";
+						 echo"<td>8</td>";
+						 echo"<td>3</td>";
+						echo"<td>5</td>";
+						echo"<td>$points</td>";
+						echo"</tr>";
+				}
+				
+				
+		  ?>
+            
+                    
+                  
+                    
+                    
                   </tbody>
                 </table>
               </div>
@@ -210,23 +230,34 @@ function normalize_date($date){
                     </tr>
                   </thead>
                   <tbody>
-                    <tr>
-                      <td>1</td>
-                      <td>
-                        <a href="game.php">Costa Rica - Argentina</a>
-                      </td>
-                      <td>A</td>
-                    </tr>
-                    <tr>
-                      <td>2</td>
-                      <td>Italy - Greece</td>
-                      <td>B</td>
-                    </tr>
-                    <tr>
-                      <td>3</td>
-                      <td>Austria - Honduras</td>
-                      <td>A</td>
-                    </tr>
+				  <?php
+					$sql = "select ev.idEvent, concat(hom.nameTeam,'-', vis.nameTeam) teamNames, ga.idGame , go.nameGroup
+							from mydb.Group go ,Team vis, Team hom,mydb.Event ev inner join Game ga on ga.idEvent = '$idEvent'
+							where vis.idTeam = ga.idVisitor  and hom.idTeam = ga.idHome and go.idGroup = vis.idGroup
+							group by idGame , teamNames;";
+                        $result = $conn->query($sql);
+                        if (!$result) {
+                        echo 'Could not run query: ' . mysql_error();
+                        exit;
+                        }
+						$contador=1;
+                        while($row = $result->fetch_row()){
+							$nameGame = $row[1];
+							$idGame= $row[2];
+							$nameGroup = $row[3];
+							
+
+					echo'<tr>';
+                      echo"<td>$contador</td>";
+                      echo'<td>';
+                        echo "<a href=\"http://localhost/html/Soccer/game.php?newIdGame=$idGame\">$nameGame</a>";
+                      echo'</td>';
+                      echo"<td>$nameGroup</td>";
+                    echo'</tr>';
+					$contador=$contador+1;
+						}
+				  ?>
+                    
                   </tbody>
                 </table>
               </div>
