@@ -270,5 +270,58 @@ BEGIN
 	return returnValue;
 END
 
+
+select * from mydb.Event;
+select * from Team;
+select * from Game;
+select  getMatchesPlayed(2,10)
+
+CREATE FUNCTION `getMatchesPlayed` (pIdEvent int, pIdTeam int)
+RETURNS INTEGER
+BEGIN
+	declare returnValue int;
+	select count(1)
+    into returnValue
+	from mydb.Event ev inner join Game ga 
+	on ev.idEvent = pIdEvent and ev.idEvent = ga.idEvent
+	where ga.idVisitor = pIdTeam or ga.idHome = pIdTeam;
+RETURN returnValue;
+END
+
+
+
+#*------RESPALDO DE FUNCION---------
+CREATE DEFINER=`mainSoccer`@`%` PROCEDURE `getGamePerEvent`()
+BEGIN
+	select ev.nameEvent, ev.idEvent , ga.idGame , vis.nameTeam , hom.nameTeam
+    from Team vis, Team hom,mydb.Event ev inner join Game ga on ga.idEvent = ev.idEvent
+    where vis.idTeam = ga.idVisitor  and hom.idTeam = ga.idHome
+    group by idGame , vis.NameTeam , hom.NameTeam;
+ END
+ 
+ 
+ #FUNCION Q TRAE LOS EVENTOS 
+ select ev.idEvent, concat(hom.nameTeam,'-', vis.nameTeam) teamNames, ga.idGame , go.nameGroup
+    from mydb.Group go ,Team vis, Team hom,mydb.Event ev inner join Game ga on ga.idEvent = ev.idEvent
+    where vis.idTeam = ga.idVisitor  and hom.idTeam = ga.idHome and go.idGroup = vis.idGroup
+    group by idGame , teamNames;
+ 
+ 
+#--------------
+
+
+	
+
+
+
+
+
+
+
+
+
+
+
+
  
  
