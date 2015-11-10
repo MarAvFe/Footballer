@@ -20,22 +20,86 @@ if(isset($_POST['delPosition'])){
     $conn->query($sql);
 }
 
-if(isset($_POST["newStat"])){
-   
-    $capture_field_vals ="";
-    foreach($_POST["newStat"] as $key => $text_field){
-        $capture_field_vals .= $text_field .", ";
+if(isset($_POST['possession'])){
+    
+    $newStats = $_POST['newStat'];
+    foreach ($newStats as $value) {
+      echo $value . ", ";
     }
-   
-    echo $capture_field_vals;
+    $newStats[count($newStats)] = "";
+    
+    $gameId = $_POST['gameId'];
+    $homeId = $_POST['homeId'];
+    $visitId = $_POST['visitId'];
+    $homeFouls = $_POST['homeFouls'];
+    $visitFouls = $_POST['visitFouls'];
+    $homePosses = $_POST['possession'];
+    $homeCorners = $_POST['homeCorners'];
+    $visitCorners = $_POST['visitCorners'];
+    $homeOffsides = $_POST['homeOffsides'];
+    $visitOffsides = $_POST['visitOffsides'];
+    
+    $sql = "call mydb.insertBallPossession(".$gameId.",".$homeId.",".$homePosses.");";
+    $conn->query($sql);
+    for($i = 0; $i < $homeOffsides; $i++){
+        $sql = "call mydb.insertOffside(".$gameId.",".$homeId.");";
+        $conn->query($sql);
+    }
+    for($i = 0; $i < $visitOffsides; $i++){
+        $sql = "call mydb.insertOffside(".$gameId.",".$visitId.");";
+        $conn->query($sql);
+    }
+    for($i = 0; $i < $homeFouls; $i++){
+        $sql = "call mydb.insertFoul(".$gameId.",".$homeId.");";
+        $conn->query($sql);
+    }
+    for($i = 0; $i < $visitFouls; $i++){
+        $sql = "call mydb.insertFoul(".$gameId.",".$visitId.");";
+        $conn->query($sql);
+    }
+    for($i = 0; $i < $homeCorners; $i++){
+        $sql = "call mydb.insertCorner(".$gameId.",".$homeId.");";
+        $conn->query($sql);
+    }
+    for($i = 0; $i < $visitCorners; $i++){
+        $sql = "call mydb.insertCorner(".$gameId.",".$visitId.");";
+        $conn->query($sql);
+    }
+    
+    for($i = 0; $i < count($newStats);){
+        if($newStats[$i] == 'Goal'){
+            $checkValue = ($newStats[$i+3] == "off") ? "true" : "false";
+            $sql = "call mydb.insertGoal(".$newStats[$i+1].",".$gameId.",".$newStats[$i+2].",".$checkValue.");";
+            $conn->query($sql);
+            $i = $checkValue == 1 ? $i + 4 : $i + 3;
+        }
+        else if($newStats[$i] == 'Card'){
+            $sql = "call mydb.insertCard(".$newStats[$i+1].",".$gameId.",".$newStats[$i+2].");";
+            $conn->query($sql);
+            $i = $i + 3;
+        }
+        else if($newStats[$i] == 'Attempt'){
+            $checkValue = ($newStats[$i+1] == "off") ? "true" : "false";
+            $sql = "call mydb.insertAttempt(".$gameId.",".$homeId.",".$checkValue.");";
+            $conn->query($sql);
+            $i = $checkValue == 1 ? $i + 2 : $i + 1;
+        }
+        else if($newStats[$i] == 'Save'){
+            $sql = "call mydb.insertSave(".$gameId.",".$newStats[$i+1].");";
+            $conn->query($sql);
+            $i = $i + 2;
+        }else{
+            $i++;
+        }
+    }
 }
+
 ?>
-<!DOCTYPE html5><html ng-app=""><head>
+<!DOCTYPE html5><html lang="en" ng-app=""><head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <script type="text/javascript" src="http://cdnjs.cloudflare.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
     <script type="text/javascript" src="http://netdna.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
-    <script type="text/javascript" src="./js/updateCombos.js"></script>
     <link href="http://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
     <link href="http://pingendo.github.io/pingendo-bootstrap/themes/default/bootstrap.css" rel="stylesheet" type="text/css">
     <link href="./css/bootstrap-datepicker.min.css" rel="stylesheet" type="text/css">
@@ -44,21 +108,30 @@ if(isset($_POST["newStat"])){
     <script type="text/javascript" src="./js/bootstrap-datepicker.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.7/angular.min.js"></script>
     <style>
-      .table.statics th+th, 
-      .table.statics td+td{
+        .table.statics th+th, 
+        .table.statics td+td{
         width:50%;
-      }
-      .table.statics th, 
-      .table.statics td,
-      .table.statics th+th+th, 
-      .table.statics td+td+td{
+        }
+        .table.statics th, 
+        .table.statics td,
+        .table.statics th+th+th, 
+        .table.statics td+td+td{
         width:25%;
-      }
-      .table.statics, th{
-      text-align:center;
-      }
+        }
+        .table.statics, th{
+        text-align:center;
+        }
+        .statType{
+            background: 0;
+            border: 0;
+            width: 100%;
+            overflow: visible;
+            outline: 0;
+            height: auto;
+        }
+    
     </style>
-    <script>
+    <script type="text/javascript">
         
         $(function() {
             $('.selectpicker.gameselect').on('change', function(){
@@ -68,10 +141,27 @@ if(isset($_POST["newStat"])){
                 document.getElementById('visitId').value = optVals[1];
                 document.getElementById('homeName').innerHTML = optVals[2];
                 document.getElementById('visitName').innerHTML = optVals[3];
+                document.getElementById('gameId').value = optVals[4];
             });
 
         });
+        <?php 
+            $sql = "select pla.idPlayer, concat(per.firstName, ' ', per.lastName) from mydb.Player pla, mydb.Person per where pla.idPerson = per.idPerson;";
+            $result = $conn->query($sql);
+            if (!$result) {
+                echo 'Could not run query: ' . mysql_error();
+            }
+            $names = "";
+            $ids = "";
+            while($row = $result->fetch_row()){
+                $names .= '"' .$row[1]. '",';
+                $ids .= $row[0] . ',';
+            }
+        ?>
+        var queriedPlayers = [<?php echo $names; ?>];
+        var queriedIds = [<?php echo $ids; ?>];
     </script>
+    <script type="text/javascript" src="./js/updateCombos.js"></script>
 
   </head><body>
     <div class="navbar navbar-default navbar-static-top">
@@ -218,19 +308,20 @@ if(isset($_POST["newStat"])){
                   <form role="form" class="form-horizontal" method="post" action="adminPage.php">
                     <select class="selectpicker gameSelect" ng-model="gameSelect" data-live-search="true" data-width="auto" title="Select a game">
                         <?php
-                            $sql = "select ev.nameEvent, ev.idEvent , ga.idGame , vis.nameTeam , hom.nameTeam from Team vis, Team hom, mydb.Event ev inner join Game ga on ga.idEvent = ev.idEvent where vis.idTeam = ga.idVisitor  and hom.idTeam = ga.idHome group by idGame , vis.NameTeam , hom.NameTeam;";
+                            $sql = "select ev.nameEvent, hom.idTeam , vis.idTeam , hom.nameTeam , vis.nameTeam, ga.idGame from Team vis, Team hom,mydb.Event ev inner join Game ga on ga.idEvent = ev.idEvent where vis.idTeam = ga.idVisitor  and hom.idTeam = ga.idHome group by idGame , vis.NameTeam , hom.NameTeam;";
                             
                             if ($result = $conn->query($sql)) {
                                 $group = '';
                                 $first = 1;
                                 while($row = $result->fetch_row()){
                                     if($row[0] != $group){
+                                        $group = $row[0];
                                         if($first == 1){
                                             $first = 0;
                                         };
                                         echo '<optgroup label="'.$row[0].'">';
                                     };
-                                    echo "<option value='".$row[1]."-".$row[2]."-".$row[3]."-".$row[4]."'>".$row[3]." - ".$row[4]."</option>";
+                                    echo "<option value='".$row[1]."-".$row[2]."-".$row[3]."-".$row[4]."-".$row[5]."'>".$row[3]." - ".$row[4]."</option>";
                                 }
                                 echo '</optgroup>';
                             }else{
@@ -250,7 +341,7 @@ if(isset($_POST["newStat"])){
                       <tbody>
                         <tr>
                           <td>
-                            <input type="number" class="form-control" placeholder="0" min="0" max="100" step="1" ng-model="otherPossession">
+                            <input type="number" class="form-control" placeholder="0" min="0" max="100" step="1" name="possession" ng-model="otherPossession">
                           </td>
                           <td>Ball possesion</td>
                           <td>
@@ -259,30 +350,39 @@ if(isset($_POST["newStat"])){
                         </tr>
                         <tr>
                           <td>
-                            <input type="number" class="form-control" placeholder="0">
+                            <input type="number" class="form-control" placeholder="0" name="homeOffsides">
                           </td>
                           <td>Offsides</td>
                           <td>
-                            <input type="number" class="form-control" placeholder="0">
+                            <input type="number" class="form-control" placeholder="0" name="visitOffsides">
                           </td>
                         </tr>
                         <tr>
                           <td>
-                            <input type="number" class="form-control" placeholder="0">
+                            <input type="number" class="form-control" placeholder="0" name="homeFouls">
                           </td>
                           <td>Fouls</td>
                           <td>
-                            <input type="number" class="form-control" placeholder="0">
+                            <input type="number" class="form-control" placeholder="0" name="visitFouls">
+                          </td>
+                        </tr>
+                        <tr>
+                          <td>
+                            <input type="number" class="form-control" placeholder="0" name="homeCorners">
+                          </td>
+                          <td>Corners</td>
+                          <td>
+                            <input type="number" class="form-control" placeholder="0" name="visitCorners">
                           </td>
                         </tr>
                       </tbody>
                     </table>
                     <input type="text" hidden="hidden" name="homeId" id="homeId">
                     <input type="text" hidden="hidden" name="visitId" id="visitId">
+                    <input type="text" hidden="hidden" name="gameId" id="gameId">
                     <button type="button" class="btn  btn-success" onclick="addGoal('moreStats')">Add goal</button>
                     <button type="button" class="btn  btn-success" onclick="addCard('moreStats')">Add card</button>
                     <button type="button" class="btn  btn-success" onclick="addAttempt('moreStats')">Add attempt</button>
-                    <button type="button" class="btn  btn-success" onclick="addCorner('moreStats')">Add corner</button>
                     <button type="button" class="btn  btn-success" onclick="addSave('moreStats')">Add save</button>
                     <table id="moreStats" class="table">
                       <thead>
