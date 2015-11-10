@@ -15,7 +15,7 @@ if ($conn->connect_error) {
 
 $loginFail = 0;
 if(isset($_POST['user'])){
-    $sql = "select mydb.isLogin('".$_POST['user']."', '".$_POST['pass']."');";
+    $sql = "select mydb.isLogin('".$_POST['user']."', '".md5($_POST['pass'])."');";
     $result = $conn->query($sql);
     $row = $result->fetch_row();
     if($row[0] == 1){
@@ -27,6 +27,7 @@ if(isset($_POST['user'])){
         $loginFail = 1;
     }
 }
+
 
 $hasError = $loginFail>0 ? ' has-error' : '';
 
