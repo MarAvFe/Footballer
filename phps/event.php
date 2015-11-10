@@ -145,7 +145,6 @@ function normalize_date($date){
                   </thead>
 				  <tbody>
 			<?php
-			
 				$sql = "select gr.idGroup , gr.nameGroup, te.idTeam, te.nameTeam
 						from mydb.Group gr inner join Team te on gr.idEvent = '$idEvent' and te.idGroup = gr.idGroup;";
                         $result = $conn->query($sql);
@@ -190,7 +189,6 @@ function normalize_date($date){
 							$fila = $resultado->fetch_assoc();
 							$matches = $fila['res'];
 						}
-						
 						 echo'<tr>';
 						 echo"<td>$nameTeam</td>";
 						 echo "<td>$nameGroup</td>";

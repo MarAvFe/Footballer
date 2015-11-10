@@ -20,9 +20,7 @@ function normalize_date($date){
 		}
 		
 	$idGame = $_GET['newIdGame'];
-	
-	
-	
+		
 	if (!($resultado = $conn->query("select idHome,idVisitor from Game where idGame ='$idGame';"))) {
     echo "Falló CALL: (" . $conn->errno . ") " . $conn->error;
 	}else{
@@ -156,8 +154,6 @@ function normalize_date($date){
 		$fila = $result->fetch_assoc();
 		$redVisit = $fila['res'];
 	}
-	
-	
 	
 ?>
 
