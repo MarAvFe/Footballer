@@ -335,6 +335,15 @@ BEGIN
     values (pNameStadium,pCapacity,pIdCity);
 END;
 
-
+CREATE FUNCTION `getTeamContinent` (pIdTeam int)
+RETURNS varchar(20)
+BEGIN
+	declare returnValue varchar(20);
+	select nameContinent 
+    into returnValue
+    from Continent
+    where idContinent=(select idContinent from Country where idCountry=(select idCountry from Team where idTeam=pIdTeam));
+RETURN returnValue;
+END;
 
 

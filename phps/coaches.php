@@ -66,19 +66,19 @@ if(isset($_POST["addCoach"])){
         <div class="collapse navbar-collapse" id="navbar-ex-collapse">
           <ul class="nav navbar-nav navbar-right">
             <li>
-              <a href="home.html">Home</a>
+              <a href="home.php">Home</a>
             </li>
             <li>
               <a href="events.php">Events</a>
             </li>
             <li>
-              <a href="teams.html">Teams</a>
+              <a href="teams.php">Teams</a>
             </li>
             <li>
               <a href="players.php">Players</a>
             </li>
             <li>
-              <a href="stadiums.html">Stadiums</a>
+              <a href="stadiums.php">Stadiums</a>
             </li>
           </ul>
         </div>
