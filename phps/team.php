@@ -231,9 +231,9 @@ if(isset($_POST["addPlayer"])){
                             <div class="col-sm-8">
                               <select name="idPlayer" class="selectpicker" data-width="100%" data-live-search="true">
                                 <?php 
-                                $sql = "select pl.idPlayer,p.firstName,p.lastName from  Person p,  Player pl
-										where pl.idPerson=p.idPerson and p.idCountry='$idCountry' and pl.idPlayer not in(
-										select idPlayer from Player_team);";
+                                $sql = "select pl.idPlayer,CONCAT(p.firstName,' ',p.lastName) from Person p inner join
+										Player pl on p.idPerson = pl.idPerson and p.idCountry = '$idCountry' 
+										where pl.idPlayer not in (select idPlayer from Player_team where idTeam = $idTeam);";
                                 $result = $conn->query($sql);
                                 if (!$result) {
                                     echo 'Could not run query: ' . mysql_error();
