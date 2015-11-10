@@ -381,6 +381,8 @@ call insertPlayer_Team(1852,13,0,1);
 call insertPlayer_Team(1853,14,0,1);
 (in pIdPlayer int, in  pIdTeam int, in pShirtNum int,in pIdPosition int)
 
+select * from mydb.Event;
+select * from mydb.Group;
 select * from Team
 select * from Position
 select * from Coach
@@ -394,7 +396,14 @@ call insertTeam('T7',1852,1,7);
 call insertTeam('T8',1853,1,8);
 (in pNameTeam VARCHAR(45),in pIdCaptain INT,in pIdCoach int,in pIdCountry int)
 
-updateTeamGroup(7,)
+call updateTeamGroup(7,9);
+call updateTeamGroup(8,9);
+call updateTeamGroup(9,10);
+call updateTeamGroup(10,10);
+call updateTeamGroup(11,11);
+call updateTeamGroup(12,11);
+call updateTeamGroup(13,12);
+call updateTeamGroup(14,12);
 
 
 select pl.idPlayer,p.firstName,p.lastName from  Player_team pt, Person p,  Player pl
@@ -407,7 +416,7 @@ Player pl on p.idPerson = pl.idPerson and p.idCountry = 1
 where pl.idPlayer not in (select idPlayer from Player_team where idTeam = 3);
 
 
-
+call generateFirstGames(4)
 
 DELIMITER //
 CREATE PROCEDURE generateFirstGames(in pIdEvent int)
@@ -451,6 +460,21 @@ CREATE PROCEDURE generateFirstGames(in pIdEvent int)
 DELIMITER ;
 
 
+
+
+pIdContinent
+select * from Continent;
+select * from Country;
+select * from Player;
+select * from Player_team;
+select * from Team;
+
+#SELECCION LOS PAISES CON UN GURPO SIN ASIGNAR
+select te.idTeam, te.nameTeam , count(pt.idPlayer) from Country co 
+inner join Team te on co.idContinent = 8 and co.idCountry = te.idCountry
+left join Player_team pt on pt.idTeam = te.idTeam
+where te.idGroup is null
+group by nameTeam , idTeam;
 
 
 
