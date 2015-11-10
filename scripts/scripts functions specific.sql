@@ -143,15 +143,20 @@ call getPositions()
 #------------------------
 
 
-select getIdTeamWinner(1)
+select getIdTeamWinner(4)
 select * from Player_team;
 select * from Player;
 select * from Goal;
 select * from Game;
 
 
+drop function getIdTeamWinner;
+CREATE DEFINER=`mainSoccer`@`%` FUNCTION `getIdTeamWinner`(pIdGame int) RETURNS int(11)
+BEGIN
 
+declare returnValue int;
 select te.idTeam
+into returnValue
 	from Team te, Game ga,
     (select count(idGoal) score
     from Goal go inner join Game ga on go.idGame = ga.idGame and ga.idGame = pIdGame
@@ -163,51 +168,27 @@ select te.idTeam
     (vi.score < ho.score and te.idTeam = ga.idHome and ga.idGame = pIdGame);
 
 
-
-
-
-
-CREATE DEFINER=`mainSoccer`@`%` FUNCTION `getIdTeamWinner`(pIdGame int) RETURNS int(11)
-BEGIN
-
-Declare returnValue int;
-	select te.idTeam
-    into returnValue
-	from Team te,
-    (select count(idGoal) score , ga.idVisitor
-    from Goal go inner join Game ga on go.idGame = ga.idGame and ga.idGame = pIdGame
-    where ga.idVisitor = getIdTeam(go.idPlayer,pIdGame)
-    group by ga.idVisitor) vi,
-    (select count(idGoal) score, ga.idHome
-    from Goal go inner join Game ga on go.idGame = ga.idGame and ga.idGame = pIdGame
-    where ga.idHome = getIdTeam(go.idPlayer,pIdGame)
-    group by ga.idHome) ho 
-    where (vi.score > ho.score and te.idTeam = vi.idVisitor) or 
-    (vi.score < ho.score and te.idTeam = ho.idHome);
-	return returnValue;
-
 RETURN returnValue;
 END
 
+select getIdTeamLoser(2)
 
-CREATE DEFINER=`mainSoccer`@`%` FUNCTION `getIdTeamLoser`(pIdGame int) RETURNS int(11)
+CREATE FUNCTION `getIdTeamLoser`(pIdGame int)
+RETURNS INTEGER
 BEGIN
-	declare returnValue int;
-	select te.idTeam
-    into returnValue
-	from Team te,
-    (select count(idGoal) score , ga.idVisitor
+declare returnValue int;
+select te.idTeam
+into returnValue
+	from Team te, Game ga,
+    (select count(idGoal) score
     from Goal go inner join Game ga on go.idGame = ga.idGame and ga.idGame = pIdGame
-    where ga.idVisitor = getIdTeam(go.idPlayer,pIdGame)
-    group by ga.idVisitor) vi,
-    (select count(idGoal) score, ga.idHome
+    where ga.idVisitor = getIdTeam(go.idPlayer,pIdGame)) vi,
+    (select count(idGoal) score
     from Goal go inner join Game ga on go.idGame = ga.idGame and ga.idGame = pIdGame
-    where ga.idHome = getIdTeam(go.idPlayer,pIdGame)
-    group by ga.idHome) ho 
-    where (vi.score < ho.score and te.idTeam = vi.idVisitor) or 
-    (vi.score > ho.score and te.idTeam = ho.idHome);
-	return returnValue;
-    
+    where ga.idHome = getIdTeam(go.idPlayer,pIdGame)) ho 
+    where (vi.score < ho.score and te.idTeam = ga.idVisitor and ga.idGame = pIdGame) or 
+    (vi.score > ho.score and te.idTeam = ga.idHome and ga.idGame = pIdGame);
+
 RETURN returnValue;
 END
 
@@ -254,7 +235,7 @@ END
  call insertGoal(5,1,5,false);
  select * from Goal;
  
- select checkTie(3);
+ select checkTie(6);
  select * from Goal;
  select * from Team;
  select * from Game;
@@ -294,15 +275,16 @@ END
  
  select getTeamTiesPerEvent(2,3)
 
+drop function getTeamTiesPerEvent
 CREATE FUNCTION `getTeamTiesPerEvent` (pIdEvent int, pIdTeam int)
 RETURNS INTEGER
 BEGIN
-	declare returnValue int;
+declare returnValue int;
 	select count(ga.idGame)
     into returnValue
 	from Game ga inner join mydb.Event ev
 	on ga.idEvent = ev.idEvent and ev.idEvent = pIdEvent
-	where checkTie(ga.idGame) = 1;
+	where checkTie(ga.idGame) = 1 and (pIdTeam = ga.idVisitor or pIdTeam = ga.idHome);
 	return returnValue;
 END
 
