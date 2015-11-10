@@ -138,6 +138,9 @@ CREATE PROCEDURE getGamePerEvent()
  END //
 DELIMITER ;
 
+call getPositions()
+
+
 
 
 
