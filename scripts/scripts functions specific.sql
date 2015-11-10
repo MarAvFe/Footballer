@@ -343,10 +343,122 @@ RETURN returnValue;
 END
 
 
+select pl.idPlayer, concat(pe.firstName, ' ', pe.lastName)  from 
+Person pe, Player pl, Player_team pt inner join Game ga
+on (ga.idVisitor = pt.idTeam or ga.idHome = pt.idTeam) and ga.idGame = pIdGamewhere pl.idPlayer = pt.idPlayer and pe.idPerson = pl.idPerson
+
+
+DELIMITER //
+CREATE PROCEDURE getTeamsForEvent()
+ BEGIN
+	select te.idTeam , te.NameTeam from Team te where te.idGroup is null;
+ END //
+DELIMITER ;
+
+select * from mydb.Group;
+select * from Game;
+select * from Country;
+select * from EventStructure
+call insertEvent('Copa test',curdate(),curdate(),7);
+call insertEventStructure('Mighty 8',8,2)
+call insertPlayer(123,curdate(),'Bob','Simple','Ton',20,20,1);
+call insertPlayer(123,curdate(),'Bob','Simple','Ton',20,20,2);
+call insertPlayer(123,curdate(),'Bob','Simple','Ton',20,20,3);
+call insertPlayer(123,curdate(),'Bob','Simple','Ton',20,20,4);
+call insertPlayer(123,curdate(),'Bob','Simple','Ton',20,20,5);
+call insertPlayer(123,curdate(),'Bob','Simple','Ton',20,20,6);
+call insertPlayer(123,curdate(),'Bob','Simple','Ton',20,20,7);
+call insertPlayer(123,curdate(),'Bob','Simple','Ton',20,20,8);
+select * from Player;
+
+call insertPlayer_Team(1846,7,0,1);
+call insertPlayer_Team(1847,8,0,1);
+call insertPlayer_Team(1848,9,0,1);
+call insertPlayer_Team(1849,10,0,1);
+call insertPlayer_Team(1850,11,0,1);
+call insertPlayer_Team(1851,12,0,1);
+call insertPlayer_Team(1852,13,0,1);
+call insertPlayer_Team(1853,14,0,1);
+(in pIdPlayer int, in  pIdTeam int, in pShirtNum int,in pIdPosition int)
+
+select * from Team
+select * from Position
+select * from Coach
+call insertTeam('T1',1846,1,1);
+call insertTeam('T2',1847,1,2);
+call insertTeam('T3',1848,1,3);
+call insertTeam('T4',1849,1,4);
+call insertTeam('T5',1850,1,5);
+call insertTeam('T6',1851,1,6);
+call insertTeam('T7',1852,1,7);
+call insertTeam('T8',1853,1,8);
+(in pNameTeam VARCHAR(45),in pIdCaptain INT,in pIdCoach int,in pIdCountry int)
+
+updateTeamGroup(7,)
+
+
+select pl.idPlayer,p.firstName,p.lastName from  Player_team pt, Person p,  Player pl
+where pl.idPerson=p.idPerson and p.idCountry='$idCountry' and pl.idPlayer != ;
+
+select * from Person;
+
+select pl.idPlayer,p.firstName,p.lastName from Person p inner join
+Player pl on p.idPerson = pl.idPerson and p.idCountry = 1 
+where pl.idPlayer not in (select idPlayer from Player_team where idTeam = 3);
+
+
+
+
+DELIMITER //
+CREATE PROCEDURE generateFirstGames(in pIdEvent int)
+ BEGIN
+	declare groupCount int;
+    declare teamCount int;
+    declare i int default 0;
+    declare y int default 0;
+    declare z int default 0;
+    declare idTeamHome int;
+    declare idTeamVisitor int;
+    
+    select evs.quantityTeam , evs.quantityGroup 
+    into teamCount, groupCount  
+    from EventStructure evs 
+    inner join mydb.Event ev on ev.idEvent = pIdEvent  and ev.idEventStructure = evs.idEventStructure;
+		
+	create temporary table randomTeams as 
+		select te.idTeam from mydb.Event ev
+        inner join mydb.Group gr on ev.idEvent = gr.idEvent and ev.idEvent = pIdEvent
+        inner join Team te on te.idGroup = gr.idGroup
+        group by rand();
+        
+    while (i < teamCount) do
+		set y = i;
+        while (y < i + teamCount) do
+			set z = y + 1;
+			while (z < i + teamCount) do
+				select idTeam into idTeamHome from randomTeams LIMIT y,y;
+                select idTeam into idTeamVisitor from randomTeams LIMIT z,z;
+				call insertGame(idTeamHome, idTeamVisitor, 0, curdate() ,90,pIdEvent);
+				set z = z + 1;
+			end while;
+			set y = y + 1;
+		end while;
+		set i = i + GroupCount;
+    end while;
+    
+    drop temporary table if exists randomTeams;
+ END //
+DELIMITER ;
 
 
 
 
 
- 
+ CREATE PROCEDURE `updateTeamGroup` (pIdTeam int, pIdGroup int)
+BEGIN
+
+	update Team te set te.idGroup = pIdGroup 
+    where te.idTeam = pIdTeam;
+
+END
  
