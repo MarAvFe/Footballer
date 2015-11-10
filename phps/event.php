@@ -190,7 +190,7 @@ function normalize_date($date){
 							$matches = $fila['res'];
 						}
 						 echo'<tr>';
-						 echo"<td>$nameTeam</td>";
+						 echo"<td><a href=\"http://localhost/html/Soccer/team.php?newIdTeam=$idTeam\">$nameTeam</a></td>";
 						 echo "<td>$nameGroup</td>";
 						 echo"<td>$matches</td>";
 						 echo"<td>$wins</td>";

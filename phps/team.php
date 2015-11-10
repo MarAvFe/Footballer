@@ -13,8 +13,8 @@ if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
 }
 
-//$idTeam = $_GET['newIdTeam'];
-$idTeam = 3;
+$idTeam = $_GET['newIdTeam'];
+
 
 	if (!($resultado = $conn->query("select getTeamName('$idTeam') as res"))) {
 		echo "Falló Select: (" . $conn->errno . ") " . $conn->error;
