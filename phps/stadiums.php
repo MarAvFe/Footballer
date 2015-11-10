@@ -17,7 +17,7 @@ if(isset($_POST["addStadium"])){
 	echo "agregar estadio";
 	$nameStadium = $_POST["nameStadium"];
 	$capacity = $_POST["capacity"];
-	$city = 6;
+	$city = $_POST["city"];
 	echo $nameStadium;
 	echo $capacity;
 	$sql = "call insertStadium('$nameStadium','$capacity','$city')";
@@ -36,6 +36,8 @@ if(isset($_POST["addStadium"])){
     <script type="text/javascript" src="http://netdna.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
     <link href="http://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
     <link href="http://pingendo.github.io/pingendo-bootstrap/themes/default/bootstrap.css" rel="stylesheet" type="text/css">
+    <link href="./css/bootstrap-select.min.css" rel="stylesheet" type="text/css">
+    <script type="text/javascript" src="./js/bootstrap-select.min.js"></script>
     <style>
       img{margin:0}
     </style>
@@ -105,6 +107,26 @@ if(isset($_POST["addStadium"])){
                   </div>
                   <div class="col-sm-8">
                     <input name="capacity" type="number" class="form-control" placeholder="30000">
+                  </div>
+                </div>
+                <div class="form-group">
+                  <div class="col-sm-offset-3 col-sm-1">
+                    <label class="control-label">City</label>
+                  </div>
+                  <div class="col-sm-8">
+                    <select name="city" class="selectpicker" data-live-search="true" data-width="100%">
+                        <?php 
+                            $sql = "Select idCity, nameCity from mydb.City;";
+                            $result = $conn->query($sql);
+                            if (!$result) {
+                                echo 'Could not run query: ' . mysql_error();
+                            }
+                            while($row = $result->fetch_row()){
+                                echo "<option value='".$row[0]."'>".$row[1]."</option>";
+                            }
+
+                        ?>
+                    </select>
                   </div>
                 </div>
                 <div class="form-group">
