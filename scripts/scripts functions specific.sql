@@ -138,8 +138,190 @@ CREATE PROCEDURE getGamePerEvent()
  END //
 DELIMITER ;
 
+call getPositions()
+
+#------------------------
+
+select * from Player_team;
+select * from Player;
+select * from Goal;
+
+
+CREATE DEFINER=`mainSoccer`@`%` FUNCTION `getIdTeamWinner`(pIdGame int) RETURNS int(11)
+BEGIN
+
+Declare returnValue int;
+	select te.idTeam
+    into returnValue
+	from Team te,
+    (select count(idGoal) score , ga.idVisitor
+    from Goal go inner join Game ga on go.idGame = ga.idGame and ga.idGame = pIdGame
+    where ga.idVisitor = getIdTeam(go.idPlayer,pIdGame)
+    group by ga.idVisitor) vi,
+    (select count(idGoal) score, ga.idHome
+    from Goal go inner join Game ga on go.idGame = ga.idGame and ga.idGame = pIdGame
+    where ga.idHome = getIdTeam(go.idPlayer,pIdGame)
+    group by ga.idHome) ho 
+    where (vi.score > ho.score and te.idTeam = vi.idVisitor) or 
+    (vi.score < ho.score and te.idTeam = ho.idHome);
+	return returnValue;
+
+RETURN returnValue;
+END
+
+
+CREATE DEFINER=`mainSoccer`@`%` FUNCTION `getIdTeamLoser`(pIdGame int) RETURNS int(11)
+BEGIN
+	declare returnValue int;
+	select te.idTeam
+    into returnValue
+	from Team te,
+    (select count(idGoal) score , ga.idVisitor
+    from Goal go inner join Game ga on go.idGame = ga.idGame and ga.idGame = pIdGame
+    where ga.idVisitor = getIdTeam(go.idPlayer,pIdGame)
+    group by ga.idVisitor) vi,
+    (select count(idGoal) score, ga.idHome
+    from Goal go inner join Game ga on go.idGame = ga.idGame and ga.idGame = pIdGame
+    where ga.idHome = getIdTeam(go.idPlayer,pIdGame)
+    group by ga.idHome) ho 
+    where (vi.score < ho.score and te.idTeam = vi.idVisitor) or 
+    (vi.score > ho.score and te.idTeam = ho.idHome);
+	return returnValue;
+    
+RETURN returnValue;
+END
+
+select * from mydb.Event;
+select * from Team;
+select getTeamWinsPerEvent(2,4)
+
+
+drop function getTeamWinsPerEvent;
+
+CREATE FUNCTION `getTeamWinsPerEvent` (pIdEvent int, pIdTeam int)
+RETURNS INTEGER
+BEGIN
+	declare returnValue int;
+	select count(ga.idGame)
+    into returnValue
+	from Game ga inner join mydb.Event ev
+	on ga.idEvent = ev.idEvent and ev.idEvent = pIdEvent
+	where getIdTeamWinner(ga.idGame) = pIdTeam;
+	
+
+RETURN returnValue;
+END
+
+select getTeamLosesPerEvent(2,3)
+
+CREATE FUNCTION `getTeamLosesPerEvent` (pIdEvent int, pIdTeam int)
+RETURNS INTEGER
+BEGIN
+	declare returnValue int;
+	select count(ga.idGame)
+    into returnValue
+	from Game ga inner join mydb.Event ev
+	on ga.idEvent = ev.idEvent and ev.idEvent = pIdEvent
+	where getIdTeamLoser(ga.idGame) = pIdTeam;
+	return returnValue;
+END
+ 
+ select * from Game;
+ select * from Player;
+ call insertGoal(4,1,5,false);
+ call insertGoal(5,1,5,false);
+ select * from Goal;
+ 
+ select checkTie(1);
+
+ 
+ CREATE FUNCTION `checkTie` (pIdGame int)
+RETURNS INTEGER
+BEGIN
+	declare returnValue int;
+	select count(1)
+	into returnValue
+	from
+	(select count(idGoal) score , ga.idVisitor
+	from Goal go inner join Game ga on go.idGame = ga.idGame and ga.idGame = pIdGame
+	where ga.idVisitor = getIdTeam(go.idPlayer,pIdGame)
+	group by ga.idVisitor) vi,
+	(select count(idGoal) score, ga.idHome
+	from Goal go inner join Game ga on go.idGame = ga.idGame and ga.idGame = pIdGame
+	where ga.idHome = getIdTeam(go.idPlayer,pIdGame)
+	group by ga.idHome) ho 
+	where vi.score = ho.score;
+
+	return returnValue;
+END
+ 
+ 
+ select getTeamTiesPerEvent(2,3)
+
+CREATE FUNCTION `getTeamTiesPerEvent` (pIdEvent int, pIdTeam int)
+RETURNS INTEGER
+BEGIN
+	declare returnValue int;
+	select count(ga.idGame)
+    into returnValue
+	from Game ga inner join mydb.Event ev
+	on ga.idEvent = ev.idEvent and ev.idEvent = pIdEvent
+	where checkTie(ga.idGame) = 1;
+	return returnValue;
+END
+
+
+select * from mydb.Event;
+select * from Team;
+select * from Game;
+select  getMatchesPlayed(2,10)
+
+CREATE FUNCTION `getMatchesPlayed` (pIdEvent int, pIdTeam int)
+RETURNS INTEGER
+BEGIN
+	declare returnValue int;
+	select count(1)
+    into returnValue
+	from mydb.Event ev inner join Game ga 
+	on ev.idEvent = pIdEvent and ev.idEvent = ga.idEvent
+	where ga.idVisitor = pIdTeam or ga.idHome = pIdTeam;
+RETURN returnValue;
+END
+
+
+
+#*------RESPALDO DE FUNCION---------
+CREATE DEFINER=`mainSoccer`@`%` PROCEDURE `getGamePerEvent`()
+BEGIN
+	select ev.nameEvent, ev.idEvent , ga.idGame , vis.nameTeam , hom.nameTeam
+    from Team vis, Team hom,mydb.Event ev inner join Game ga on ga.idEvent = ev.idEvent
+    where vis.idTeam = ga.idVisitor  and hom.idTeam = ga.idHome
+    group by idGame , vis.NameTeam , hom.NameTeam;
+ END
+ 
+ 
+ #FUNCION Q TRAE LOS EVENTOS 
+ select ev.idEvent, concat(hom.nameTeam,'-', vis.nameTeam) teamNames, ga.idGame , go.nameGroup
+    from mydb.Group go ,Team vis, Team hom,mydb.Event ev inner join Game ga on ga.idEvent = ev.idEvent
+    where vis.idTeam = ga.idVisitor  and hom.idTeam = ga.idHome and go.idGroup = vis.idGroup
+    group by idGame , teamNames;
+ 
+ 
+#--------------
+
+
+	
 
 
 
 
+
+
+
+
+
+
+
+
+ 
  
