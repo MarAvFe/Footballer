@@ -238,7 +238,6 @@ if(isset($_POST['possession'])){
                                 while($row = $result->fetch_row()){
                                     echo "<option>".$row[0]."</option>";
                                 }
-                                
                             ?>
                         </select>
                       </td>
@@ -345,7 +344,7 @@ if(isset($_POST['possession'])){
                           </td>
                           <td>Ball possesion</td>
                           <td>
-                            <input type="number" class="form-control" placeholder="0" ng-model="possession" value="{{100-otherPossession}}" disabled="">
+                            <input type="number" class="form-control" placeholder="0" ng-model="possession" value="{{100-otherPossession}}" readonly="">
                           </td>
                         </tr>
                         <tr>
