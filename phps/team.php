@@ -141,7 +141,6 @@ $idTeam = 3;
                     </tr>
                   </thead>
                   <tbody>
-				  <?php
 					<tr>
                       <td>1</td>
                       <td>Mark</td>
@@ -149,7 +148,6 @@ $idTeam = 3;
                       <td>Forward</td>
                       <td>32</td>
                     </tr>
-				  ?>
                     <tr>
                       <td>1</td>
                       <td>Mark</td>

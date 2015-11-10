@@ -145,7 +145,7 @@ function normalize_date($date){
                   </thead>
 				  <tbody>
 			<?php
-				$sql = "select gr.idGroup , gr.nameGroup, te.idTeam, te.nameTeam, getTeamPoints(gr.idEvent,te.idTeam) as points
+				$sql = "select gr.idGroup , gr.nameGroup, te.idTeam, te.nameTeam
 						from mydb.Group gr inner join Team te on gr.idEvent = '$idEvent' and te.idGroup = gr.idGroup;";
                         $result = $conn->query($sql);
                         if (!$result) {
@@ -158,7 +158,6 @@ function normalize_date($date){
 							$nameGroup = $row[1];
 							$idTeam = $row[2];
 							$nameTeam = $row[3];
-							$points = $row[4];
 							
 						if (!($resultado = $conn->query("select getTeamWinsPerEvent('$idEvent','$idTeam') as res"))) {
 							echo "Falló CALL: (" . $conn->errno . ") " . $conn->error;
@@ -177,6 +176,12 @@ function normalize_date($date){
 						}else{
 							$fila = $resultado->fetch_assoc();
 							$ties = $fila['res'];
+						}
+						if (!($resultado = $conn->query("select getTeamPoints('$idEvent','$idTeam') as res"))) {
+							echo "Falló CALL: (" . $conn->errno . ") " . $conn->error;
+						}else{
+							$fila = $resultado->fetch_assoc();
+							$points = $fila['res'];
 						}
 						if (!($resultado = $conn->query("select getMatchesPlayed('$idEvent','$idTeam') as res"))) {
 							echo "Falló CALL: (" . $conn->errno . ") " . $conn->error;

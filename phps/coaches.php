@@ -298,19 +298,20 @@ if(isset($_POST["addCoach"])){
       </div>
     </footer>
     <script>
-      $('.popper').popover({
-                        placement: 'right',
-                        container: 'body',
-                        html: true,
-                        content: function () {
-                          return $(this).next('.popper-content').html();
-                        }
-                      });
-                      $('#dateSelector .input-group.date').datepicker({
-                        format: "dd/mm/yyyy",
-                        autoclose: true,
-                        todayHighlight: true
-                      });
+        $('.popper').popover({
+            placement: 'auto right',
+            container: 'body',
+            html: true,
+            trigger: "hover",
+            content: function () {
+                return $(this).next('.popper-content').html();
+            }
+        });
+        $('#dateSelector .input-group.date').datepicker({
+            format: "dd/mm/yyyy",
+            autoclose: true,
+            todayHighlight: true
+        });
     </script>
   
 
