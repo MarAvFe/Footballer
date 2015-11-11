@@ -111,7 +111,7 @@ if(isset($_POST["addPlayer"])){
         <div class="row">
           <div class="col-md-12">
             <div class="well">
-              <img src="img/flags/angola.png" class="center-block img-responsive" width="300">
+              <img src="uploads/flags/pic<?php echo $nameTeam ?>" class="center-block img-responsive" width="300">
               <h1 class="text-center"><?php echo $nameTeam;?></h1>
             </div>
           </div>
@@ -189,7 +189,7 @@ if(isset($_POST["addPlayer"])){
 										$fila = $resultado->fetch_assoc();
 										$position = $fila['res'];
 									}
-									if (!($resultado = $conn->query("select getPlayerShirt('$idPlayer') as res"))) {
+									if (!($resultado = $conn->query("select getPlayerShirt('$idPlayer') as res "))) {
 										echo "Falló CALL: (" . $conn->errno . ") " . $conn->error;
 									}else{
 										$fila = $resultado->fetch_assoc();
@@ -222,7 +222,7 @@ if(isset($_POST["addPlayer"])){
                 <div id="addStadiumForm" class="collapse">
                   <div class="row">
                     <div class="col-md-12">
-                      <form role="form" class="form-horizontal" action="team.php" method="POST">
+                      <form role="form" class="form-horizontal" action="team.php?newIdTeam=<?php echo $idTeam; ?>" method="POST">
                         <div class="col-md-4">
                           <div class="form-group">
                             <div class="col-sm-4">
