@@ -176,27 +176,32 @@ if(isset($_POST['newTeam'])){
                 </tr>
               </thead>
               <tbody>
-                <tr>
-                  <td>
-                    <img src="img/flags/angola.png" height="40" width="70" class="img-responsive">
-                  </td>
-                  <td><a href="team.php">Angola</a></td>
-                  <td>19</td>
-                </tr>
-                <tr>
-                  <td>
-                    <img src="img/flags/nigeria.png" height="40" width="70" class="img-responsive">
-                  </td>
-                  <td>Nigeria</td>
-                  <td>22</td>
-                </tr>
-                <tr>
-                  <td>
-                    <img src="img/flags/togo.png" height="40" width="70" class="img-responsive">
-                  </td>
-                  <td>Togo</td>
-                  <td>23</td>
-                </tr>
+                <?php
+				$sql = "select te.idTeam, te.nameTeam , count(pt.idPlayer) from Country co 
+					inner join Team te on co.idContinent = 6 and co.idCountry = te.idCountry
+					left join Player_team pt on pt.idTeam = te.idTeam
+					where te.idGroup is null
+					group by nameTeam , idTeam;";
+                    $result = $conn->query($sql);
+                    if (!$result) {
+						echo 'Could not run query: ' . mysql_error();
+						exit;
+                    }
+                    while($row = $result->fetch_row()){
+						$idTeam=$row[0];
+						$nameTeam=$row[1];
+						$players=$row[2];
+
+				echo'<tr>';
+                  echo'<td>';
+                    echo'<img src="img/flags/angola.png" height="40" width="70" class="img-responsive">';
+                  echo'</td>';
+                  echo"<td><a href=\"http://localhost/html/Soccer/team.php?newIdTeam=$idTeam\">$nameTeam</a></td>";
+                  echo"<td>$players</td>";
+                echo"</tr>";
+                echo"<tr>";
+			}
+			  ?>
               </tbody>
             </table>
           </div>
@@ -211,27 +216,32 @@ if(isset($_POST['newTeam'])){
                 </tr>
               </thead>
               <tbody>
-                <tr>
-                  <td>
-                    <img src="img/flags/angola.png" height="40" width="70" class="img-responsive">
-                  </td>
-                  <td>Angola</td>
-                  <td>19</td>
-                </tr>
-                <tr>
-                  <td>
-                    <img src="img/flags/nigeria.png" height="40" width="70" class="img-responsive">
-                  </td>
-                  <td>Nigeria</td>
-                  <td>22</td>
-                </tr>
-                <tr>
-                  <td>
-                    <img src="img/flags/togo.png" height="40" width="70" class="img-responsive">
-                  </td>
-                  <td>Togo</td>
-                  <td>23</td>
-                </tr>
+               <?php
+				$sql = "select te.idTeam, te.nameTeam , count(pt.idPlayer) from Country co 
+					inner join Team te on co.idContinent = 4 and co.idCountry = te.idCountry
+					left join Player_team pt on pt.idTeam = te.idTeam
+					where te.idGroup is null
+					group by nameTeam , idTeam;";
+                    $result = $conn->query($sql);
+                    if (!$result) {
+						echo 'Could not run query: ' . mysql_error();
+						exit;
+                    }
+                    while($row = $result->fetch_row()){
+						$idTeam=$row[0];
+						$nameTeam=$row[1];
+						$players=$row[2];
+
+				echo'<tr>';
+                  echo'<td>';
+                    echo'<img src="img/flags/angola.png" height="40" width="70" class="img-responsive">';
+                  echo'</td>';
+                  echo"<td><a href=\"http://localhost/html/Soccer/team.php?newIdTeam=$idTeam\">$nameTeam</a></td>";
+                  echo"<td>$players</td>";
+                echo"</tr>";
+                echo"<tr>";
+			}
+			  ?>
               </tbody>
             </table>
           </div>
@@ -246,27 +256,33 @@ if(isset($_POST['newTeam'])){
                 </tr>
               </thead>
               <tbody>
-                <tr>
-                  <td>
-                    <img src="img/flags/angola.png" height="40" width="70" class="img-responsive">
-                  </td>
-                  <td>Angola</td>
-                  <td>19</td>
-                </tr>
-                <tr>
-                  <td>
-                    <img src="img/flags/nigeria.png" height="40" width="70" class="img-responsive">
-                  </td>
-                  <td>Nigeria</td>
-                  <td>22</td>
-                </tr>
-                <tr>
-                  <td>
-                    <img src="img/flags/togo.png" height="40" width="70" class="img-responsive">
-                  </td>
-                  <td>Togo</td>
-                  <td>23</td>
-                </tr>
+			  <?php
+				$sql = "select te.idTeam, te.nameTeam , count(pt.idPlayer) from Country co 
+					inner join Team te on co.idContinent = 8 and co.idCountry = te.idCountry
+					left join Player_team pt on pt.idTeam = te.idTeam
+					where te.idGroup is null
+					group by nameTeam , idTeam;";
+                    $result = $conn->query($sql);
+                    if (!$result) {
+						echo 'Could not run query: ' . mysql_error();
+						exit;
+                    }
+                    while($row = $result->fetch_row()){
+						$idTeam=$row[0];
+						$nameTeam=$row[1];
+						$players=$row[2];
+
+				echo'<tr>';
+                  echo'<td>';
+                    echo'<img src="img/flags/angola.png" height="40" width="70" class="img-responsive">';
+                  echo'</td>';
+                  echo"<td><a href=\"http://localhost/html/Soccer/team.php?newIdTeam=$idTeam\">$nameTeam</a></td>";
+                  echo"<td>$players</td>";
+                echo"</tr>";
+                echo"<tr>";
+			}
+			  ?>
+			 
               </tbody>
             </table>
           </div>
@@ -281,27 +297,72 @@ if(isset($_POST['newTeam'])){
                 </tr>
               </thead>
               <tbody>
+               <?php
+				$sql = "select te.idTeam, te.nameTeam , count(pt.idPlayer) from Country co 
+					inner join Team te on co.idContinent = 5 and co.idCountry = te.idCountry
+					left join Player_team pt on pt.idTeam = te.idTeam
+					where te.idGroup is null
+					group by nameTeam , idTeam;";
+                    $result = $conn->query($sql);
+                    if (!$result) {
+						echo 'Could not run query: ' . mysql_error();
+						exit;
+                    }
+                    while($row = $result->fetch_row()){
+						$idTeam=$row[0];
+						$nameTeam=$row[1];
+						$players=$row[2];
+
+				echo'<tr>';
+                  echo'<td>';
+                    echo'<img src="img/flags/angola.png" height="40" width="70" class="img-responsive">';
+                  echo'</td>';
+                  echo"<td><a href=\"http://localhost/html/Soccer/team.php?newIdTeam=$idTeam\">$nameTeam</a></td>";
+                  echo"<td>$players</td>";
+                echo"</tr>";
+                echo"<tr>";
+			}
+			  ?>
+              </tbody>
+            </table>
+          </div>
+		   <div class="col-md-12">
+            <h3>Oceania</h3>
+            <table class="table">
+              <thead>
                 <tr>
-                  <td>
-                    <img src="img/flags/angola.png" height="40" width="70" class="img-responsive">
-                  </td>
-                  <td>Angola</td>
-                  <td>19</td>
+                  <th>Flag</th>
+                  <th>Name</th>
+                  <th># Players</th>
                 </tr>
-                <tr>
-                  <td>
-                    <img src="img/flags/nigeria.png" height="40" width="70" class="img-responsive">
-                  </td>
-                  <td>Nigeria</td>
-                  <td>22</td>
-                </tr>
-                <tr>
-                  <td>
-                    <img src="img/flags/togo.png" height="40" width="70" class="img-responsive">
-                  </td>
-                  <td>Togo</td>
-                  <td>23</td>
-                </tr>
+              </thead>
+              <tbody>
+               <?php
+				$sql = "select te.idTeam, te.nameTeam , count(pt.idPlayer) from Country co 
+					inner join Team te on co.idContinent = 7 and co.idCountry = te.idCountry
+					left join Player_team pt on pt.idTeam = te.idTeam
+					where te.idGroup is null
+					group by nameTeam , idTeam;";
+                    $result = $conn->query($sql);
+                    if (!$result) {
+						echo 'Could not run query: ' . mysql_error();
+						exit;
+                    }
+                    while($row = $result->fetch_row()){
+						$idTeam=$row[0];
+						$nameTeam=$row[1];
+						$players=$row[2];
+
+				echo'<tr>';
+                  echo'<td>';
+                    echo'<img src="img/flags/angola.png" height="40" width="70" class="img-responsive">';
+                  echo'</td>';
+                  echo"<td><a href=\"http://localhost/html/Soccer/team.php?newIdTeam=$idTeam\">$nameTeam</a></td>";
+                  echo"<td>$players</td>";
+                echo"</tr>";
+                echo"<tr>";
+			}
+			  ?>
               </tbody>
             </table>
           </div>

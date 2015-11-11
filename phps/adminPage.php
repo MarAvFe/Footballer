@@ -92,6 +92,9 @@ if(isset($_POST['possession'])){
             $i++;
         }
     }
+	
+	$sql = "call setGamePlayed(".$gameId.");";
+    $conn->query($sql);
 }
 
 ?>

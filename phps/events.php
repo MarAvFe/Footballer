@@ -157,7 +157,58 @@ function normalize_date($date){
                                 while($row = $result->fetch_row()){
                                     echo "<option value=\"". $row[0]. "\">". $row[1] . "</option>\n";
                                 }
-							
+								$sql = "select te.idTeam, te.nameTeam , count(pt.idPlayer) from Country co 
+										inner join Team te on co.idContinent = 4 and co.idCountry = te.idCountry
+										left join Player_team pt on pt.idTeam = te.idTeam
+										where te.idGroup is null
+										group by nameTeam , idTeam;";
+                                $result = $conn->query($sql);
+                                if (!$result) {
+                                    echo 'Could not run query: ' . mysql_error();
+                                    exit;
+                                }
+                                while($row = $result->fetch_row()){
+                                    echo "<option value=\"". $row[0]. "\">". $row[1] . "</option>\n";
+                                }
+								$sql = "select te.idTeam, te.nameTeam , count(pt.idPlayer) from Country co 
+										inner join Team te on co.idContinent = 5 and co.idCountry = te.idCountry
+										left join Player_team pt on pt.idTeam = te.idTeam
+										where te.idGroup is null
+										group by nameTeam , idTeam;";
+                                $result = $conn->query($sql);
+                                if (!$result) {
+                                    echo 'Could not run query: ' . mysql_error();
+                                    exit;
+                                }
+                                while($row = $result->fetch_row()){
+                                    echo "<option value=\"". $row[0]. "\">". $row[1] . "</option>\n";
+                                }
+								$sql = "select te.idTeam, te.nameTeam , count(pt.idPlayer) from Country co 
+										inner join Team te on co.idContinent = 6 and co.idCountry = te.idCountry
+										left join Player_team pt on pt.idTeam = te.idTeam
+										where te.idGroup is null
+										group by nameTeam , idTeam;";
+                                $result = $conn->query($sql);
+                                if (!$result) {
+                                    echo 'Could not run query: ' . mysql_error();
+                                    exit;
+                                }
+                                while($row = $result->fetch_row()){
+                                    echo "<option value=\"". $row[0]. "\">". $row[1] . "</option>\n";
+                                }
+								$sql = "select te.idTeam, te.nameTeam , count(pt.idPlayer) from Country co 
+										inner join Team te on co.idContinent = 7 and co.idCountry = te.idCountry
+										left join Player_team pt on pt.idTeam = te.idTeam
+										where te.idGroup is null
+										group by nameTeam , idTeam;";
+                                $result = $conn->query($sql);
+                                if (!$result) {
+                                    echo 'Could not run query: ' . mysql_error();
+                                    exit;
+                                }
+                                while($row = $result->fetch_row()){
+                                    echo "<option value=\"". $row[0]. "\">". $row[1] . "</option>\n";
+                                }
                             ?>
                     </select>
                   </div>
