@@ -20,10 +20,48 @@ if(isset($_POST['delPosition'])){
     $conn->query($sql);
 }
 
+if(isset($_POST['createPrize'])){
+    if($_POST['awardType']){
+        $sql = "call mydb.insertAwardPerson('".$_POST['prizeName']."');";
+        $conn->query($sql);
+    }else{
+        $sql = "call mydb.insertAwardTeam('".$_POST['prizeName']."');";
+        $conn->query($sql);
+    }
+}
+
 if(isset($_POST['submitPrize'])){
-    $sql = "call mydb.deletePosition('".$_POST['outPosition']."');";
+    $awardValue = explode("-",$_POST['awardId']);
+    $winnerValue = explode("-",$_POST['winnerId']);
+    if($awardValue[0] == 't' and $winnerValue[0] == 't' ){
+        $sql = "call mydb.insertAwardxTeam(".$awardValue[1].",".$winnerValue[1].");";
+        $conn->query($sql);
+    }else if($awardValue[0] == 'p' and $winnerValue[0] == 'p' ){
+        $sql = "call mydb.insertAwardxPlayer(".$awardValue[1].",".$winnerValue[1].");";
+        $conn->query($sql);
+    }
+}
+
+if(isset($_POST['addCountry'])){
+    $sql = "call mydb.insertCountry('".$_POST['inCountry']."','foto','".$_POST['inContinent']."');";
     $conn->query($sql);
 }
+
+if(isset($_POST['delCountry'])){
+    $sql = "call mydb.insertCountry('".$_POST['inCountry']."','foto','".$_POST['inContinent']."');";
+    //$conn->query($sql);
+}
+
+if(isset($_POST['addCity'])){
+    $sql = "call mydb.insertCity('".$_POST['inCity']."','".$_POST['inCountry']."');";
+    $conn->query($sql);
+}
+
+if(isset($_POST['delCountry'])){
+    $sql = "call mydb.insertCountry('".$_POST['inCountry']."','foto','".$_POST['inContinent']."');";
+    //$conn->query($sql);
+}
+
 
 if(isset($_POST['possession'])){
     
@@ -254,66 +292,112 @@ if(isset($_POST['possession'])){
                         </select>
                       </td>
                       <td>
-                        <input name="inPosition" type="text" class="form-control" placeholder="Forward">
+                          <div class="col-sm-12">
+                        <input name="inPosition" type="text" class="form-control" placeholder="Enter position name">
+                          </div>
                       </td>
                       <td>
-                        <button name="addPosition" type="submit" class="btn btn-info">Add position</button>
+                        <button name="addPosition" type="submit" class="btn btn-block btn-info">Add position</button>
                       </td>
                       <td>
-                        <button name="delPosition" type="submit" class="btn btn-info">Delete position</button>
+                        <button name="delPosition" type="submit" class="btn btn-block btn-info">Delete position</button>
                       </td>
                     </form>
                 </tr>
-                <tr>
-                  <td>Cup structure</td>
-                  <td colspan="2">
-                    <div class="form-group">
-                      <div class="col-sm-3">
-                        <select class="selectpicker" data-width="100%">
-                          <option>Cup</option>
-                          <option>Crown</option>
-                          <option>Hexagonal</option>
+                <tr> 
+                    <form method="post" action="adminPage.php">
+                      <td>Countries</td>
+                      <td>
+                        <select name="outCountry" class="selectpicker" data-width="100%">
+                            <?php 
+                                $sql = "Select idCountry, nameCountry from mydb.Country;";
+                                $result = $conn->query($sql);
+                                if (!$result) {
+                                    echo 'Could not run query: ' . mysql_error();
+                                }
+                                while($row = $result->fetch_row()){
+                                    echo "<option value='".$row[0]."'>".$row[1]."</option>";
+                                }
+                            ?>
                         </select>
-                      </div>
-                      <div class="col-sm-9">
-                        <input type="text" class="form-control" placeholder="Name">
-                      </div>
-                      <div class="col-sm-3">
-                        <input type="text" class="form-control">
-                      </div>
-                      <div class="col-sm-9">
-                        <select class="selectpicker" data-width="100%" title="Number of teams">
-                          <option>8</option>
-                          <option>16</option>
-                          <option>32</option>
+                      </td>
+                      <td>
+                        <div class="col-sm-6">
+                            <input name="inCountry" type="text" class="form-control" placeholder="New country name">
+                          </div>
+                        <div class="col-sm-6">
+                        <select name="inContinent" class="selectpicker" data-width="100%" title="Select it's continent">
+                            <?php 
+                                $sql = "Select idContinent, nameContinent from mydb.Continent;";
+                                $result = $conn->query($sql);
+                                if (!$result) {
+                                    echo 'Could not run query: ' . mysql_error();
+                                }
+                                while($row = $result->fetch_row()){
+                                    echo "<option value='".$row[0]."'>".$row[1]."</option>";
+                                }
+                            ?>
                         </select>
-                      </div>
-                      <div class="col-sm-3">
-                        <input type="text" class="form-control" placeholder="4">
-                      </div>
-                      <div class="col-sm-9">
-                        <select class="selectpicker" data-width="100%" title="Number of groups">
-                          <option>2</option>
-                          <option>4</option>
-                          <option>8</option>
+                            </div>
+                      </td>
+                      <td>
+                        <button name="addCountry" type="submit" class="btn btn-block btn-info">Add country</button>
+                      </td>
+                      <td>
+                        
+                      </td>
+                    </form>
+                </tr>
+                <tr> 
+                    <form method="post" action="adminPage.php">
+                      <td>Cities</td>
+                      <td>
+                        <select name="outCity" class="selectpicker" data-width="100%">
+                            <?php 
+                                $sql = "Select idCity, nameCity from mydb.City;";
+                                $result = $conn->query($sql);
+                                if (!$result) {
+                                    echo 'Could not run query: ' . mysql_error();
+                                }
+                                while($row = $result->fetch_row()){
+                                    echo "<option value='".$row[0]."'>".$row[1]."</option>";
+                                }
+                            ?>
                         </select>
-                      </div>
-                    </div>
-                  </td>
-                  <td>
-                    <button type="button" class="btn  btn-info">Add structure</button>
-                  </td>
-                  <td>
-                    <button type="button" class="btn  btn-info">Delete structure</button>
-                  </td>
+                      </td>
+                      <td>
+                        <div class="col-sm-6">
+                            <input name="inCity" type="text" class="form-control" placeholder="New city name">
+                          </div>
+                        <div class="col-sm-6">
+                        <select name="inCountry" class="selectpicker" data-width="100%" title="Select it's country">
+                            <?php 
+                                $sql = "Select idCountry, nameCountry from mydb.Country;";
+                                $result = $conn->query($sql);
+                                if (!$result) {
+                                    echo 'Could not run query: ' . mysql_error();
+                                }
+                                while($row = $result->fetch_row()){
+                                    echo "<option value='".$row[0]."'>".$row[1]."</option>";
+                                }
+                            ?>
+                        </select>
+                            </div>
+                      </td>
+                      <td>
+                        <button name="addCity" type="submit" class="btn btn-block btn-info">Add city</button>
+                      </td>
+                      <td>
+                      </td>
+                    </form>
                 </tr>
               </tbody>
             </table>
-            <button type="button" class="btn btn-block btn-info btn-lg" data-target="#addStadiumForm" data-toggle="collapse">Add game statics
+            <button type="button" class="btn btn-block btn-info btn-lg" data-target="#addStatsForm" data-toggle="collapse">Add game statics
               <i class="fa fa-fw fa-lg fa-plus-circle"></i>
             </button>
             <br>
-            <div id="addStadiumForm" class="collapse">
+            <div id="addStatsForm" class="collapse">
               <div class="row">
                 <div class="col-md-offset-2 col-md-8">
                   <form role="form" class="form-horizontal" method="post" action="adminPage.php">
@@ -420,7 +504,7 @@ if(isset($_POST['possession'])){
                 </div>
               </div>
             </div>
-            <button type="button" class="btn btn-block btn-info btn-lg" data-target="#addAwardForm" data-toggle="collapse">Add award
+            <button type="button" class="btn btn-block btn-info btn-lg" data-target="#addAwardForm" data-toggle="collapse">Grant award
               <i class="fa fa-fw fa-lg fa-plus-circle"></i>
             </button>
             <br>
@@ -428,7 +512,8 @@ if(isset($_POST['possession'])){
               <div class="row">
                 <div class="col-md-offset-2 col-md-8">
                   <form role="form" class="form-horizontal" method="post" action="adminPage.php">
-                    <select data-live-search="true" data-width="auto" title="Select a winner" class="selectpicker">
+                    <div class="col-lg-4">
+                        <select name="awardId" data-live-search="true" data-width="auto" title="Select a winner" class="selectpicker">
                       <?php 
                             $sql = "select pla.idPlayer, concat(per.firstName, ' ', per.lastName) from mydb.Player pla, mydb.Person per where pla.idPerson = per.idPerson;";
                             $result = $conn->query($sql);
@@ -437,7 +522,7 @@ if(isset($_POST['possession'])){
                             }
                             echo '<optgroup label="Players">';
                             while($row = $result->fetch_row()){
-                                echo "<option value='".$row[0]."'>".$row[1]."</option>";
+                                echo "<option value='p-".$row[0]."'>".$row[1]."</option>";
                             }
                             echo '</optgroup>';
                         
@@ -446,20 +531,22 @@ if(isset($_POST['possession'])){
                             if (!$result) {
                                 echo 'Could not run query: ' . mysql_error();
                             }
-                            echo '<optgroup label="Countries">';
+                            echo '<optgroup label="Teams">';
                             while($row = $result->fetch_row()){
-                                echo "<option value='".$row[0]."'>".$row[1]."</option>";
+                                echo "<option value='t-".$row[0]."'>".$row[1]."</option>";
                             }
                             echo '</optgroup>';
                         ?>
                     </select>
-                    <select data-live-search="true" data-width="auto" title="Select an award" class="selectpicker">
+                        </div>
+                      <div class="col-lg-5">
+                    <select name="winnerId" data-live-search="true" data-width="auto" title="Select an award" class="selectpicker">
                         <?php 
                             $sql = "select idAwardTeam,nameAward from AwardTeam;";
                             if ($result = $conn->query($sql)) {
                                 echo '<optgroup label="Team awards">';
                                 while($row = $result->fetch_row()){
-                                    echo "<option value='".$row[0]."'>".$row[1]."</option>";
+                                    echo "<option value='t-".$row[0]."'>".$row[1]."</option>";
                                 }
                                 echo '</optgroup>';
                             }
@@ -468,22 +555,41 @@ if(isset($_POST['possession'])){
                             if ($result = $conn->query($sql)) {
                                 echo '<optgroup label="Player awards">';
                                 while($row = $result->fetch_row()){
-                                    echo "<option value='".$row[0]."'>".$row[1]."</option>";
+                                    echo "<option value='p-".$row[0]."'>".$row[1]."</option>";
                                 }
                                 echo '</optgroup>';
                             }
                         ?>
-                    </select>
-                    <div id="dateSelector" class="col-sm-3 col-sm-offset-9">
-                      <!--<input type="text" class="form-control" placeholder="dd/mm/yyyy" id="datepicker">-->
-                      <div class="input-group date">
-                        <input type="text" class="form-control" readonly="true">
-                        <span class="input-group-addon">
-                          <i class="fa fa-fw fa-lg -circle fa-calendar"></i>
-                        </span>
-                      </div>
-                    </div>
+                    </select></div>
+                      <div class="col-lg-3">
                     <button name="submitPrize" type="submit" class="btn  btn-primary">Give prize</button>
+                          </div>
+                    <br><br>
+                  </form>
+                </div>
+              </div>
+            </div>
+            <button type="button" class="btn btn-block btn-info btn-lg" data-target="#createAwardForm" data-toggle="collapse">Create award
+              <i class="fa fa-fw fa-lg fa-plus-circle"></i>
+            </button>
+            <br>
+            <div id="createAwardForm" class="collapse">
+              <div class="row">
+                <div class="col-md-offset-2 col-md-8">
+                  <form role="form" class="form-horizontal" method="post" action="adminPage.php">
+                      <div class="col-lg-4">
+                        <select name="awardType" title="Select a type" class="selectpicker form-control">
+                            <option value="0">For a team</option>
+                            <option value="1">For a player</option>
+                        </select>
+                      </div>
+                      <div class="col-lg-5">
+                        <input name="prizeName" type="text" class="form-control" placeholder="Give it a name">
+                      </div>    
+                      <div class="col-lg-3">
+                        <button name="createPrize" type="submit" class="btn  btn-primary form-control">Create prize</button>
+                      </div>
+                    <br><br>
                   </form>
                 </div>
               </div>
