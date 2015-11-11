@@ -1,9 +1,10 @@
 <?php
 session_start();
 
+$hidden = "";
 if(!isset($_SESSION['loggedUser'])){
-    $newURL = 'index.php';
-    header('Location: '.$newURL);
+    $hidden = " style='display:none'";
+    /*<?php echo $hidden; ?>*/
 }
 
 $conn = new mysqli($_SESSION['server'], $_SESSION['username'], $_SESSION['password'], $_SESSION['dbname']);
@@ -135,11 +136,11 @@ function uploadPicture($picture, $idPic, $stadPerCoaFlag){
             </div>
           </div>
         </div>
-          <button type="button" class="btn btn-block btn-info btn-lg" data-target="#addStadiumForm" data-toggle="collapse">Add a new team
+          <button type="button" class="btn btn-block btn-info btn-lg" data-target="#addStadiumForm" data-toggle="collapse"<?php echo $hidden; ?>>Add a new team
           <i class="fa fa-fw fa-lg fa-plus-circle"></i>
         </button>
         <br>
-        <div id="addStadiumForm" ng-app="" class="collapse">
+        <div id="addStadiumForm" ng-app="" class="collapse"<?php echo $hidden; ?>>
           <div class="row">
             <div class="col-md-12">
               <form class="form-horizontal" role="form" method="post" action="teams.php" enctype="multipart/form-data">
@@ -250,7 +251,7 @@ function uploadPicture($picture, $idPic, $stadPerCoaFlag){
                   echo'<td>';
                     echo'<img src="uploads/flags/pic'.$nameTeam.'" height="40" width="70" class="img-responsive">';
                   echo'</td>';
-                  echo"<td><a href=\"http://localhost/html/Soccer/team.php?newIdTeam=$idTeam\">$nameTeam</a></td>";
+                  echo"<td><a href=\"team.php?newIdTeam=$idTeam\">$nameTeam</a></td>";
                   echo"<td>$players</td>";
                 echo"</tr>";
                 echo"<tr>";
@@ -290,7 +291,7 @@ function uploadPicture($picture, $idPic, $stadPerCoaFlag){
                   echo'<td>';
                     echo'<img src="uploads/flags/pic'.$nameTeam.'" height="40" width="70" class="img-responsive">';
                   echo'</td>';
-                  echo"<td><a href=\"http://localhost/html/Soccer/team.php?newIdTeam=$idTeam\">$nameTeam</a></td>";
+                  echo"<td><a href=\"team.php?newIdTeam=$idTeam\">$nameTeam</a></td>";
                   echo"<td>$players</td>";
                 echo"</tr>";
                 echo"<tr>";
@@ -330,7 +331,7 @@ function uploadPicture($picture, $idPic, $stadPerCoaFlag){
                   echo'<td>';
                     echo'<img src="uploads/flags/pic'.$nameTeam.'" height="40" width="70" class="img-responsive">';
                   echo'</td>';
-                  echo"<td><a href=\"http://localhost/html/Soccer/team.php?newIdTeam=$idTeam\">$nameTeam</a></td>";
+                  echo"<td><a href=\"team.php?newIdTeam=$idTeam\">$nameTeam</a></td>";
                   echo"<td>$players</td>";
                 echo"</tr>";
                 echo"<tr>";
@@ -371,7 +372,7 @@ function uploadPicture($picture, $idPic, $stadPerCoaFlag){
                   echo'<td>';
                     echo'<img src="uploads/flags/pic'.$nameTeam.'" height="40" width="70" class="img-responsive">';
                   echo'</td>';
-                  echo"<td><a href=\"http://localhost/html/Soccer/team.php?newIdTeam=$idTeam\">$nameTeam</a></td>";
+                  echo"<td><a href=\"team.php?newIdTeam=$idTeam\">$nameTeam</a></td>";
                   echo"<td>$players</td>";
                 echo"</tr>";
                 echo"<tr>";
@@ -411,7 +412,7 @@ function uploadPicture($picture, $idPic, $stadPerCoaFlag){
                   echo'<td>';
                     echo'<img src="uploads/flags/pic'.$nameTeam.'" height="40" width="70" class="img-responsive">';
                   echo'</td>';
-                  echo"<td><a href=\"http://localhost/html/Soccer/team.php?newIdTeam=$idTeam\">$nameTeam</a></td>";
+                  echo"<td><a href=\"team.php?newIdTeam=$idTeam\">$nameTeam</a></td>";
                   echo"<td>$players</td>";
                 echo"</tr>";
                 echo"<tr>";

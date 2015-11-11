@@ -1,9 +1,10 @@
 <?php 
 session_start();
 
+$hidden = "";
 if(!isset($_SESSION['loggedUser'])){
-    $newURL = 'index.php';
-    header('Location: '.$newURL);
+    $hidden = " style='display:none'";
+    /*<?php echo $hidden; ?>*/
 }
 
 // Create connection
@@ -215,11 +216,11 @@ if(isset($_POST["addPlayer"])){
 				  
                   </tbody>
                 </table>
-                <button type="button" class="btn btn-block btn-info btn-lg" data-target="#addStadiumForm" data-toggle="collapse">Add a new player
+                <button type="button" class="btn btn-block btn-info btn-lg" data-target="#addStadiumForm" data-toggle="collapse"<?php echo $hidden; ?>>Add a new player
                   <i class="fa fa-fw fa-lg fa-plus-circle"></i>
                 </button>
                 <br>
-                <div id="addStadiumForm" class="collapse">
+                <div id="addStadiumForm" class="collapse"<?php echo $hidden; ?>>
                   <div class="row">
                     <div class="col-md-12">
                       <form role="form" class="form-horizontal" action="team.php?newIdTeam=<?php echo $idTeam; ?>" method="POST">

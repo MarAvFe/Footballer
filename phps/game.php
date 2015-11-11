@@ -1,10 +1,6 @@
 <?php 
 session_start();
 
-if(!isset($_SESSION['loggedUser'])){
-    $newURL = 'index.php';
-    header('Location: '.$newURL);
-}
 
 // Create connection
 $conn = new mysqli($_SESSION['server'], $_SESSION['username'], $_SESSION['password'], $_SESSION['dbname']);

@@ -1,9 +1,10 @@
 <?php 
 session_start();
 
+$hidden = "";
 if(!isset($_SESSION['loggedUser'])){
-    $newURL = 'index.php';
-    header('Location: '.$newURL);
+    $hidden = " style='display:none'";
+    /*<?php echo $hidden; ?>*/
 }
 
 // Create connection
@@ -142,11 +143,11 @@ function uploadPicture($picture, $idPic, $stadPerCoaFlag){
     </div>
     <div class="section">
       <div class="container">
-        <button type="button" class="btn btn-block btn-info btn-lg" data-target="#addStadiumForm" data-toggle="collapse">Add a new player
+        <button type="button" class="btn btn-block btn-info btn-lg" data-target="#addStadiumForm" data-toggle="collapse"<?php echo $hidden; ?>>Add a new player
           <i class="fa fa-fw fa-lg fa-plus-circle"></i>
         </button>
         <br>
-        <div id="addStadiumForm" class="collapse">
+        <div id="addStadiumForm" class="collapse"<?php echo $hidden; ?>>
           <div class="row">
             <div class="col-md-12">
               <form role="form" class="form-horizontal" action="players.php" method="POST" enctype="multipart/form-data">
@@ -271,7 +272,7 @@ function uploadPicture($picture, $idPic, $stadPerCoaFlag){
                           <i class="-o fa fa-lg fa-search"></i>
                         </span>
                       </div>
-                      <button type="button" class="btn btn-lg btn-info" onclick="location.href='coaches.html'">View coaches</button>
+                      <button type="button" class="btn btn-lg btn-info" onclick="location.href='coaches.php'">View coaches</button>
                     </form>
                   </div>
                 </div>
