@@ -145,8 +145,9 @@ function normalize_date($date){
                   </thead>
 				  <tbody>
 			<?php
-				$sql = "select gr.idGroup , gr.nameGroup, te.idTeam, te.nameTeam
-						from mydb.Group gr inner join Team te on gr.idEvent = '$idEvent' and te.idGroup = gr.idGroup;";
+				$sql = "select gr.idGroup , gr.nameGroup, te.idTeam, te.nameTeam, getTeamPoints(gr.idEvent,te.idTeam) as points
+						from mydb.Group gr inner join Team te on gr.idEvent =2 and te.idGroup = gr.idGroup
+						order by gr.idGroup,points DESC;";
                         $result = $conn->query($sql);
                         if (!$result) {
                         echo 'Could not run query: ' . mysql_error();
@@ -158,6 +159,7 @@ function normalize_date($date){
 							$nameGroup = $row[1];
 							$idTeam = $row[2];
 							$nameTeam = $row[3];
+							$points = $row[4];
 							
 						if (!($resultado = $conn->query("select getTeamWinsPerEvent('$idEvent','$idTeam') as res"))) {
 							echo "Falló CALL: (" . $conn->errno . ") " . $conn->error;
@@ -177,12 +179,6 @@ function normalize_date($date){
 							$fila = $resultado->fetch_assoc();
 							$ties = $fila['res'];
 						}
-						if (!($resultado = $conn->query("select getTeamPoints('$idEvent','$idTeam') as res"))) {
-							echo "Falló CALL: (" . $conn->errno . ") " . $conn->error;
-						}else{
-							$fila = $resultado->fetch_assoc();
-							$points = $fila['res'];
-						}
 						if (!($resultado = $conn->query("select getMatchesPlayed('$idEvent','$idTeam') as res"))) {
 							echo "Falló CALL: (" . $conn->errno . ") " . $conn->error;
 						}else{
@@ -190,7 +186,7 @@ function normalize_date($date){
 							$matches = $fila['res'];
 						}
 						 echo'<tr>';
-						 echo"<td><a href=\"http://localhost/html/Soccer/team.php?newIdTeam=$idTeam\">$nameTeam</a></td>";
+						 echo"<td><a href=\"team.php?newIdTeam=$idTeam\">$nameTeam</a></td>";
 						 echo "<td>$nameGroup</td>";
 						 echo"<td>$matches</td>";
 						 echo"<td>$wins</td>";
