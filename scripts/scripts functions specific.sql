@@ -355,10 +355,7 @@ CREATE PROCEDURE getTeamsForEvent()
  END //
 DELIMITER ;
 
-select * from mydb.Group;
-select * from Game;
-select * from Country;
-select * from EventStructure
+
 call insertEvent('Copa test',curdate(),curdate(),7);
 call insertEventStructure('Mighty 8',8,2)
 call insertPlayer(123,curdate(),'Bob','Simple','Ton',20,20,1);
@@ -405,19 +402,26 @@ call updateTeamGroup(12,11);
 call updateTeamGroup(13,12);
 call updateTeamGroup(14,12);
 
+select * from Game;
+select * from Game  limit 0,1;
 
-select pl.idPlayer,p.firstName,p.lastName from  Player_team pt, Person p,  Player pl
-where pl.idPerson=p.idPerson and p.idCountry='$idCountry' and pl.idPlayer != ;
-
-select * from Person;
-
-select pl.idPlayer,p.firstName,p.lastName from Person p inner join
-Player pl on p.idPerson = pl.idPerson and p.idCountry = 1 
-where pl.idPlayer not in (select idPlayer from Player_team where idTeam = 3);
+#Trae los paises que no tienen equipos con idGROUP null
+                                                                                                                                             select co.idCountry , co.nameCountry
+from Country co inner join Team te on co.idCountry = te.idCountry
+and te.idTeam not in (select idTeam from Team where idGroup is null)
 
 
+
+
+select * from mydb.Group;
+select * from Game;
+select * from Country;
+select * from EventStructure
 call generateFirstGames(4)
+rollback
+commit
 
+drop procedure generateFirstGames;
 DELIMITER //
 CREATE PROCEDURE generateFirstGames(in pIdEvent int)
  BEGIN
@@ -447,6 +451,13 @@ CREATE PROCEDURE generateFirstGames(in pIdEvent int)
 			while (z < i + teamCount) do
 				select idTeam into idTeamHome from randomTeams LIMIT y,y;
                 select idTeam into idTeamVisitor from randomTeams LIMIT z,z;
+                
+                
+                insert into Game(idHome,idVisitor,matchJourney,dateTimeGame,totalGameTime,idEvent)
+				values (pIdHome, pIdVisitor, pMatchJourney, 0, curdate(), 90, pIdEvent) from randomTeams
+				LIMIT i,1;
+                
+                insert into Game()
 				call insertGame(idTeamHome, idTeamVisitor, 0, curdate() ,90,pIdEvent);
 				set z = z + 1;
 			end while;
@@ -485,4 +496,14 @@ BEGIN
     where te.idTeam = pIdTeam;
 
 END
+
+
+
+
+
+
+
+
+
+
  
