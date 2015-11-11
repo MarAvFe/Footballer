@@ -21,10 +21,64 @@ if(isset($_POST['newTeam'])){
     $teamCap = $_POST['teamCap'];
     $teamName = $row[0];
     $teamCoach = $_POST['teamCoach'];
+    uploadPicture($_FILES["picture"], $teamName, 3);
     
     $sql = "call mydb.insertTeam('".$teamName."',".$teamCap.",".$teamCoach.",".$teamCountry.");";
     $conn->query($sql);
+}
+
+
+function uploadPicture($picture, $idPic, $stadPerCoaFlag){
+    $uploadOk = 1;
+    // stadPerCoaFlag: Stadium (0), Person (1), Coach (2), Flag (3)
+    if($stadPerCoaFlag == 0){
+        $target_dir = "uploads/stadiums/";
+    }
+    else if($stadPerCoaFlag == 1){
+        $target_dir = "uploads/people/players/";
+    }
+    else if($stadPerCoaFlag == 2){
+        $target_dir = "uploads/people/coaches/";
+    }
+    else if($stadPerCoaFlag == 3){
+        $target_dir = "uploads/flags/";
+    }
+    $target_file = $target_dir . basename($picture['name']);
+    $imageFileType = pathinfo($target_file,PATHINFO_EXTENSION); // .png .gif .jpg
+    $check = getimagesize($picture["tmp_name"]);
+    if($check !== false) {
+        //echo "File is an image - " . $check["mime"] . ".";
+        $uploadOk = 1;
+    } else {
+        echo "File is not an image.";
+        $uploadOk = 0;
+    }
     
+    // Check file size
+    if ($picture["size"] > 2000000) {
+        echo "Sorry, your file is too large.";
+        $uploadOk = 0;
+    }
+    // Allow certain file formats
+    if($imageFileType != "jpg" && $imageFileType != "png" && $imageFileType != "jpeg"
+    && $imageFileType != "gif" ) {
+        echo "Sorry, only JPG, JPEG, PNG & GIF files are allowed.";
+        $uploadOk = 0;
+    }
+    // Check if $uploadOk is set to 0 by an error
+    if ($uploadOk == 0) {
+        echo "Sorry, your file was not uploaded.";
+    // if everything is ok, try to upload file
+    } else {
+        if(!is_dir($target_dir)){
+            mkdir($target_dir, 0777, true);
+        }
+        
+        if (move_uploaded_file($picture["tmp_name"], $target_dir.'pic'.$idPic)) {
+        } else {
+            echo "Sorry, there was an error uploading your file.";
+        }
+    }
 }
 
 ?>
@@ -88,13 +142,13 @@ if(isset($_POST['newTeam'])){
         <div id="addStadiumForm" ng-app="" class="collapse">
           <div class="row">
             <div class="col-md-12">
-              <form class="form-horizontal" role="form" method="post" action="teams.php">
+              <form class="form-horizontal" role="form" method="post" action="teams.php" enctype="multipart/form-data">
                 <div class="form-group">
                   <div class="col-sm-offset-3 col-sm-1">
                     <label class="control-label">Flag</label>
                   </div>
                   <div class="col-sm-8">
-                    <input type="file" name="teamFlag">
+                    <input type="file" name="picture">
                   </div>
                 </div>
                 <div class="form-group">
@@ -194,7 +248,7 @@ if(isset($_POST['newTeam'])){
 
 				echo'<tr>';
                   echo'<td>';
-                    echo'<img src="img/flags/angola.png" height="40" width="70" class="img-responsive">';
+                    echo'<img src="uploads/flags/pic'.$nameTeam.'" height="40" width="70" class="img-responsive">';
                   echo'</td>';
                   echo"<td><a href=\"http://localhost/html/Soccer/team.php?newIdTeam=$idTeam\">$nameTeam</a></td>";
                   echo"<td>$players</td>";
@@ -234,7 +288,7 @@ if(isset($_POST['newTeam'])){
 
 				echo'<tr>';
                   echo'<td>';
-                    echo'<img src="img/flags/angola.png" height="40" width="70" class="img-responsive">';
+                    echo'<img src="uploads/flags/pic'.$nameTeam.'" height="40" width="70" class="img-responsive">';
                   echo'</td>';
                   echo"<td><a href=\"http://localhost/html/Soccer/team.php?newIdTeam=$idTeam\">$nameTeam</a></td>";
                   echo"<td>$players</td>";
@@ -274,7 +328,7 @@ if(isset($_POST['newTeam'])){
 
 				echo'<tr>';
                   echo'<td>';
-                    echo'<img src="img/flags/angola.png" height="40" width="70" class="img-responsive">';
+                    echo'<img src="uploads/flags/pic'.$nameTeam.'" height="40" width="70" class="img-responsive">';
                   echo'</td>';
                   echo"<td><a href=\"http://localhost/html/Soccer/team.php?newIdTeam=$idTeam\">$nameTeam</a></td>";
                   echo"<td>$players</td>";
@@ -315,7 +369,7 @@ if(isset($_POST['newTeam'])){
 
 				echo'<tr>';
                   echo'<td>';
-                    echo'<img src="img/flags/angola.png" height="40" width="70" class="img-responsive">';
+                    echo'<img src="uploads/flags/pic'.$nameTeam.'" height="40" width="70" class="img-responsive">';
                   echo'</td>';
                   echo"<td><a href=\"http://localhost/html/Soccer/team.php?newIdTeam=$idTeam\">$nameTeam</a></td>";
                   echo"<td>$players</td>";
@@ -355,7 +409,7 @@ if(isset($_POST['newTeam'])){
 
 				echo'<tr>';
                   echo'<td>';
-                    echo'<img src="img/flags/angola.png" height="40" width="70" class="img-responsive">';
+                    echo'<img src="uploads/flags/pic'.$nameTeam.'" height="40" width="70" class="img-responsive">';
                   echo'</td>';
                   echo"<td><a href=\"http://localhost/html/Soccer/team.php?newIdTeam=$idTeam\">$nameTeam</a></td>";
                   echo"<td>$players</td>";

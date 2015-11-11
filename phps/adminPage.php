@@ -20,6 +20,11 @@ if(isset($_POST['delPosition'])){
     $conn->query($sql);
 }
 
+if(isset($_POST['submitPrize'])){
+    $sql = "call mydb.deletePosition('".$_POST['outPosition']."');";
+    $conn->query($sql);
+}
+
 if(isset($_POST['possession'])){
     
     $newStats = $_POST['newStat'];
@@ -36,6 +41,8 @@ if(isset($_POST['possession'])){
     $homePosses = $_POST['possession'];
     $homeCorners = $_POST['homeCorners'];
     $visitCorners = $_POST['visitCorners'];
+    $homeAttempts = $_POST['homeAttempts'];
+    $visitAttempts = $_POST['visitAttempts'];
     $homeOffsides = $_POST['homeOffsides'];
     $visitOffsides = $_POST['visitOffsides'];
     
@@ -65,10 +72,18 @@ if(isset($_POST['possession'])){
         $sql = "call mydb.insertCorner(".$gameId.",".$visitId.");";
         $conn->query($sql);
     }
+    for($i = 0; $i < $homeAttempt; $i++){
+        $sql = "call mydb.insertAttempt(".$gameId.",".$homeId.",0);";
+        $conn->query($sql);
+    }
+    for($i = 0; $i < $visitAttempt; $i++){
+        $sql = "call mydb.insertAttempt(".$gameId.",".$visitId.",0);";
+        $conn->query($sql);
+    }
     
     for($i = 0; $i < count($newStats);){
         if($newStats[$i] == 'Goal'){
-            $checkValue = ($newStats[$i+3] == "off") ? "true" : "false";
+            $checkValue = ($newStats[$i+3] == "off") ? 1 : 0;
             $sql = "call mydb.insertGoal(".$newStats[$i+1].",".$gameId.",".$newStats[$i+2].",".$checkValue.");";
             $conn->query($sql);
             $i = $checkValue == 1 ? $i + 4 : $i + 3;
@@ -77,12 +92,6 @@ if(isset($_POST['possession'])){
             $sql = "call mydb.insertCard(".$newStats[$i+1].",".$gameId.",".$newStats[$i+2].");";
             $conn->query($sql);
             $i = $i + 3;
-        }
-        else if($newStats[$i] == 'Attempt'){
-            $checkValue = ($newStats[$i+1] == "off") ? "true" : "false";
-            $sql = "call mydb.insertAttempt(".$gameId.",".$homeId.",".$checkValue.");";
-            $conn->query($sql);
-            $i = $checkValue == 1 ? $i + 2 : $i + 1;
         }
         else if($newStats[$i] == 'Save'){
             $sql = "call mydb.insertSave(".$gameId.",".$newStats[$i+1].");";
@@ -377,6 +386,15 @@ if(isset($_POST['possession'])){
                             <input type="number" class="form-control" placeholder="0" name="visitCorners">
                           </td>
                         </tr>
+                        <tr>
+                          <td>
+                            <input type="number" class="form-control" placeholder="0" name="homeAttempts">
+                          </td>
+                          <td>Attempts</td>
+                          <td>
+                            <input type="number" class="form-control" placeholder="0" name="visitAttempts">
+                          </td>
+                        </tr>
                       </tbody>
                     </table>
                     <input type="text" hidden="hidden" name="homeId" id="homeId">
@@ -384,7 +402,6 @@ if(isset($_POST['possession'])){
                     <input type="text" hidden="hidden" name="gameId" id="gameId">
                     <button type="button" class="btn  btn-success" onclick="addGoal('moreStats')">Add goal</button>
                     <button type="button" class="btn  btn-success" onclick="addCard('moreStats')">Add card</button>
-                    <button type="button" class="btn  btn-success" onclick="addAttempt('moreStats')">Add attempt</button>
                     <button type="button" class="btn  btn-success" onclick="addSave('moreStats')">Add save</button>
                     <table id="moreStats" class="table">
                       <thead>
@@ -394,7 +411,6 @@ if(isset($_POST['possession'])){
                           <th>Minute</th>
                           <th>Color</th>
                           <th>Penalty</th>
-                          <th>Direct attempt</th>
                         </tr>
                       </thead>
                       <tbody></tbody>
@@ -411,22 +427,54 @@ if(isset($_POST['possession'])){
             <div id="addAwardForm" class="collapse">
               <div class="row">
                 <div class="col-md-offset-2 col-md-8">
-                  <form role="form" class="form-horizontal">
-                    <select>
-                      <option>Team</option>
-                      <option>Player</option>
+                  <form role="form" class="form-horizontal" method="post" action="adminPage.php">
+                    <select data-live-search="true" data-width="auto" title="Select a winner" class="selectpicker">
+                      <?php 
+                            $sql = "select pla.idPlayer, concat(per.firstName, ' ', per.lastName) from mydb.Player pla, mydb.Person per where pla.idPerson = per.idPerson;";
+                            $result = $conn->query($sql);
+                            if (!$result) {
+                                echo 'Could not run query: ' . mysql_error();
+                            }
+                            echo '<optgroup label="Players">';
+                            while($row = $result->fetch_row()){
+                                echo "<option value='".$row[0]."'>".$row[1]."</option>";
+                            }
+                            echo '</optgroup>';
+                        
+                            $sql = "select te.idTeam, te.nameTeam from Country co inner join Team te on co.idCountry = te.idCountry group by nameTeam , idTeam;";
+                            $result = $conn->query($sql);
+                            if (!$result) {
+                                echo 'Could not run query: ' . mysql_error();
+                            }
+                            echo '<optgroup label="Countries">';
+                            while($row = $result->fetch_row()){
+                                echo "<option value='".$row[0]."'>".$row[1]."</option>";
+                            }
+                            echo '</optgroup>';
+                        ?>
                     </select>
-                    <select>
-                      <option>Spain</option>
-                      <option>Portugal</option>
-                      <option>Raul González</option>
+                    <select data-live-search="true" data-width="auto" title="Select an award" class="selectpicker">
+                        <?php 
+                            $sql = "select idAwardTeam,nameAward from AwardTeam;";
+                            if ($result = $conn->query($sql)) {
+                                echo '<optgroup label="Team awards">';
+                                while($row = $result->fetch_row()){
+                                    echo "<option value='".$row[0]."'>".$row[1]."</option>";
+                                }
+                                echo '</optgroup>';
+                            }
+                        
+                            $sql = "select idAwardPerson,nameAwardPerson from AwardPerson;";
+                            if ($result = $conn->query($sql)) {
+                                echo '<optgroup label="Player awards">';
+                                while($row = $result->fetch_row()){
+                                    echo "<option value='".$row[0]."'>".$row[1]."</option>";
+                                }
+                                echo '</optgroup>';
+                            }
+                        ?>
                     </select>
-                    <select>
-                      <option>Bota de Oro</option>
-                      <option>Emmy</option>
-                      <option>Balon de Oro</option>
-                    </select>
-                    <div id="dateSelector">
+                    <div id="dateSelector" class="col-sm-3 col-sm-offset-9">
                       <!--<input type="text" class="form-control" placeholder="dd/mm/yyyy" id="datepicker">-->
                       <div class="input-group date">
                         <input type="text" class="form-control" readonly="true">
@@ -435,7 +483,7 @@ if(isset($_POST['possession'])){
                         </span>
                       </div>
                     </div>
-                    <button type="submit" class="btn  btn-primary">Give prize</button>
+                    <button name="submitPrize" type="submit" class="btn  btn-primary">Give prize</button>
                   </form>
                 </div>
               </div>

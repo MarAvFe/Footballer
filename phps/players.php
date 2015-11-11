@@ -387,7 +387,7 @@ function uploadPicture($picture, $idPic, $stadPerCoaFlag){
     </footer>
     <script>
       $('.popper').popover({
-                        placement: 'right',
+                        placement: 'auto right',
                         container: 'body',
                         html: true,
                         trigger: "hover",
