@@ -146,7 +146,7 @@ function normalize_date($date){
 				  <tbody>
 			<?php
 				$sql = "select gr.idGroup , gr.nameGroup, te.idTeam, te.nameTeam, getTeamPoints(gr.idEvent,te.idTeam) as points
-						from mydb.Group gr inner join Team te on gr.idEvent =2 and te.idGroup = gr.idGroup
+						from mydb.Group gr inner join Team te on gr.idEvent ='$idEvent' and te.idGroup = gr.idGroup
 						order by gr.idGroup,points DESC;";
                         $result = $conn->query($sql);
                         if (!$result) {

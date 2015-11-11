@@ -197,7 +197,9 @@ function uploadPicture($picture, $idPic, $stadPerCoaFlag){
                   <div class="col-sm-8">
                     <select class="selectpicker" ng-model="countryNameVal" data-width="100%" data-live-search="true" title="Countries" name="teamCountry">
                         <?php 
-                            $sql = "Select idCountry, nameCountry from mydb.Country;";
+                            $sql = "select co.idCountry , co.nameCountry
+									from Country co
+									where co.idCountry not in  (select idCountry from Team where idGroup is null);";
                             $result = $conn->query($sql);
                             if (!$result) {
                                 echo 'Could not run query: ' . mysql_error();

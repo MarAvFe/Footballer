@@ -24,15 +24,87 @@ function normalize_date($date){
 		$start = $_POST["start"];
 		$end = $_POST["end"];
 		$structure = $_POST["structure"];
-			
+		$teams = $_POST['teams'];
 		
+		#inserto el evento
 		$sql = "call insertEvent('$nameEvent',STR_TO_DATE('$start','%d/%m/%Y'),STR_TO_DATE('$end','%d/%m/%Y'),'$structure')";
 		$result = $conn->query($sql);
 		if (!$result) {
 			echo 'Could not run query: ' . mysql_error();
 			exit;
 		}
-	}
+		
+		#selecciono la cantidad de equipos y de grupos
+		$sql = "select quantityTeam,quantityGroup from EventStructure where idEventStructure='$structure';";
+        $result = $conn->query($sql);
+        if (!$result) {
+            echo 'Could not run query: ' . mysql_error();
+             exit;
+        }
+        while($row = $result->fetch_row()){
+            $quantityTeam=$row[0];
+            $quantityGroup=$row[1];
+			echo "T:".$quantityTeam;
+			echo "G:".$quantityGroup;
+        }
+		#selecciono el id del evento
+		$sql = "select idEvent from Event where nameEvent='$nameEvent';";
+        $result = $conn->query($sql);
+        if (!$result) {
+            echo 'Could not run query: ' . mysql_error();
+             exit;
+        }
+        while($row = $result->fetch_row()){
+            $idEvent=$row[0];
+			echo "idEvent:".$idEvent;
+        }
+		
+		#selecciono el id de los grupos del evento
+		$sql = "select idGroup from mydb.Group where idEvent='$idEvent';";
+        $result = $conn->query($sql);
+        if (!$result) {
+            echo 'Could not run queryGroup: ' . mysql_error();
+             exit;
+        }
+		$arrayGroup=array();
+        while($row = $result->fetch_row()){
+            $arrayGroup[]=$row[0];
+			echo $row[0];
+		}
+		
+		#mezclo el orden del array
+		shuffle($teams);
+		$cont=0;
+		$contGroup=0;
+		foreach($arrayGroup as $group){
+				while($contGroup<$quantityGroup){
+					$team=$teams[$cont];
+					$sql = "update Team
+							set idGroup='$group'
+							where idTeam='$team';";
+					$result = $conn->query($sql);
+					if (!$result) {
+						echo 'Could not run queryTeams: ' . mysql_error();
+						 exit;
+					}
+					$cont+=1;
+					$contGroup+=1;
+				}
+				$contGroup=0;
+		}
+		#se crean los partidos de grupo
+		$sql = "call generateFirstGames('$idEvent');";
+        $result = $conn->query($sql);
+        if (!$result) {
+            echo 'Could not run query generateGames: ' . mysql_error();
+             exit;
+        }
+		
+     }
+			
+			
+		
+	
 		
 ?>
 <!DOCTYPE html5><html><head>
@@ -142,7 +214,7 @@ function normalize_date($date){
                     <label class="control-label">Teams</label>
                   </div>
                   <div class="col-sm-8">
-                    <select class="selectpicker" data-width="100%" multiple="" data-live-search="true" data-selected-text-format="count" title="Countries" data-max-options="3">
+                    <select name="teams[]"class="selectpicker" data-width="100%" multiple="" data-live-search="true" data-selected-text-format="count" title="Countries" data-max-options="32">
                       <?php 
                                 $sql = "select te.idTeam, te.nameTeam , count(pt.idPlayer) from Country co 
 										inner join Team te on co.idContinent = 8 and co.idCountry = te.idCountry
