@@ -1,18 +1,19 @@
 <?php
 session_start();
 
+// Recibe los datos que utilizará todo el sitio para manejar las conexiones a la base de datos
 $_SESSION['server'] = 'soccer2.clupi7ohqydz.us-west-2.rds.amazonaws.com';
 $_SESSION['username'] = 'mainSoccer';
 $_SESSION['password'] = '123';
 $_SESSION['dbname'] = 'mydb';
 
-// Create connection
+// Crea una nueva conexión
 $conn = new mysqli($_SESSION['server'], $_SESSION['username'], $_SESSION['password'], $_SESSION['dbname']);
-// Check connection
 if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
 }
 
+// Valida el inicio de sesión del administrador
 $loginFail = 0;
 if(isset($_POST['user'])){
     $sql = "select mydb.isLogin('".$_POST['user']."', '".md5($_POST['pass'])."');";
@@ -87,6 +88,7 @@ $hasError = $loginFail>0 ? ' has-error' : '';
       <div class="container">
         <div class="row">
           <div class="col-md-12">
+              <!-- Datos, imágenes y subtítulos de las noticias de la primera plana -->
             <div id="fullcarousel-example" data-interval="false" class="carousel slide" data-ride="carousel">
               <div class="carousel-inner">
                 <div class="active item">
@@ -112,6 +114,7 @@ $hasError = $loginFail>0 ? ' has-error' : '';
                   </div>
                 </div>
               </div>
+                <!-- Botones de control del carrusel -->
               <a class="left carousel-control" href="#fullcarousel-example" data-slide="prev"><i class="icon-prev fa fa-angle-left"></i></a>
               <a class="right carousel-control" href="#fullcarousel-example" data-slide="next"><i class="icon-next fa fa-angle-right"></i> </a>
             </div>

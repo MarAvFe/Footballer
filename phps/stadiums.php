@@ -1,6 +1,7 @@
 <?php 
 session_start();
 
+// Fragmento para hacer desaparecer el botón para agregar jugadores en caso de no se el admin
 $hidden = "";
 if(!isset($_SESSION['loggedUser'])){
     $hidden = " style='display:none'";
@@ -14,6 +15,7 @@ if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
 }
 
+// Fragmento para manejar y validar el registro de un nuevo estadio y la actualización de su imagen.
 if(isset($_POST["addStadium"])){
 	echo "agregar estadio";
 	$nameStadium = $_POST["nameStadium"];
@@ -31,7 +33,7 @@ if(isset($_POST["addStadium"])){
     }
 	
 }
-
+// Función para facilitar la subida de una imagen al servidor
 function uploadPicture($picture, $idPic, $stadPerCoaFlag){
     $uploadOk = 1;
     // stadPerCoaFlag: Stadium (0), Person (1), Coach (2), Flag (3)
@@ -144,6 +146,7 @@ function uploadPicture($picture, $idPic, $stadPerCoaFlag){
           <i class="fa fa-fw fa-lg fa-plus-circle"></i>
         </button>
         <br>
+          <!-- Formulario que recibe todos los datos sobre un nuevo estadio a crear -->
         <div id="addStadiumForm" class="collapse"<?php echo $hidden; ?>>
           <div class="row">
             <div class="col-md-12">
@@ -207,6 +210,8 @@ function uploadPicture($picture, $idPic, $stadPerCoaFlag){
       <div class="container">
         <div class="row">
           <div class="col-md-6">
+              
+          <!-- Para mostrar cada estadio y su información y fotografía -->
 		  <?php 
 						$sql = "select nameStadium,capacity,idCity from Stadium";
                         $result = $conn->query($sql);

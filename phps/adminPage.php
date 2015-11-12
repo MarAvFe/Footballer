@@ -1,6 +1,8 @@
 <?php
 session_start();
 
+// Revisa si hay una sesión de administrador iniciada y redirige en caso 
+// se no se así para limitar el acceso a estas funciones.
 if(!isset($_SESSION['loggedUser'])){
     $newURL = 'index.php';
     header('Location: '.$newURL);
@@ -11,6 +13,11 @@ if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
 }
 
+
+/*
+    Comienzan las validaciones para comprobar si algún formulario 
+    ha sido llamado para insertar o eliminar algún dato
+*/
 if(isset($_POST['addPosition'])){
     $sql = "call mydb.insertPosition('".$_POST['inPosition']."');";
     $conn->query($sql);
@@ -21,6 +28,7 @@ if(isset($_POST['delPosition'])){
 }
 
 if(isset($_POST['createPrize'])){
+    // Se discrimina si el tipo de premio es para una persona o un equipo.
     if($_POST['awardType']){
         $sql = "call mydb.insertAwardPerson('".$_POST['prizeName']."');";
         $conn->query($sql);
@@ -31,6 +39,7 @@ if(isset($_POST['createPrize'])){
 }
 
 if(isset($_POST['submitPrize'])){
+    // Manejo de los casos de concesión de un permiso
     $awardValue = explode("-",$_POST['awardId']);
     $winnerValue = explode("-",$_POST['winnerId']);
     if($awardValue[0] == 't' and $winnerValue[0] == 't' ){
@@ -64,6 +73,8 @@ if(isset($_POST['delCountry'])){
 
 
 if(isset($_POST['possession'])){
+    // Este fragmento se encarga de la inserción de datos y estadísticas 
+    // sobre un partido finalizado.
     
     $newStats = $_POST['newStat'];
     foreach ($newStats as $value) {
@@ -145,6 +156,11 @@ if(isset($_POST['possession'])){
 }
 
 ?>
+<!--    
+        Esta página tiene como fin brindar accesso al administrador del sitio, a las acciones
+        que requieran privilegios como agregar información en catálogos y crear nuevos países.
+        Para acceder ah ella se necesita una autenticación que será recibida en la página index. 
+-->
 <!DOCTYPE html5><html lang="en" ng-app=""><head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -184,6 +200,8 @@ if(isset($_POST['possession'])){
     <script type="text/javascript">
         
         $(function() {
+            // Función que actualiza los títulos de la tabla de estadísticas 
+            // según el partido que sea seleccionado
             $('.selectpicker.gameselect').on('change', function(){
                 var selected = $(this).find("option:selected").val();
                 var optVals = selected.split("-");
@@ -196,6 +214,7 @@ if(isset($_POST['possession'])){
 
         });
         <?php 
+            // Se crean los arreglos de jugadores para los distintos datos a agregar durante la página.
             $sql = "select pla.idPlayer, concat(per.firstName, ' ', per.lastName) from mydb.Player pla, mydb.Person per where pla.idPerson = per.idPerson;";
             $result = $conn->query($sql);
             if (!$result) {
@@ -226,6 +245,7 @@ if(isset($_POST['possession'])){
           <a class="navbar-brand"><img height="40" alt="Brand" src="img/SoccerStatsImgLogo.png" style="position:relative;bottom:10px;"></a>
           <a href="index.php"><h4 class="navbar-text">SOCCER STATS</h4></a>
         </div>
+          <!-- Menú de navegación por la página -->
         <div class="collapse navbar-collapse" id="navbar-ex-collapse">
           <ul class="nav navbar-nav navbar-right">
             <li class="active">
@@ -256,6 +276,7 @@ if(isset($_POST['possession'])){
             </div>
           </div>
         </div>
+          <!-- Inicia la sección de catálogos -->
         <div class="row">
           <div class="col-md-12">
             <h1>Catalogs</h1>
@@ -275,6 +296,7 @@ if(isset($_POST['possession'])){
               </thead>
               <tbody>
                 <tr> 
+                    <!-- Formulario de inserción de posiciones -->
                     <form method="post" action="adminPage.php">
                       <td>Positions</td>
                       <td>
@@ -305,6 +327,7 @@ if(isset($_POST['possession'])){
                     </form>
                 </tr>
                 <tr> 
+                    <!-- Formulario de inserción de países -->
                     <form method="post" action="adminPage.php">
                       <td>Countries</td>
                       <td>
@@ -349,6 +372,7 @@ if(isset($_POST['possession'])){
                     </form>
                 </tr>
                 <tr> 
+                    <!-- Formulario de inserción de ciudades -->
                     <form method="post" action="adminPage.php">
                       <td>Cities</td>
                       <td>
@@ -400,6 +424,7 @@ if(isset($_POST['possession'])){
             <div id="addStatsForm" class="collapse">
               <div class="row">
                 <div class="col-md-offset-2 col-md-8">
+                    <!-- Formulario de inserción de estadísticas de partidi -->
                   <form role="form" class="form-horizontal" method="post" action="adminPage.php">
                     <select class="selectpicker gameSelect" ng-model="gameSelect" data-live-search="true" data-width="auto" title="Select a game">
                         <?php
@@ -511,6 +536,7 @@ if(isset($_POST['possession'])){
             <div id="addAwardForm" class="collapse">
               <div class="row">
                 <div class="col-md-offset-2 col-md-8">
+                    <!-- Formulario de concesión de premios -->
                   <form role="form" class="form-horizontal" method="post" action="adminPage.php">
                     <div class="col-lg-4">
                         <select name="awardId" data-live-search="true" data-width="auto" title="Select a winner" class="selectpicker">
@@ -576,6 +602,7 @@ if(isset($_POST['possession'])){
             <div id="createAwardForm" class="collapse">
               <div class="row">
                 <div class="col-md-offset-2 col-md-8">
+                    <!-- Formulario de inserción de premios -->
                   <form role="form" class="form-horizontal" method="post" action="adminPage.php">
                       <div class="col-lg-4">
                         <select name="awardType" title="Select a type" class="selectpicker form-control">
