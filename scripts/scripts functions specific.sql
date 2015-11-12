@@ -404,12 +404,14 @@ call updateTeamGroup(14,12);
 
 select * from Game;
 select * from Game  limit 0,1;
+select * from Game  limit 1,1;
+select * from Game  limit 2,1;
+select * from Game  limit 3,1;
 
 #Trae los paises que no tienen equipos con idGROUP null
-                                                                                                                                             select co.idCountry , co.nameCountry
-from Country co inner join Team te on co.idCountry = te.idCountry
-and te.idTeam not in (select idTeam from Team where idGroup is null)
-
+select co.idCountry , co.nameCountry
+from Country co left outer join
+(select idCountry from Team where idGroup is null) te on co.idCountry = te.idCountry
 
 
 
@@ -420,6 +422,7 @@ select * from EventStructure
 call generateFirstGames(4)
 rollback
 commit
+delete from Game where idEvent = 4
 
 drop procedure generateFirstGames;
 DELIMITER //
@@ -446,18 +449,12 @@ CREATE PROCEDURE generateFirstGames(in pIdEvent int)
         
     while (i < teamCount) do
 		set y = i;
-        while (y < i + teamCount) do
+        while (y < i + groupCount) do
 			set z = y + 1;
-			while (z < i + teamCount) do
-				select idTeam into idTeamHome from randomTeams LIMIT y,y;
-                select idTeam into idTeamVisitor from randomTeams LIMIT z,z;
+			while (z < i + groupCount) do
+				select idTeam into idTeamHome from randomTeams LIMIT y,1;
+                select idTeam into idTeamVisitor from randomTeams LIMIT z,1;
                 
-                
-                insert into Game(idHome,idVisitor,matchJourney,dateTimeGame,totalGameTime,idEvent)
-				values (pIdHome, pIdVisitor, pMatchJourney, 0, curdate(), 90, pIdEvent) from randomTeams
-				LIMIT i,1;
-                
-                insert into Game()
 				call insertGame(idTeamHome, idTeamVisitor, 0, curdate() ,90,pIdEvent);
 				set z = z + 1;
 			end while;
@@ -499,9 +496,78 @@ END
 
 
 
+drop procedure generateFirstGames;
+DELIMITER //
+CREATE PROCEDURE generateRound(in pIdEvent int)
+ BEGIN
+	declare groupCount int;
+    declare teamCount int;
+    declare i int default 0;
+    declare y int default 0;
+    declare z int default 0;
+    declare idTeamHome int;
+    declare idTeamVisitor int;
+    declare currentRound int;
+    
+    select evs.quantityTeam , evs.quantityGroup 
+    into teamCount, groupCount  
+    from EventStructure evs 
+    inner join mydb.Event ev on ev.idEvent = pIdEvent and ev.idEventStructure = evs.idEventStructure;
+    
+    select min(ga.matchJourney)
+    into currentRound 
+    from Game ga
+    inner join mydb.Event ev on ev.idEvent = pIdEvent and ga.idEvent = ev.idEvent;
+	
+ END //
+DELIMITER ;
 
 
 
+drop procedure generateFirstGames;
+DELIMITER //
+CREATE PROCEDURE generateFinals(in pIdEvent int)
+ BEGIN
+	declare groupCount int;
+    declare teamCount int;
+    declare i int default 0;
+    declare y int default 0;
+    declare z int default 0;
+    declare idTeamHome int;
+    declare idTeamVisitor int;
+    declare currentRound int;
+    
+    select evs.quantityTeam , evs.quantityGroup 
+    into teamCount, groupCount  
+    from EventStructure evs 
+    inner join mydb.Event ev on ev.idEvent = pIdEvent and ev.idEventStructure = evs.idEventStructure;
+    
+    select min(ga.matchJourney)
+    into currentRound 
+    from Game ga
+    inner join mydb.Event ev on ev.idEvent = pIdEvent and ga.idEvent = ev.idEvent;
+    
+    create temporary table randomTeams
+    (idTeam int);
+    
+    
+    
+    select idTeam from Team te 
+    
+    select te.idGroup from Team te, Game ga 
+		where ga.idEvent = 4 and ga.idVisitor = te.idTeam
+    getTeamPoints()
+    
+	
+ END //
+DELIMITER ;
+
+
+
+#SELECCIONA LOS PAISES QUE PUEDEN CREAR NUEVOS EQUIPOS PARA EVENTOS
+select co.idCountry , co.nameCountry
+from Country co
+where co.idCountry not in  (select idCountry from Team where idGroup is null)
 
 
 
