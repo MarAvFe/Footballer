@@ -1,20 +1,19 @@
 <?php 
 session_start();
 
+// Determina si existe una sesión iniciada para saber qué tanto detalle de la página mostrar.
 $hidden = "";
 if(!isset($_SESSION['loggedUser'])){
     $hidden = " style='display:none'";
     /*<?php echo $hidden; ?>*/
 }
 
-
-// Create connection
 $conn = new mysqli($_SESSION['server'], $_SESSION['username'], $_SESSION['password'], $_SESSION['dbname']);
-// Check connection
 if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
 }
 
+// Fragmento que maneja la captura de datos y creación de un nuevo entrenador.
 if(isset($_POST["addCoach"])){
 	$idCountry = $_POST["idCountry"];
 	$birthdate = $_POST["birthdate"];
@@ -33,6 +32,7 @@ if(isset($_POST["addCoach"])){
 	
 }
 
+// Función que encapsula la tarea de capturar una imagen del navegador y copiarla al servidor.
 function uploadPicture($picture, $idPic, $stadPerCoaFlag){
     $uploadOk = 1;
     // stadPerCoaFlag: Stadium (0), Person (1), Coach (2), Flag (3)
@@ -119,6 +119,7 @@ function uploadPicture($picture, $idPic, $stadPerCoaFlag){
           <a class="navbar-brand"><img height="40" alt="Brand" src="img/SoccerStatsImgLogo.png" style="position:relative;bottom:10px;"></a>
           <a href="index.php"><h4 class="navbar-text">SOCCER STATS</h4></a>
         </div>
+          <!-- Menú de navegación por la página -->
         <div class="collapse navbar-collapse" id="navbar-ex-collapse">
           <ul class="nav navbar-nav navbar-right">
             <li>
@@ -146,6 +147,7 @@ function uploadPicture($picture, $idPic, $stadPerCoaFlag){
           <i class="fa fa-fw fa-lg fa-plus-circle"></i>
         </button>
         <br>
+          <!-- Espacio para agregar datos para insertar un nuevo entrenador -->
         <div id="addStadiumForm" class="collapse"<?php echo $hidden; ?>>
           <div class="row">
             <div class="col-md-12">
@@ -208,6 +210,7 @@ function uploadPicture($picture, $idPic, $stadPerCoaFlag){
                     <div class="col-sm-8">
                       <select name="idCountry" class="selectpicker" data-width="100%" data-live-search="true">
                          <?php 
+                          // Código para rellenar el select con los paísese que existan en la base
                                 $sql = "select idCountry,nameCountry from Country;";
                                 $result = $conn->query($sql);
                                 if (!$result) {
@@ -261,7 +264,11 @@ function uploadPicture($picture, $idPic, $stadPerCoaFlag){
                 </div>
                 <div class="row">
 				<?php 
-				
+				 
+                /*
+                    Este código se encarga de rellenar la página con todos los entrenadores y sus respectivos datos.
+                    El siguiente código recupera la información necesaria
+                */
 				$sql = "select idCoach from Coach";
                         $result = $conn->query($sql);
                         if (!$result) {
@@ -296,8 +303,8 @@ function uploadPicture($picture, $idPic, $stadPerCoaFlag){
 							$ageCoach = $fila['res']." years";
 						}
 						
-				
-					echo"<div class=\"col-md-3\">";
+				    // Se genera un "objeto" para organizar los datos
+					echo "<div class=\"col-md-3\">";
                     echo "<a href=\"#\" data-toggle=\"popover\" data-title=\"$nameCoach\" class=\"popper\"><img src=\"uploads/people/players/pic$dniCoach\" class=\"center-block img-responsive\"></a>";
                     echo '<div class="popper-content hide">';
                     echo '<p>';
@@ -354,6 +361,7 @@ function uploadPicture($picture, $idPic, $stadPerCoaFlag){
       </div>
     </footer>
     <script>
+        // Manejo de los selectores de fecha y cuadros desplegables
         $('.popper').popover({
             placement: 'auto right',
             container: 'body',

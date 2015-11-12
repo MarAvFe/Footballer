@@ -7,107 +7,16 @@ if(!isset($_SESSION['loggedUser'])){
     /*<?php echo $hidden; ?>*/
 }
 
-// Create connection
+// Se crea la conexión con el servidor
 $conn = new mysqli($_SESSION['server'], $_SESSION['username'], $_SESSION['password'], $_SESSION['dbname']);
-// Check connection
 if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
 }
 
-function normalize_date($date){   
-		if(!empty($date)){ 
-			$var = explode('/',str_replace('-','/',$date));
-			return "$var[2]/$var[1]/$var[0]"; }   
-		} 
-
-	if(isset($_POST["addEvent"])){
-		$nameEvent = $_POST["nameEvent"];
-		$start = $_POST["start"];
-		$end = $_POST["end"];
-		$structure = $_POST["structure"];
-		$teams = $_POST['teams'];
-		
-		#inserto el evento
-		$sql = "call insertEvent('$nameEvent',STR_TO_DATE('$start','%d/%m/%Y'),STR_TO_DATE('$end','%d/%m/%Y'),'$structure')";
-		$result = $conn->query($sql);
-		if (!$result) {
-			echo 'Could not run query: ' . mysql_error();
-			exit;
-		}
-		
-		#selecciono la cantidad de equipos y de grupos
-		$sql = "select quantityTeam,quantityGroup from EventStructure where idEventStructure='$structure';";
-        $result = $conn->query($sql);
-        if (!$result) {
-            echo 'Could not run query: ' . mysql_error();
-             exit;
-        }
-        while($row = $result->fetch_row()){
-            $quantityTeam=$row[0];
-            $quantityGroup=$row[1];
-			echo "T:".$quantityTeam;
-			echo "G:".$quantityGroup;
-        }
-		#selecciono el id del evento
-		$sql = "select idEvent from Event where nameEvent='$nameEvent';";
-        $result = $conn->query($sql);
-        if (!$result) {
-            echo 'Could not run query: ' . mysql_error();
-             exit;
-        }
-        while($row = $result->fetch_row()){
-            $idEvent=$row[0];
-			echo "idEvent:".$idEvent;
-        }
-		
-		#selecciono el id de los grupos del evento
-		$sql = "select idGroup from mydb.Group where idEvent='$idEvent';";
-        $result = $conn->query($sql);
-        if (!$result) {
-            echo 'Could not run queryGroup: ' . mysql_error();
-             exit;
-        }
-		$arrayGroup=array();
-        while($row = $result->fetch_row()){
-            $arrayGroup[]=$row[0];
-			echo $row[0];
-		}
-		
-		#mezclo el orden del array
-		shuffle($teams);
-		$cont=0;
-		$contGroup=0;
-		foreach($arrayGroup as $group){
-				while($contGroup<$quantityGroup){
-					$team=$teams[$cont];
-					$sql = "update Team
-							set idGroup='$group'
-							where idTeam='$team';";
-					$result = $conn->query($sql);
-					if (!$result) {
-						echo 'Could not run queryTeams: ' . mysql_error();
-						 exit;
-					}
-					$cont+=1;
-					$contGroup+=1;
-				}
-				$contGroup=0;
-		}
-		#se crean los partidos de grupo
-		$sql = "call generateFirstGames('$idEvent');";
-        $result = $conn->query($sql);
-        if (!$result) {
-            echo 'Could not run query generateGames: ' . mysql_error();
-             exit;
-        }
-		
-     }
-			
-			
-		
-	
-		
 ?>
+<!--    
+        Esta página tiene como fin mostrar todos los premios y sus respectivo dueño
+-->
 <!DOCTYPE html5><html><head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -135,6 +44,7 @@ function normalize_date($date){
           <a class="navbar-brand"><img height="40" alt="Brand" src="img/SoccerStatsImgLogo.png" style="position:relative;bottom:10px;"></a>
           <a href="index.php"><h4 class="navbar-text">SOCCER STATS</h4></a>
         </div>
+          <!-- Menú de navegación por la página -->
         <div class="collapse navbar-collapse" id="navbar-ex-collapse">
           <ul class="nav navbar-nav navbar-right">
             <li>
@@ -180,9 +90,9 @@ function normalize_date($date){
                 </tr>
               </thead>
               <tbody>
-
+                  <!-- Muestra todos los premios asignados -->
 		<?php 
-
+                  // Recupera la información sobre los premios de los jugadores
                 $sql = "select e.idEvent,e.nameEvent,e.dateStartEvent,e.dateEndEvent, es.nameEventStructure
                         from mydb.Event e, EventStructure es
                         where e.idEventStructure=es.idEventStructure;";
@@ -203,7 +113,7 @@ function normalize_date($date){
                         echo "</tr>";
                 }
 			
-
+                  // Recupera la información sobre los premios de los equipos
                 $sql = "select e.idEvent,e.nameEvent,e.dateStartEvent,e.dateEndEvent, es.nameEventStructure
                         from mydb.Event e, EventStructure es
                         where e.idEventStructure=es.idEventStructure;";

@@ -111,7 +111,7 @@ select getIdTeam(idPlayer,pIdGame)
 select * from Player_team
 select getIdTeam(4,1)
 
-
+select * from Attempt
 
 
 

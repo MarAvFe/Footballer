@@ -1,6 +1,7 @@
 <?php 
 session_start();
 
+// Fragmento para hacer desaparecer el botón para agregar jugadores en caso de no se el admin
 $hidden = "";
 if(!isset($_SESSION['loggedUser'])){
     $hidden = " style='display:none'";
@@ -14,7 +15,7 @@ if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
 }
 
-
+// Fragmento para manejar y validar el registro de un nuevo jugador y la actualización de su imagen.
 if(isset($_POST["addPlayer"])){
 	$idCountry = $_POST["idCountry"];
 	$birthdate = $_POST["birthdatePlayer"];
@@ -34,7 +35,7 @@ if(isset($_POST["addPlayer"])){
     }
 }
 
-
+// Función para facilitar la subida de una imagen al servidor
 function uploadPicture($picture, $idPic, $stadPerCoaFlag){
     $uploadOk = 1;
     // stadPerCoaFlag: Stadium (0), Person (1), Coach (2), Flag (3)
@@ -147,6 +148,7 @@ function uploadPicture($picture, $idPic, $stadPerCoaFlag){
           <i class="fa fa-fw fa-lg fa-plus-circle"></i>
         </button>
         <br>
+          <!-- Formulario que recibe todos los datos sobre un nuevo jugador a crear -->
         <div id="addStadiumForm" class="collapse"<?php echo $hidden; ?>>
           <div class="row">
             <div class="col-md-12">
@@ -213,6 +215,7 @@ function uploadPicture($picture, $idPic, $stadPerCoaFlag){
                     </div>
                   </div>
                 </div>
+                  <!-- Segunda sección del formulario -->
                 <div class="col-md-4">
                   <div class="form-group">
                     <div class="col-sm-4">
@@ -263,8 +266,9 @@ function uploadPicture($picture, $idPic, $stadPerCoaFlag){
               <div class="container playersPics">
                 <div class="row">
                   <div class="col-md-12">
+                      <!-- Cuadrilla que despliega toda la informacion sobre cada jugador mostrado -->
                     <h1 class="text-center">Players</h1>
-                    <p class="text-center lead">Click any picture for more details</p>
+                    <p class="text-center lead">Hover any picture for more details</p>
                     <form role="search" class="navbar-form navbar-left input-group">
                       <div class="form-group has-warning input-group">
                         <input class="form-control input-lg" placeholder="Type something..." type="text">
@@ -279,6 +283,7 @@ function uploadPicture($picture, $idPic, $stadPerCoaFlag){
                 <div class="row">
 				<?php 
 				
+                    // Recuperación de la información de cada jugador
 				$sql = "select idPlayer from Player";
                         $result = $conn->query($sql);
                         if (!$result) {
@@ -326,6 +331,7 @@ function uploadPicture($picture, $idPic, $stadPerCoaFlag){
 						}
 						
 				
+                            // Se imprime en pantalla la información recuperada
 					echo"<div class=\"col-md-3\">";
                     echo "<a href=\"#\" data-toggle=\"popover\" data-title=\"$nameplayer\" class=\"popper\"><img src=\"uploads/people/players/pic$dniplayer\" class=\"center-block img-responsive\"></a>";
                     echo '<div class="popper-content hide">';

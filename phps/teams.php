@@ -12,6 +12,7 @@ if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
 }
 
+// Maneja la creación de un nuevo equipo en la base de datos
 if(isset($_POST['newTeam'])){
     $teamCountry = $_POST['teamCountry'];
     
@@ -28,7 +29,7 @@ if(isset($_POST['newTeam'])){
     $conn->query($sql);
 }
 
-
+// Función que encapsula la acción de subir una foto al servidor
 function uploadPicture($picture, $idPic, $stadPerCoaFlag){
     $uploadOk = 1;
     // stadPerCoaFlag: Stadium (0), Person (1), Coach (2), Flag (3)
@@ -140,6 +141,9 @@ function uploadPicture($picture, $idPic, $stadPerCoaFlag){
           <i class="fa fa-fw fa-lg fa-plus-circle"></i>
         </button>
         <br>
+          <!--  Formulario que recibe todos los datos sobre un nuevo equipo a crear 
+                Aquí se rellenan los selects con la información disponible para liderar cada equipo.
+            -->
         <div id="addStadiumForm" ng-app="" class="collapse"<?php echo $hidden; ?>>
           <div class="row">
             <div class="col-md-12">
@@ -220,8 +224,18 @@ function uploadPicture($picture, $idPic, $stadPerCoaFlag){
             </div>
           </div>
         </div>
+          
+          
+            <!-- 
+                Se define una estructura de muestra de datos que consiste en imprimir secciones con 
+                continentes y dentro de cada uno de ellos se muestran los equipos que no pertenezcan 
+                aún a algún evento
+            -->
         <div class="row">
           <div class="col-md-12">
+              
+              
+          <!-- ************************  Africa ************************ -->
             <h3>Africa</h3>
             
             <table class="table">
@@ -263,6 +277,7 @@ function uploadPicture($picture, $idPic, $stadPerCoaFlag){
             </table>
           </div>
           <div class="col-md-12">
+              <!-- ************************  America ************************ -->
             <h3>America</h3>
             <table class="table">
               <thead>
@@ -303,6 +318,7 @@ function uploadPicture($picture, $idPic, $stadPerCoaFlag){
             </table>
           </div>
           <div class="col-md-12">
+              <!-- ************************  Europa ************************ -->
             <h3>Europe</h3>
             <table class="table">
               <thead>
@@ -344,6 +360,7 @@ function uploadPicture($picture, $idPic, $stadPerCoaFlag){
             </table>
           </div>
           <div class="col-md-12">
+              <!-- ************************ Asia ************************ -->
             <h3>Asia</h3>
             <table class="table">
               <thead>
@@ -384,6 +401,7 @@ function uploadPicture($picture, $idPic, $stadPerCoaFlag){
             </table>
           </div>
 		   <div class="col-md-12">
+               <!-- ************************  Oceanía ************************ -->
             <h3>Oceania</h3>
             <table class="table">
               <thead>

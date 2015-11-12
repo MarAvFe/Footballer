@@ -71,7 +71,7 @@ DELIMITER ;
 
 select getAvergeGoals(2)
 
-DELIMITER //
+AttemptTypeDELIMITER //
 CREATE FUNCTION `getAvergeGoals` (pIdEvent int)
 RETURNS INTEGER
 BEGIN
@@ -86,6 +86,9 @@ DELIMITER ;
 
 
 
+
+
+show full columns from Goal;
 
 
     

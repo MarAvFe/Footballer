@@ -16,7 +16,7 @@ if ($conn->connect_error) {
 
 $idTeam = $_GET['newIdTeam'];
 
-
+    // Pedir información sobre el equipo a mostrar
 	if (!($resultado = $conn->query("select getTeamName('$idTeam') as res"))) {
 		echo "Falló Select: (" . $conn->errno . ") " . $conn->error;
 	}else{
@@ -49,6 +49,7 @@ $idTeam = $_GET['newIdTeam'];
 		$idCountry = $fila['res'];
 	}
 	
+// Manejar la inserción de un jugador existente en el equipo mostrado
 if(isset($_POST["addPlayer"])){
 	$idPlayer = $_POST["idPlayer"];
 	$shirtNum = $_POST["shirtNum"];
@@ -151,6 +152,7 @@ if(isset($_POST["addPlayer"])){
               <div class="panel-heading">
                 <h3 class="panel-title lead">Players</h3>
               </div>
+                <!-- Tabla para ordenar y mostrar todos los datos sobre los jugadores que pertenezcan al equipo -->
               <div class="panel-body">
                 <table class="table">
                   <thead>
@@ -231,6 +233,7 @@ if(isset($_POST["addPlayer"])){
                             </div>
                             <div class="col-sm-8">
                               <select name="idPlayer" class="selectpicker" data-width="100%" data-live-search="true">
+                                   <!-- Select para seleccionar un jugador existente -->
                                 <?php 
                                 $sql = "select pl.idPlayer,CONCAT(p.firstName,' ',p.lastName) from Person p inner join
 										Player pl on p.idPerson = pl.idPerson and p.idCountry = '$idCountry' 
@@ -256,6 +259,7 @@ if(isset($_POST["addPlayer"])){
                             </div>
                             <div class="col-sm-8">
                               <select name="idPosition" class="selectpicker" data-width="100%">
+          <!-- Select para seleccionar la posición del jugador a agregar -->
                                  <?php 
                                 $sql = "select idPosition,namePosition from Position;";
                                 $result = $conn->query($sql);

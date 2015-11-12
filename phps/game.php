@@ -17,6 +17,11 @@ function normalize_date($date){
 		
 	$idGame = $_GET['newIdGame'];
 		
+/*
+
+        RECUPERACIÓN DE TODA LA INFORMACIÓN SOBRE EL JUEGO Y LOS EQUIPOS INVOLUCRADOS
+
+*/
 	if (!($resultado = $conn->query("select idHome,idVisitor from Game where idGame ='$idGame';"))) {
     echo "Falló CALL: (" . $conn->errno . ") " . $conn->error;
 	}else{
@@ -194,6 +199,7 @@ function normalize_date($date){
           <a href="index.php"><h4 class="navbar-text">SOCCER STATS</h4></a>
         </div>
         <div class="collapse navbar-collapse" id="navbar-ex-collapse">
+            <!-- Menú de navegación por la página -->
           <ul class="nav navbar-nav navbar-right">
             <li class="active">
               <a href="index.php">Home</a>
@@ -225,6 +231,7 @@ function normalize_date($date){
         </div>
         <div class="row">
           <div class="col-md-offset-3 col-md-6">
+              <!-- Tabla que muestra de manera intuitiva los datos del partido -->
             <table class="table statics">
               <thead>
                 <tr>

@@ -8,6 +8,7 @@ if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
 }
 
+// Reorganiza la fecha en un formato más cómo de manipular.
 function normalize_date($date){   
 		if(!empty($date)){ 
 			$var = explode('/',str_replace('-','/',$date));
@@ -53,10 +54,12 @@ function normalize_date($date){
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
           </button>
+            
           <a class="navbar-brand"><img height="40" alt="Brand" src="img/SoccerStatsImgLogo.png" style="position:relative;bottom:10px;"></a>
           <a href="index.php"><h4 class="navbar-text">SOCCER STATS</h4></a>
         </div>
         <div class="collapse navbar-collapse" id="navbar-ex-collapse">
+            <!-- Menú de navegación de la página -->
           <ul class="nav navbar-nav navbar-right">
             <li>
               <a href="index.php">Home</a>
@@ -82,6 +85,7 @@ function normalize_date($date){
         <div class="row">
           <div class="col-md-12">
             <div class="well">
+                <!-- Título del evento -->
               <h1 class="text-center"><?php echo $nameEvent; ?></h1>
             </div>
           </div>
@@ -90,6 +94,7 @@ function normalize_date($date){
           <div class="col-md-12">
             <div class="panel panel-info">
               <div class="panel-heading">
+                  <!-- Se muestran todos los datos del evento -->
                 <h3 class="panel-title">Structure</h3>
               </div>
               <div class="panel-body">
@@ -123,6 +128,7 @@ function normalize_date($date){
               <div class="panel-heading">
                 <h3 class="panel-title lead">Dashboard</h3>
               </div>
+               <!-- Datos sobre el evento como goles, tiros y tarjetass en general -->
               <div class="panel-body">
                 <table class="table">
                   <thead>
@@ -136,6 +142,7 @@ function normalize_date($date){
                   </thead>
 				  <tbody>
 			<?php
+                    // Query sobre goles
 					$sql = "select (count(go.idGoal) / te.teams) goals 
 							from Goal go inner join Game ga on ga.idEvent = '$idEvent' and ga.idGame = go.idGame,
 							(select count(1) teams from mydb.Group gr inner join Team te on gr.idEvent = '$idEvent' 
@@ -147,6 +154,8 @@ function normalize_date($date){
 							}
 							$row = $result->fetch_row();
 							$goals = $row[0]."%";
+                      
+                    // Query sobre expulsiones
 					$sql = "select (count(ca.color) / te.teams) expulsions
 							from Card ca inner join Game ga on ga.idEvent = '$idEvent' and ga.idGame = ca.idGame,
 							(select count(1) teams from mydb.Group gr inner join Team te on gr.idEvent = '$idEvent' 
@@ -160,6 +169,7 @@ function normalize_date($date){
 							$row = $result->fetch_row();
 							$redCards = $row[0]."%";
 						
+                    // Query sobre amonestaciones
 					$sql = "select (count(ca.color) / te.teams) caution
 							from Card ca inner join Game ga on ga.idEvent = '$idEvent' and ga.idGame = ca.idGame,
 							(select count(1) teams from mydb.Group gr inner join Team te on gr.idEvent = '$idEvent' 
@@ -173,6 +183,7 @@ function normalize_date($date){
 							$row = $result->fetch_row();
 							$yellowCards = $row[0]."%";
 					
+                      // Query sobre goles tiros a marco
 					$sql = "select (count(att.idAttempt) / te.teams) attempts
 							from Attempt att inner join Game ga on ga.idEvent = '$idEvent' and ga.idGame = att.idGame,
 							(select count(1) teams from mydb.Group gr inner join Team te on gr.idEvent = '$idEvent'  
@@ -185,6 +196,7 @@ function normalize_date($date){
 							$row = $result->fetch_row();
 							$shots = $row[0]."%";
 				
+                      // Estructura para mostrar toda la información
 						 echo'<tr>';
 						 echo "<td></td>";
 						 echo"<td>$goals</td>";						
@@ -210,6 +222,7 @@ function normalize_date($date){
               <div class="panel-heading">
                 <h3 class="panel-title lead">Teams</h3>
               </div>
+              <!-- Tabla para mostrar los equipos y sus datos -->
               <div class="panel-body">
                 <table class="table">
                   <thead>
@@ -315,6 +328,7 @@ function normalize_date($date){
               <div class="panel-heading">
                 <h3 class="panel-title lead">Games</h3>
               </div>
+                <!-- Tabla para mostrar los juegos y sus datos -->
               <div class="panel-body">
                 <table class="table">
                   <thead>
