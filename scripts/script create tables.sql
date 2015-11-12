@@ -851,3 +851,19 @@ ENGINE = InnoDB;
 SET SQL_MODE=@OLD_SQL_MODE;
 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS;
 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS;
+
+
+CREATE TABLE IF NOT EXISTS `mydb`.`Dashboard` (
+  `idDashboard` INT NOT NULL AUTO_INCREMENT,
+  `goalsPerMatch` INT NOT NULL,
+  `expulsions` INT NOT NULL,
+  `cautions` INT NOT NULL,
+  `avergeShotsPerTeam` INT NOT NULL,
+  `avergeMinutesPerMatch` INT NOT NULL,
+  `matchesPlayed` INT NOT NULL,
+  `createdBy` VARCHAR(45) NULL,
+  `createdOn` DATE NULL,
+  `updatedBy` VARCHAR(45) NULL,
+  `updatedOn` DATE NULL,
+  PRIMARY KEY (`idDashboard`))
+ENGINE = InnoDB

@@ -24,6 +24,7 @@ CREATE PROCEDURE getIdTeam(in pIdPlayer INT, in pIdGame INT)
  END //
 DELIMITER ;
 
+
 select * from mydb.Event;
 
 call getGroupsTeams(2)
@@ -569,7 +570,78 @@ select co.idCountry , co.nameCountry
 from Country co
 where co.idCountry not in  (select idCountry from Team where idGroup is null)
 
+select * from Team
+update Team 
+
+select (favor.scores - agaist.scores) from
+(select count(1) scores from Goal go inner join Game ga on 
+ga.idEvent = pIdEvent and getIdTeam(go.idPlayer,go.idGame) = pIdTeam and go.idGame = ga.idGame)favor,
+(select count(1) scores from Goal go inner join Game ga on 
+ga.idEvent = pIdEvent and (ga.idVisitor = pIdTeam or ga.idHome = pIdTeam) and go.idGame = ga.idGame 
+and getIdTeam(go.idPlayer,go.idGame) != pIdTeam)agaist
 
 
+select count(1) scores from Goal go inner join Game ga on 
+ga.idEvent = pIdEvent and getIdTeam(go.idPlayer,go.idGame) = pIdTeam and go.idGame = ga.idGame
+
+select count(1) scores from Goal go inner join Game ga on 
+ga.idEvent = pIdEvent and (ga.idVisitor = pIdTeam or ga.idHome = pIdTeam) and go.idGame = ga.idGame 
+and getIdTeam(go.idPlayer,go.idGame) != pIdTeam
+
+
+getTeamGoalsFavor
+
+select getTeamGoalsAgainst(3,2)
+CREATE FUNCTION `getTeamGoalsAgainst` (pIdTeam int, pIdEvent int)
+RETURNS INTEGER
+BEGIN
+declare returnValue int;
+select count(1) scores 
+into returnValue
+from Goal go inner join Game ga on 
+ga.idEvent = pIdEvent and (ga.idVisitor = pIdTeam or ga.idHome = pIdTeam) and go.idGame = ga.idGame 
+and getIdTeam(go.idPlayer,go.idGame) != pIdTeam;
+
+RETURN returnValue;
+END
+
+
+select getTeamGoalsFavor(3,2)
+CREATE DEFINER=`mainSoccer`@`%` FUNCTION `getTeamGoalsFavor`(pIdTeam int, pIdEvent int) RETURNS int(11)
+BEGIN
+declare returnValue int;
+select count(1) scores
+into returnValue
+from Goal go inner join Game ga on 
+ga.idEvent = pIdEvent and getIdTeam(go.idPlayer,go.idGame) = pIdTeam 
+and go.idGame = ga.idGame;
+
+RETURN returnValue;
+END
 
  
+select getTeamGoalsAverge(3,2) 
+drop function getTeamGoalsAverge
+
+DELIMITER //
+ CREATE FUNCTION `getTeamGoalsAverge` (pIdTeam int, pIdEvent int)
+RETURNS INTEGER
+BEGIN
+declare returnValue int;
+select (favor.scores - agaist.scores) 
+into returnValue
+from
+(select count(1) scores from Goal go inner join Game ga on 
+ga.idEvent = pIdEvent and getIdTeam(go.idPlayer,go.idGame) = pIdTeam and go.idGame = ga.idGame)favor,
+(select count(1) scores from Goal go inner join Game ga on 
+ga.idEvent = pIdEvent and (ga.idVisitor = pIdTeam or ga.idHome = pIdTeam) and go.idGame = ga.idGame 
+and getIdTeam(go.idPlayer,go.idGame) != pIdTeam)agaist;
+
+RETURN returnValue;
+ END //
+DELIMITER ;
+
+
+
+
+
