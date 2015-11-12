@@ -118,6 +118,94 @@ function normalize_date($date){
         </div>
         <div class="row">
           <div class="col-md-12">
+		  
+		   <div class="panel panel-warning">
+              <div class="panel-heading">
+                <h3 class="panel-title lead">Dashboard</h3>
+              </div>
+              <div class="panel-body">
+                <table class="table">
+                  <thead>
+				  <tr>
+                      <th>Total Games</th>
+                      <th>Goal per Match</th>
+                      <th>Average Yellow Card </th>
+                      <th>Average Red Card</th>
+                      <th>Shots per Match</th>
+                    </tr>
+                  </thead>
+				  <tbody>
+			<?php
+					$sql = "select (count(go.idGoal) / te.teams) goals 
+							from Goal go inner join Game ga on ga.idEvent = '$idEvent' and ga.idGame = go.idGame,
+							(select count(1) teams from mydb.Group gr inner join Team te on gr.idEvent = '$idEvent' 
+							and gr.idGroup = te.idGroup) te;";
+							$result = $conn->query($sql);
+							if (!$result) {
+							echo 'Could not run query: ' . mysql_error();
+							exit;
+							}
+							$row = $result->fetch_row();
+							$goals = $row[0]."%";
+					$sql = "select (count(ca.color) / te.teams) expulsions
+							from Card ca inner join Game ga on ga.idEvent = '$idEvent' and ga.idGame = ca.idGame,
+							(select count(1) teams from mydb.Group gr inner join Team te on gr.idEvent = '$idEvent' 
+							and gr.idGroup = te.idGroup) te    
+							where ca.color = 1;";
+							$result = $conn->query($sql);
+							if (!$result) {
+							echo 'Could not run query: ' . mysql_error();
+							exit;
+							}
+							$row = $result->fetch_row();
+							$redCards = $row[0]."%";
+						
+					$sql = "select (count(ca.color) / te.teams) caution
+							from Card ca inner join Game ga on ga.idEvent = '$idEvent' and ga.idGame = ca.idGame,
+							(select count(1) teams from mydb.Group gr inner join Team te on gr.idEvent = '$idEvent' 
+							and gr.idGroup = te.idGroup) te    
+							where ca.color = 0;";
+							$result = $conn->query($sql);
+							if (!$result) {
+							echo 'Could not run query: ' . mysql_error();
+							exit;
+							}
+							$row = $result->fetch_row();
+							$yellowCards = $row[0]."%";
+					
+					$sql = "select (count(att.idAttempt) / te.teams) attempts
+							from Attempt att inner join Game ga on ga.idEvent = '$idEvent' and ga.idGame = att.idGame,
+							(select count(1) teams from mydb.Group gr inner join Team te on gr.idEvent = '$idEvent'  
+							and gr.idGroup = te.idGroup) te;";
+							$result = $conn->query($sql);
+							if (!$result) {
+							echo 'Could not run query: ' . mysql_error();
+							exit;
+							}
+							$row = $result->fetch_row();
+							$shots = $row[0]."%";
+				
+						 echo'<tr>';
+						 echo "<td></td>";
+						 echo"<td>$goals</td>";						
+						 echo"<td>$yellowCards</td>";
+						 echo"<td>$redCards</td>";
+						 echo"<td>$shots</td>";
+						echo"</tr>";
+				
+				
+				
+		  ?>
+            
+                    
+                  
+                    
+                    
+                  </tbody>
+                </table>
+              </div>
+            </div>
+		  
 		  <div class="panel panel-warning">
               <div class="panel-heading">
                 <h3 class="panel-title lead">Teams</h3>
