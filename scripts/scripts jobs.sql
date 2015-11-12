@@ -89,6 +89,8 @@ DELIMITER ;
 
 
 show full columns from Goal;
-
-
+select * from INFORMATION_SCHEMA.TABLES
+select TABLE_NAME, table_comment from INFORMATION_SCHEMA.TABLES where TABLE_SCHEMA = 'mydb'
+select TABLE_NAME, column_name, column_comment from INFORMATION_SCHEMA.COLUMNS where TABLE_SCHEMA = 'mydb'
+TABLE_NAME = 'testcomments'
     
