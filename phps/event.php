@@ -180,6 +180,24 @@ function normalize_date($date){
 							$fila = $resultado->fetch_assoc();
 							$matches = $fila['res'];
 						}
+						if (!($resultado = $conn->query("select getTeamGoalsAgainst('$idTeam','$idEvent') as res"))) {
+							echo "Falló CALL: (" . $conn->errno . ") " . $conn->error;
+						}else{
+							$fila = $resultado->fetch_assoc();
+							$against = $fila['res'];
+						}
+						if (!($resultado = $conn->query("select getTeamGoalsFavor('$idTeam','$idEvent') as res"))) {
+							echo "Falló CALL: (" . $conn->errno . ") " . $conn->error;
+						}else{
+							$fila = $resultado->fetch_assoc();
+							$favor = $fila['res'];
+						}
+						if (!($resultado = $conn->query("select getTeamGoalsAverge('$idTeam','$idEvent') as res"))) {
+							echo "Falló CALL: (" . $conn->errno . ") " . $conn->error;
+						}else{
+							$fila = $resultado->fetch_assoc();
+							$average = $fila['res'];
+						}
 						 echo'<tr>';
 						 echo"<td><a href=\"team.php?newIdTeam=$idTeam\">$nameTeam</a></td>";
 						 echo "<td>$nameGroup</td>";
@@ -187,9 +205,9 @@ function normalize_date($date){
 						 echo"<td>$wins</td>";
 						 echo"<td>$ties</td>";
 						 echo"<td>$loses</td>";
-						 echo"<td>8</td>";
-						 echo"<td>3</td>";
-						echo"<td>5</td>";
+						 echo"<td>$favor</td>";
+						 echo"<td>$against</td>";
+						echo"<td>$average</td>";
 						echo"<td>$points</td>";
 						echo"</tr>";
 				}
