@@ -91,6 +91,7 @@ function uploadPicture($picture, $idPic, $stadPerCoaFlag){
 
 ?>
 <html><head>
+	<title>Players</title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <script type="text/javascript" src="http://cdnjs.cloudflare.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>

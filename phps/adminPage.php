@@ -162,6 +162,7 @@ if(isset($_POST['possession'])){
         Para acceder ah ella se necesita una autenticación que será recibida en la página index. 
 -->
 <!DOCTYPE html5><html lang="en" ng-app=""><head>
+	<title>Admin Page</title> 
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <script type="text/javascript" src="http://cdnjs.cloudflare.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
