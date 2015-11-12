@@ -255,7 +255,7 @@ function uploadPicture($picture, $idPic, $stadPerCoaFlag){
                           <i class="-o fa fa-lg fa-search"></i>
                         </span>
                       </div>
-                      <button type="button" class="btn btn-lg btn-info" onclick="location.href='players.php'">View coaches</button>
+                      <button type="button" class="btn btn-lg btn-info" onclick="location.href='players.php'">View players</button>
                     </form>
                   </div>
                 </div>

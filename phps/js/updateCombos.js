@@ -37,7 +37,6 @@ function addGoal(tableId){
     var cell2 = row.insertCell(2);
     var cell3 = row.insertCell(3);
     var cell4 = row.insertCell(4);
-    var cell5 = row.insertCell(5);
     
     var penalty = document.createElement("INPUT");
     penalty.setAttribute("type","checkbox");
@@ -50,7 +49,6 @@ function addGoal(tableId){
     cell2.appendChild(getMinsInput());
     cell3.innerHTML = "--";
     cell4.appendChild(penalty);
-    cell5.innerHTML = "--";
     $('.selectpicker').selectpicker('refresh');
 }
 
@@ -63,40 +61,13 @@ function addCard(tableId){
     var cell2 = row.insertCell(2);
     var cell3 = row.insertCell(3);
     var cell4 = row.insertCell(4);
-    var cell5 = row.insertCell(5);
     
     cell0.appendChild(getStatTitle("Card"))
     cell1.appendChild(getComboPlayers());
     cell2.innerHTML = "--";
     cell3.appendChild(getCardColorsCombo());
     cell4.innerHTML = "--";
-    cell5.innerHTML = "--";
     $('.selectpicker').selectpicker('refresh');
-}
-
-function addAttempt(tableId){
-    var table = document.getElementById(tableId);
-    var row = table.insertRow(1);
-    
-    var cell0 = row.insertCell(0);
-    var cell1 = row.insertCell(1);
-    var cell2 = row.insertCell(2);
-    var cell3 = row.insertCell(3);
-    var cell4 = row.insertCell(4);
-    var cell5 = row.insertCell(5);
-    
-    var direct = document.createElement("INPUT");
-    direct.setAttribute("type","checkbox");
-    direct.setAttribute("class","form-control ");
-    direct.setAttribute("name","newStat[]");
-    direct.setAttribute("value","off");
-    
-    cell0.appendChild(getStatTitle("Attempt"))
-    cell1.innerHTML = "--";
-    cell2.innerHTML = "--";
-    cell3.innerHTML = "--";
-    cell4.innerHTML = "--";
-    cell5.appendChild(direct);
 }
 
 function addSave(tableId){
@@ -108,14 +79,12 @@ function addSave(tableId){
     var cell2 = row.insertCell(2);
     var cell3 = row.insertCell(3);
     var cell4 = row.insertCell(4);
-    var cell5 = row.insertCell(5);
         
     cell0.appendChild(getStatTitle("Save"))
     cell1.appendChild(getComboPlayers());
     cell2.innerHTML = "--";
     cell3.innerHTML = "--";
     cell4.innerHTML = "--";
-    cell5.innerHTML = "--";
     $('.selectpicker').selectpicker('refresh');
     
 }

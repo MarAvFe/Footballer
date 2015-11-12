@@ -308,6 +308,7 @@ function normalize_date($date){
       <div class="container">
         <div class="row">
           <div class="col-md-12">
+              <button type="button" class="btn btn-lg btn-info" onclick="location.href='awards.php'">View awards</button>
             <table class="table">
               <thead>
                 <tr>
