@@ -184,15 +184,15 @@ if(isset($_POST["addPlayer"])){
 										$fila = $resultado->fetch_assoc();
 										$age = $fila['res'];
 									}
-									if (!($resultado = $conn->query("select getPlayerPosition('$idPlayer') as res"))) {
+									if (!($resultado = $conn->query("select getPlayerPosition('$idTeam','$idPlayer') as res"))) {
 										echo "Falló CALL: (" . $conn->errno . ") " . $conn->error;
 									}else{
 										$fila = $resultado->fetch_assoc();
 										$position = $fila['res'];
 									}
-									if (!($resultado = $conn->query("select getPlayerShirt('$idPlayer') as res "))) {
+									if (!($resultado = $conn->query("select getPlayerShirt('$idTeam','$idPlayer') as res "))) {
 										echo "Falló CALL: (" . $conn->errno . ") " . $conn->error;
-									}else{
+									}else{ 
 										$fila = $resultado->fetch_assoc();
 										$shirt = $fila['res'];
 									}
